@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Team;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,7 +32,7 @@ import java.util.List;
  * Use the {@link SpielFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpielFragment extends Fragment {
+public class TeamFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,7 +63,7 @@ public class SpielFragment extends Fragment {
         return fragment;
     }
 
-    public SpielFragment() {
+    public TeamFragment() {
         // Required empty public constructor
     }
 
@@ -83,11 +84,11 @@ public class SpielFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_spiel, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_team, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-        ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);
-        lv.setAdapter(new SpieleAdapter(getActivity().getApplicationContext(), (List<Spiel>) dbh.getAllGames()));
+        ListView lv = (ListView) rootView.findViewById(R.id.listViewTeams);
+        lv.setAdapter(new TeamsAdapter(getActivity().getApplicationContext(), (List<Team>) dbh.getAllTeams()));
 
         return rootView;
     }
@@ -130,24 +131,25 @@ public class SpielFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(int position);
+
     }
 
-    private class SpieleAdapter extends BaseAdapter {
+    private class TeamsAdapter extends BaseAdapter {
 
         Context context;
-        List<Spiel> spiele;
-        public SpieleAdapter(Context context, List<Spiel> spiele){
+        List<Team> teams;
+        public TeamsAdapter(Context context, List<Team> teams){
             this.context = context;
-            this.spiele = spiele;
+            this.teams = teams;
         }
         @Override
         public int getCount() {
-            return spiele.size();
+            return teams.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return spiele.get(position);
+            return teams.get(position);
         }
 
         @Override
@@ -166,7 +168,7 @@ public class SpielFragment extends Fragment {
 
             TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
 
-            txtTitle.setText(spiele.get(position).getHeimteam()+" gegen "+spiele.get(position).getGastteam());
+            txtTitle.setText((CharSequence) teams.get(position).getLang_name());
             //txtTitle.setText(spiele.get(position).getNachname());
 
             return convertView;

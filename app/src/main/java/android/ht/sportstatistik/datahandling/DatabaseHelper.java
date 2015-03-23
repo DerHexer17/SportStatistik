@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -196,6 +197,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void addSpiel(Spiel spiel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SPIEL_BEENDET, spiel.getBeendet());
+        values.put(SPIEL_GASTTEAM, spiel.getGastteam());
+        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+        values.put(SPIEL_DATUM, formatter.format(spiel.getDatum()));
+        values.put(KEY_CREATED_AT, formatter.format(new Date()));
+
+        db.insert(TABLE_SPIEL, null, values);
+        db.close();
+
+    }
+
     // ALL GETTER
     public List<Spieler> getAllPlayers() {
         List<Spieler> alleSpieler = new ArrayList<Spieler>();
@@ -255,6 +272,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleTeams;
+    }
+
+    public List<Spiel> getAllGames() {
+        List<Spiel> alleSpiele = new ArrayList<Spiel>();
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIEL;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Spiel s = new Spiel();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
+                s.setHeimteam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
+                s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
+                try {
+                    s.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                alleSpiele.add(s);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleSpiele;
     }
 
 }

@@ -1,8 +1,14 @@
 package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.ht.sportstatistik.TestDataActivity;
+import android.ht.sportstatistik.datahandling.DatabaseHelper;
+import android.ht.sportstatistik.datahandling.Spiel;
+import android.ht.sportstatistik.datahandling.Team;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,11 +25,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.ht.sportstatistik.R;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static android.ht.sportstatistik.activities.TeamFragment.*;
+
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,6 +51,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    DatabaseHelper dbh;
 
     private String[] navMenuTitles;
 
@@ -48,6 +66,7 @@ public class MainActivity extends ActionBarActivity
         mTitle = getTitle();
 
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        dbh = DatabaseHelper.getInstance(this);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -62,6 +81,9 @@ public class MainActivity extends ActionBarActivity
         switch(position){
             case 0:
                 fragment = new SpielFragment();
+                break;
+            case 1:
+                fragment = new TeamFragment();
                 break;
             default:
                 fragment = PlaceholderFragment.newInstance(position+1);
@@ -174,6 +196,104 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    public void neuesSpiel(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Spiel anlegen");
+        alert.setMessage("Leg ein neues Spiel an");
+
+        final Spinner heimteam = new Spinner(this);
+        List<String> heimteams = new ArrayList<String>();
+        for(Team t : dbh.getAllTeams()){
+            heimteams.add(t.getLang_name());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heimteams);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        heimteam.setAdapter(dataAdapter);
+
+        // Set an EditText view to get user input
+        final LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        final EditText gegner = new EditText(this);
+        gegner.setHint("Gegner");
+        final EditText datum = new EditText(this);
+        //final Spinner datum = new Spinner(this);
+        //datum.setAdapter(new DatePicker(this));
+        ll.addView(heimteam);
+        ll.addView(gegner);
+        ll.addView(datum);
+        alert.setView(ll);
+
+        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Spiel s = new Spiel();
+                s.setBeendet("Nein");
+                s.setGastteam(String.valueOf(gegner.getText()));
+                s.setDatum(new Date());
+                s.setHeimteam(1);
+                dbh.addSpiel(s);
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+    }
+
+    public void neuesTeam(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Team anlegen");
+        alert.setMessage("Leg ein neues Team an");
+
+        // Set an EditText view to get user input
+        final LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        final EditText titel_kurz = new EditText(this);
+        titel_kurz.setHint("Kurztitel (z.B. esv_vlm)");
+        final EditText titel_lang = new EditText(this);
+        titel_lang.setHint("Längerer Titel (z.B. ESV Dresden 1. Herren)");
+        final EditText beschreibung = new EditText(this);
+        beschreibung.setHint("Beschreibung (Optional)");
+        //final Spinner datum = new Spinner(this);
+        //datum.setAdapter(new DatePicker(this));
+        ll.addView(titel_kurz);
+        ll.addView(titel_lang);
+        ll.addView(beschreibung);
+        alert.setView(ll);
+
+        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Team t = new Team();
+                t.setKurz_name(String.valueOf(titel_kurz.getText()));
+                t.setLang_name(String.valueOf(titel_lang.getText()));
+                try{
+                    t.setBeschreibung(String.valueOf(beschreibung.getText()));
+                }catch (Exception e){
+                    t.setBeschreibung("");
+                }
+
+                dbh.addTeam(t);
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        alert.show();
+        //this.recreate();
+
+    }
 
 
 }

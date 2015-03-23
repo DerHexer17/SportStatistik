@@ -12,15 +12,15 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Neues Spiel anlegen"
-            android:onClick="neuesSpiel"/>
+            android:text="Neues Team anlegen"
+            android:onClick="neuesTeam"/>
 
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listViewSpiele">
+            android:id="@+id/listViewTeams">
 
-            </ListView>
-        </LinearLayout>
+        </ListView>
+    </LinearLayout>
 
 </FrameLayout>
