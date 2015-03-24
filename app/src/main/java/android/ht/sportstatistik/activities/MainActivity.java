@@ -9,6 +9,7 @@ import android.ht.sportstatistik.TestDataActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -203,13 +205,15 @@ public class MainActivity extends ActionBarActivity
         alert.setMessage("Leg ein neues Spiel an");
 
         final Spinner heimteam = new Spinner(this);
-        List<String> heimteams = new ArrayList<String>();
+        /*List<String> heimteams = new ArrayList<String>();
         for(Team t : dbh.getAllTeams()){
             heimteams.add(t.getLang_name());
-        }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heimteams);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        heimteam.setAdapter(dataAdapter);
+        }*/
+
+        TeamsArrayAdapter teamsAdapter = new TeamsArrayAdapter(this, android.R.layout.simple_spinner_item, dbh.getAllTeams());
+       // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heimteams);
+        teamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        heimteam.setAdapter(teamsAdapter);
 
         // Set an EditText view to get user input
         final LinearLayout ll = new LinearLayout(this);
@@ -230,19 +234,22 @@ public class MainActivity extends ActionBarActivity
                 s.setBeendet("Nein");
                 s.setGastteam(String.valueOf(gegner.getText()));
                 s.setDatum(new Date());
-                s.setHeimteam(1);
+                Team t = (Team) heimteam.getSelectedItem();
+                s.setHeimteam(t.getId());
                 dbh.addSpiel(s);
                 // Do something with value!
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
         });
 
         alert.show();
+        ListView lv = (ListView) findViewById(R.id.listViewSpiele);
+        lv.deferNotifyDataSetChanged();
     }
 
     public void neuesTeam(View view){
@@ -291,6 +298,7 @@ public class MainActivity extends ActionBarActivity
 
 
         alert.show();
+
         //this.recreate();
 
     }

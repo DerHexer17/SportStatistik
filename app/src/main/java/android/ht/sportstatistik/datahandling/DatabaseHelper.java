@@ -262,7 +262,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }*/
-
+                t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
                 t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
                 t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));

@@ -8,6 +8,15 @@ public class Team {
     private String kurz_name;
     private String lang_name;
     private String beschreibung;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getKurz_name() {
         return kurz_name;
@@ -31,5 +40,9 @@ public class Team {
 
     public void setBeschreibung(String beschreibung) {
         this.beschreibung = beschreibung;
+    }
+
+    public String toString(){
+        return getLang_name();
     }
 }
