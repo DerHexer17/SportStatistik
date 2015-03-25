@@ -203,7 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(SPIEL_BEENDET, spiel.getBeendet());
         values.put(SPIEL_GASTTEAM, spiel.getGastteam());
-        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam());
+        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam_id());
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(SPIEL_DATUM, formatter.format(spiel.getDatum()));
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
@@ -276,7 +276,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<Spiel> getAllGames() {
         List<Spiel> alleSpiele = new ArrayList<Spiel>();
-        String selectQuery = "SELECT  * FROM " + TABLE_SPIEL;
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + ", " + TABLE_TEAM + " WHERE " +
+                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -294,7 +295,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }*/
 
                 s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
-                s.setHeimteam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
+                s.setHeimteam_id(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
+                s.setHeimteam_titel(c.getString(c.getColumnIndex(TABLE_TEAM+"."+TEAM_KURZ)));
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
                 try {
                     s.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));

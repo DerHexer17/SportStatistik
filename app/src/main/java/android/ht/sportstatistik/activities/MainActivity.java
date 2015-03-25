@@ -8,6 +8,7 @@ import android.database.DataSetObserver;
 import android.ht.sportstatistik.TestDataActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
+import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.support.v7.app.ActionBarActivity;
@@ -42,7 +43,7 @@ import java.util.List;
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -86,6 +87,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 1:
                 fragment = new TeamFragment();
+                break;
+            case 2:
+                fragment = new SpielerFragment();
                 break;
             default:
                 fragment = PlaceholderFragment.newInstance(position+1);
@@ -235,7 +239,7 @@ public class MainActivity extends ActionBarActivity
                 s.setGastteam(String.valueOf(gegner.getText()));
                 s.setDatum(new Date());
                 Team t = (Team) heimteam.getSelectedItem();
-                s.setHeimteam(t.getId());
+                s.setHeimteam_id(t.getId());
                 dbh.addSpiel(s);
                 // Do something with value!
             }
@@ -290,7 +294,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -303,5 +307,61 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    public void neuerSpieler(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final Context context = this;
+        alert.setTitle("Spieler anlegen");
+        alert.setMessage("Leg einen neuen Spieler an");
 
+        // Set an EditText view to get user input
+        final LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        final EditText vorname = new EditText(this);
+        vorname.setHint("Vorname");
+        final EditText nachname = new EditText(this);
+        nachname.setHint("Nachname");
+        final EditText nummer = new EditText(this);
+        nummer.setHint("Rückennummer (Zahl!)");
+        //final Spinner datum = new Spinner(this);
+        //datum.setAdapter(new DatePicker(this));
+        ll.addView(vorname);
+        ll.addView(nachname);
+        ll.addView(nummer);
+        alert.setView(ll);
+
+        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Spieler sp = new Spieler();
+
+                try{
+                    sp.setVorname(String.valueOf(vorname.getText()));
+                    sp.setNachname(String.valueOf(nachname.getText()));
+                    sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
+                }catch (Exception e){
+                    Log.d("Neuer Spieler", e.getMessage());
+                }
+
+
+
+                dbh.addSpieler(sp);
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        alert.show();
+
+        //this.recreate();
+
+    }
+
+    public void cancel(View view){
+        Log.d("Cancel", "Button gedrückt"+view.getParent().toString());
+    }
 }

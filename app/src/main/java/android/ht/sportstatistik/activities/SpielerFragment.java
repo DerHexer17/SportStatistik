@@ -31,7 +31,7 @@ import java.util.List;
  * Use the {@link SpielFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpielFragment extends Fragment {
+public class SpielerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,7 +62,7 @@ public class SpielFragment extends Fragment {
         return fragment;
     }
 
-    public SpielFragment() {
+    public SpielerFragment() {
         // Required empty public constructor
     }
 
@@ -83,11 +83,11 @@ public class SpielFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_spiel, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_spieler, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-        ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);
-        lv.setAdapter(new SpieleAdapter(getActivity().getApplicationContext(), (List<Spiel>) dbh.getAllGames()));
+        ListView lv = (ListView) rootView.findViewById(R.id.listViewSpieler);
+        lv.setAdapter(new SpielerAdapter(getActivity().getApplicationContext(), (List<Spieler>) dbh.getAllPlayers()));
 
         return rootView;
     }
@@ -132,22 +132,22 @@ public class SpielFragment extends Fragment {
         public void onFragmentInteraction(int position);
     }
 
-    private class SpieleAdapter extends BaseAdapter {
+    private class SpielerAdapter extends BaseAdapter {
 
         Context context;
-        List<Spiel> spiele;
-        public SpieleAdapter(Context context, List<Spiel> spiele){
+        List<Spieler> spieler;
+        public SpielerAdapter(Context context, List<Spieler> spieler){
             this.context = context;
-            this.spiele = spiele;
+            this.spieler = spieler;
         }
         @Override
         public int getCount() {
-            return spiele.size();
+            return spieler.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return spiele.get(position);
+            return spieler.get(position);
         }
 
         @Override
@@ -166,7 +166,9 @@ public class SpielFragment extends Fragment {
 
             TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
 
-            txtTitle.setText(spiele.get(position).getHeimteam_titel()+" gegen "+spiele.get(position).getGastteam());
+            txtTitle.setText(spieler.get(position).getVorname()+" "+
+                spieler.get(position).getNachname()+" ("+
+                spieler.get(position).getNummmer()+")");
             //txtTitle.setText(spiele.get(position).getNachname());
 
             return convertView;

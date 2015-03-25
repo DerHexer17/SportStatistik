@@ -7,18 +7,30 @@ import java.util.Date;
  */
 public class Spiel {
 
-    private int heimteam;
+    private int heimteam_id;
+    private String heimteam_titel;
+
+    public int getHeimteam_id() {
+        return heimteam_id;
+    }
+
+    public void setHeimteam_id(int heimteam_id) {
+        this.heimteam_id = heimteam_id;
+    }
+
+    public String getHeimteam_titel() {
+        return heimteam_titel;
+    }
+
+    public void setHeimteam_titel(String heimteam_titel) {
+        this.heimteam_titel = heimteam_titel;
+    }
+
     private String gastteam;
     private Date datum;
     private String beendet;
 
-    public int getHeimteam() {
-        return heimteam;
-    }
 
-    public void setHeimteam(int heimteam) {
-        this.heimteam = heimteam;
-    }
 
     public String getGastteam() {
         return gastteam;
