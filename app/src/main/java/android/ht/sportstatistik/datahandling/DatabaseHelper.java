@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SPIELER_VORNAME = "spieler_vorname";
     private static final String SPIELER_NACHNAME = "spieler_nachname";
     private static final String SPIELER_NUMMER = "spieler_nummer";
+    private static final String SPIELER_TORWART = "spieler_torwart";
 
     // TEAM_SPIELER Table - column names
     private static final String TEAM_SPIELER_TEAM = "team_spieler_team";
@@ -107,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIELER_VORNAME + " TEXT, " +
             SPIELER_NACHNAME + " TEXT, " + SPIELER_NUMMER + " INTEGER, " +
-            KEY_CREATED_AT + " DATE" + ")";
+            SPIELER_TORWART + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_TEAM_SPIELER = "CREATE TABLE " + TABLE_TEAM_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_SPIELER_TEAM + " INTEGER, " +
@@ -173,6 +174,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SPIELER_VORNAME, spieler.getVorname());
         values.put(SPIELER_NACHNAME, spieler.getNachname());
         values.put(SPIELER_NUMMER, spieler.getNummmer());
+        if(spieler.isTorwart()){
+            values.put(SPIELER_TORWART, "Ja");
+        }else{
+            values.put(SPIELER_TORWART, "Nein");
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
@@ -236,7 +242,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
-
+                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                    s.setTorwart(true);
+                }else{
+                    s.setTorwart(false);
+                }
                 alleSpieler.add(s);
             } while (c.moveToNext());
         }

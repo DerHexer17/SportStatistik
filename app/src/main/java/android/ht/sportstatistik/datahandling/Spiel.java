@@ -31,7 +31,6 @@ public class Spiel {
     private String beendet;
 
 
-
     public String getGastteam() {
         return gastteam;
     }

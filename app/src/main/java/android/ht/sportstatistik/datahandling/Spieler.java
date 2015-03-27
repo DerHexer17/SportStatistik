@@ -8,6 +8,15 @@ public class Spieler {
     private String vorname;
     private String nachname;
     private int nummmer;
+    private boolean torwart;
+
+    public boolean isTorwart() {
+        return torwart;
+    }
+
+    public void setTorwart(boolean torwart) {
+        this.torwart = torwart;
+    }
 
     public String getVorname() {
         return vorname;
