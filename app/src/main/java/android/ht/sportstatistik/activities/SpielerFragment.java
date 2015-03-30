@@ -2,10 +2,12 @@ package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.helper.SpielerAdapter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -132,47 +134,6 @@ public class SpielerFragment extends Fragment {
         public void onFragmentInteraction(int position);
     }
 
-    private class SpielerAdapter extends BaseAdapter {
 
-        Context context;
-        List<Spieler> spieler;
-        public SpielerAdapter(Context context, List<Spieler> spieler){
-            this.context = context;
-            this.spieler = spieler;
-        }
-        @Override
-        public int getCount() {
-            return spieler.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return spieler.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater mInflater = (LayoutInflater)
-                        context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                convertView = mInflater.inflate(R.layout.list_item, null);
-            }
-
-
-            TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-
-            txtTitle.setText(spieler.get(position).getVorname()+" "+
-                spieler.get(position).getNachname()+" ("+
-                spieler.get(position).getNummmer()+")");
-            //txtTitle.setText(spiele.get(position).getNachname());
-
-            return convertView;
-        }
-    }
 
 }

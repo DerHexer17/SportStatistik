@@ -219,6 +219,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void addSpielerToTeam(Spieler s, Team t){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TEAM_SPIELER_SPIELER, s.getId());
+        values.put(TEAM_SPIELER_TEAM, t.getId());
+        values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
+
+        db.insert(TABLE_TEAM_SPIELER, null, values);
+        db.close();
+    }
+
     // ALL GETTER
     public List<Spieler> getAllPlayers() {
         List<Spieler> alleSpieler = new ArrayList<Spieler>();
@@ -242,6 +254,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
+                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
                     s.setTorwart(true);
                 }else{
@@ -252,6 +265,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleSpieler;
+    }
+
+    public List<Spieler> getAllPlayersFromTeam(int id) {
+        List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_TEAM_SPIELER +
+                " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
+                " AND " + TEAM_SPIELER_TEAM + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Spieler s = new Spieler();
+
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
+                s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
+                s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
+                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                    s.setTorwart(true);
+                }else{
+                    s.setTorwart(false);
+                }
+                alleSpielerFromTeam.add(s);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleSpielerFromTeam;
+    }
+
+    public Team getTeam(int id){
+        String selectQuery = "SELECT  * FROM " + TABLE_TEAM + " WHERE " + KEY_ID + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Team t = new Team();
+        t.setLang_name("DEFAULT");
+        if(c.moveToFirst()){
+
+            t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
+            t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
+            t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));
+        }
+        return t;
     }
 
     public List<Team> getAllTeams() {
@@ -308,6 +376,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setHeimteam_id(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
                 s.setHeimteam_titel(c.getString(c.getColumnIndex(TABLE_TEAM+"."+TEAM_KURZ)));
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
+                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 try {
                     s.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
                 } catch (ParseException e) {

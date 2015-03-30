@@ -2,6 +2,7 @@ package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
@@ -158,7 +159,7 @@ public class TeamFragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater mInflater = (LayoutInflater)
                         context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -170,7 +171,14 @@ public class TeamFragment extends Fragment {
 
             txtTitle.setText((CharSequence) teams.get(position).getLang_name());
             //txtTitle.setText(spiele.get(position).getNachname());
-
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), TeamActivity.class);
+                    intent.putExtra("teamId", teams.get(position).getId());
+                    startActivity(intent);
+                }
+            });
             return convertView;
         }
     }

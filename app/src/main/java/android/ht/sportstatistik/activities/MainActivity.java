@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -253,7 +254,7 @@ public class MainActivity extends ActionBarActivity
 
         alert.show();
         ListView lv = (ListView) findViewById(R.id.listViewSpiele);
-        lv.deferNotifyDataSetChanged();
+        
     }
 
     public void neuesTeam(View view){
@@ -322,11 +323,14 @@ public class MainActivity extends ActionBarActivity
         nachname.setHint("Nachname");
         final EditText nummer = new EditText(this);
         nummer.setHint("Rückennummer (Zahl!)");
+        final CheckBox torwart = new CheckBox(this);
+        torwart.setText("Torwart?");
         //final Spinner datum = new Spinner(this);
         //datum.setAdapter(new DatePicker(this));
         ll.addView(vorname);
         ll.addView(nachname);
         ll.addView(nummer);
+        ll.addView(torwart);
         alert.setView(ll);
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
@@ -337,6 +341,11 @@ public class MainActivity extends ActionBarActivity
                     sp.setVorname(String.valueOf(vorname.getText()));
                     sp.setNachname(String.valueOf(nachname.getText()));
                     sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
+                    if(torwart.isChecked()){
+                        sp.setTorwart(true);
+                    }else{
+                        sp.setTorwart(false);
+                    }
                 }catch (Exception e){
                     Log.d("Neuer Spieler", e.getMessage());
                 }

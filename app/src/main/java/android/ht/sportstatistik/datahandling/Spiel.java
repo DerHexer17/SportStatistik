@@ -7,8 +7,20 @@ import java.util.Date;
  */
 public class Spiel {
 
+    private int id;
     private int heimteam_id;
     private String heimteam_titel;
+    private String gastteam;
+    private Date datum;
+    private String beendet;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getHeimteam_id() {
         return heimteam_id;
@@ -25,11 +37,6 @@ public class Spiel {
     public void setHeimteam_titel(String heimteam_titel) {
         this.heimteam_titel = heimteam_titel;
     }
-
-    private String gastteam;
-    private Date datum;
-    private String beendet;
-
 
     public String getGastteam() {
         return gastteam;

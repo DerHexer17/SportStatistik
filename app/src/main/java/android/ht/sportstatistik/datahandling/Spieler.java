@@ -5,11 +5,19 @@ package android.ht.sportstatistik.datahandling;
  */
 public class Spieler {
 
+    private int id;
     private String vorname;
     private String nachname;
     private int nummmer;
     private boolean torwart;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public boolean isTorwart() {
         return torwart;
     }
