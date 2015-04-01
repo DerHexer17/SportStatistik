@@ -304,6 +304,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpielerFromTeam;
     }
 
+    public List<Spieler> getAllPlayersNotFromTeam(int id) {
+        List<Spieler> alleSpielerFromTeam = getAllPlayersFromTeam(id);
+        List<Spieler> alleSpieler = getAllPlayers();
+        for(Spieler s : alleSpielerFromTeam){
+            alleSpieler.remove(s);
+        }
+
+        return alleSpieler;
+    }
+
     public Team getTeam(int id){
         String selectQuery = "SELECT  * FROM " + TABLE_TEAM + " WHERE " + KEY_ID + " = " + id;
 

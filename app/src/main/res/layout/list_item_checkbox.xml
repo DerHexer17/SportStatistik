@@ -9,17 +9,6 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cbSpieler"/>
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/labelSpieler"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-
-        android:textSize="16dip"
-        android:textStyle="bold"
-        android:textColor="@android:color/black">
-
-    </TextView>
-
+        android:id="@+id/cbSpieler" />
 
 </LinearLayout>

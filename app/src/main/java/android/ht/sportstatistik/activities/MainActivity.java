@@ -282,8 +282,8 @@ public class MainActivity extends ActionBarActivity
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Team t = new Team();
-                t.setKurz_name(String.valueOf(titel_kurz.getText()));
-                t.setLang_name(String.valueOf(titel_lang.getText()));
+                t.setKurz_name(String.valueOf(titel_kurz.getText()).trim());
+                t.setLang_name(String.valueOf(titel_lang.getText()).trim());
                 try{
                     t.setBeschreibung(String.valueOf(beschreibung.getText()));
                 }catch (Exception e){
@@ -338,8 +338,8 @@ public class MainActivity extends ActionBarActivity
                 Spieler sp = new Spieler();
 
                 try{
-                    sp.setVorname(String.valueOf(vorname.getText()));
-                    sp.setNachname(String.valueOf(nachname.getText()));
+                    sp.setVorname(String.valueOf(vorname.getText()).trim());
+                    sp.setNachname(String.valueOf(nachname.getText()).trim());
                     sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
                     if(torwart.isChecked()){
                         sp.setTorwart(true);
