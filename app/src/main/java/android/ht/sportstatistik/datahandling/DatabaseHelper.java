@@ -305,13 +305,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<Spieler> getAllPlayersNotFromTeam(int id) {
-        List<Spieler> alleSpielerFromTeam = getAllPlayersFromTeam(id);
-        List<Spieler> alleSpieler = getAllPlayers();
-        for(Spieler s : alleSpielerFromTeam){
-            alleSpieler.remove(s);
-        }
+        String selectQuery = "SELECT * FROM " + TABLE_SPIELER + " LEFT JOIN " + TABLE_TEAM_SPIELER +
+                " ON " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
+                " WHERE " + TEAM_SPIELER_TEAM + " IS NULL OR " +
+                TEAM_SPIELER_TEAM + " != " + id;
 
-        return alleSpieler;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Spieler s = new Spieler();
+
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
+                s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
+                s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
+                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                    s.setTorwart(true);
+                }else{
+                    s.setTorwart(false);
+                }
+                alleSpielerFromTeam.add(s);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleSpielerFromTeam;
     }
 
     public Team getTeam(int id){
