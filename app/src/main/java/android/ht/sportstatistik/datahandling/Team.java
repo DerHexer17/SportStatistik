@@ -10,6 +10,14 @@ public class Team {
     private String beschreibung;
     private int id;
 
+    public Team(String kname, String lname, String beschreibung){
+        this.kurz_name=kname;
+        this.lang_name=lname;
+        this.beschreibung=beschreibung;
+    }
+
+    public Team(){}
+
     public int getId() {
         return id;
     }

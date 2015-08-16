@@ -11,6 +11,7 @@ import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
+import android.ht.sportstatistik.helper.Testdaten;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -151,6 +152,10 @@ public class MainActivity extends ActionBarActivity
             case R.id.action_example:
                 Intent intent = new Intent(getApplicationContext(), TestDataActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.testdatenEinspielen:
+                new Testdaten(getApplicationContext()).testdatenEinspielen();
                 break;
         }
 

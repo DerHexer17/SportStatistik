@@ -167,7 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ADDER
-    public void addSpieler(Spieler spieler) {
+    public long addSpieler(Spieler spieler) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -182,13 +182,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
-        db.insert(TABLE_SPIELER, null, values);
+        long id = db.insert(TABLE_SPIELER, null, values);
         db.close();
         Log.d(TAG, "addSpieler durchgeführt");
+        return id;
 
     }
 
-    public void addTeam(Team team) {
+    public long addTeam(Team team) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -198,8 +199,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
-        db.insert(TABLE_TEAM, null, values);
+        long id = db.insert(TABLE_TEAM, null, values);
         db.close();
+        return id;
 
     }
 
