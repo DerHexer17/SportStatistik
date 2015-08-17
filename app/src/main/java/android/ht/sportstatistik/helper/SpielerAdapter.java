@@ -19,10 +19,8 @@ import java.util.List;
  */
 public class SpielerAdapter extends ArrayAdapter<Spieler> {
 
-     Context context;
-     List<Spieler> spieler;
+
      DatabaseHelper dbh;
-     boolean complex;
 
 
      /*public SpielerAdapter(Context context, List<Spieler> spieler){
@@ -34,62 +32,30 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
 
     public SpielerAdapter(Context context, int resource, List<Spieler> spieler) {
         super(context, resource, spieler);
-        this.spieler=spieler;
-        this.context=context;
-        complex = true;
         dbh=DatabaseHelper.getInstance(context);
     }
 
     @Override
-        public int getCount() {
-            return spieler.size();
-        }
-
-        @Override
-        public Spieler getItem(int position) {
-            return spieler.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                if(complex == true) {
-                    LayoutInflater mInflater = (LayoutInflater)
-                            context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+                 LayoutInflater mInflater = (LayoutInflater)
+                         getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
                     convertView = mInflater.inflate(R.layout.list_item_spieler, null);
 
                     TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
                     TextView txtMannschaft = (TextView) convertView.findViewById(R.id.spielerListTeam);
 
-                    txtTitle.setText(spieler.get(position).getVorname()+" "+
-                            spieler.get(position).getNachname()+" ("+
-                            spieler.get(position).getNummmer()+")");
-                    if(dbh.getAllTeamsFromPlayer(spieler.get(position).getId()).size() == 0){
+                    txtTitle.setText(getItem(position).getVorname()+" "+
+                            getItem(position).getNachname()+" ("+
+                            getItem(position).getNummmer()+")");
+                    if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 0){
                         txtMannschaft.setText("Ohne Mannschaft");
-                    }else if(dbh.getAllTeamsFromPlayer(spieler.get(position).getId()).size() == 1){
-                        txtMannschaft.setText(dbh.getAllTeamsFromPlayer(spieler.get(position).getId()).get(0).getLang_name());
+                    }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){
+                        txtMannschaft.setText(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0).getLang_name());
                     }else{
                         txtMannschaft.setText("Mehrere Mannschaften");
                     }
-                }else{
-                    LayoutInflater mInflater = (LayoutInflater)
-                            context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    convertView = mInflater.inflate(R.layout.list_item, null);
 
-                    TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-
-
-                    txtTitle.setText(spieler.get(position).getVorname()+" "+
-                            spieler.get(position).getNachname()+" ("+
-                            spieler.get(position).getNummmer()+")");
-                    //txtTitle.setText(spiele.get(position).getNachname());
-
-                }
             }
 
 

@@ -67,8 +67,8 @@ public class MainActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        setTitle("Sport Statistik App");
-        mTitle = getTitle();
+        //setTitle("Sport Statistik App");
+        mTitle = "Sport Statistik";
 
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         dbh = DatabaseHelper.getInstance(this);
@@ -82,7 +82,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
-
+        //setTitle(navMenuTitles[position]);
         switch(position){
             case 0:
                 fragment = new SpielFragment();
@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, fragment)
                     .commit();
 
-            //setTitle(navMenuTitles[position]);
+
         }
 
     }
@@ -297,6 +297,11 @@ public class MainActivity extends ActionBarActivity
                 }
 
                 dbh.addTeam(t);
+                ListView lv = (ListView) findViewById(R.id.listViewTeams);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.add(t);
+                Log.d("Adapter", "Objekt t geadded. Kurztitel: "+t.getKurz_name());
+                adapter.notifyDataSetChanged();
                 // Do something with value!
             }
         });

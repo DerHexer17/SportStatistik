@@ -30,23 +30,23 @@ public class TeamSpielerAdapter extends SpielerAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
-                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.list_item_checkbox, null);
         }
 
         CheckBox cb = (CheckBox) convertView.findViewById(R.id.cbSpieler);
-        cb.setText(spieler.get(position).getVorname()+" "+
-                spieler.get(position).getNachname()+" ("+
-                spieler.get(position).getNummmer()+")");
+        cb.setText(getItem(position).getVorname()+" "+
+                getItem(position).getNachname()+" ("+
+                getItem(position).getNummmer()+")");
 
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    selectedSpieler.add(spieler.get(position));
+                    selectedSpieler.add(getItem(position));
                 } else {
-                    selectedSpieler.remove(spieler.get(position));
+                    selectedSpieler.remove(getItem(position));
                 }
 
             }

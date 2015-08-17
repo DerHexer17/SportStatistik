@@ -8,6 +8,7 @@ import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.TeamAdapter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -89,7 +90,7 @@ public class TeamFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewTeams);
-        lv.setAdapter(new TeamsAdapter(getActivity().getApplicationContext(), (List<Team>) dbh.getAllTeams()));
+        lv.setAdapter(new TeamAdapter(getActivity().getApplicationContext(), R.id.teamSpieler, dbh.getAllTeams()));
 
         return rootView;
     }
@@ -135,52 +136,6 @@ public class TeamFragment extends Fragment {
 
     }
 
-    private class TeamsAdapter extends BaseAdapter {
 
-        Context context;
-        List<Team> teams;
-        public TeamsAdapter(Context context, List<Team> teams){
-            this.context = context;
-            this.teams = teams;
-        }
-        @Override
-        public int getCount() {
-            return teams.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return teams.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater mInflater = (LayoutInflater)
-                        context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                convertView = mInflater.inflate(R.layout.list_item, null);
-            }
-
-
-            TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-
-            txtTitle.setText((CharSequence) teams.get(position).getLang_name());
-            //txtTitle.setText(spiele.get(position).getNachname());
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), TeamActivity.class);
-                    intent.putExtra("teamId", teams.get(position).getId());
-                    startActivity(intent);
-                }
-            });
-            return convertView;
-        }
-    }
 
 }
