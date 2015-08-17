@@ -64,7 +64,7 @@ public class Testdaten {
         Spieler s10 = new Spieler("Ben", "Benisch", 3, false);
         s10.setId((int) dbh.addSpieler(s10));
         dbh.addSpielerToTeam(s10, t2);
-        Spieler s11 = new Spieler("Andrea ", "Sauer", 5, false);
+        Spieler s11 = new Spieler("Andrea", "Sauer", 5, false);
         s11.setId((int) dbh.addSpieler(s11));
         dbh.addSpielerToTeam(s11, t3);
         Spieler s12 = new Spieler("Katharina", "Dinter", 11, false);
@@ -73,7 +73,7 @@ public class Testdaten {
         Spieler s13 = new Spieler("Eike", "Dusi", 2, false);
         s13.setId((int) dbh.addSpieler(s13));
         dbh.addSpielerToTeam(s13, t3);
-        Spieler s14 = new Spieler("Anja", "Weihäuser", 45, false);
+        Spieler s14 = new Spieler("Anja", "Weithäuser", 45, false);
         s14.setId((int) dbh.addSpieler(s14));
         dbh.addSpielerToTeam(s14, t3);
 

@@ -27,17 +27,19 @@ public class TeamActivity extends ActionBarActivity {
 
     Team team;
     DatabaseHelper dbh;
+    List<Spieler> ausgewaehlteSpieler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
         dbh = DatabaseHelper.getInstance(this);
         team = dbh.getTeam(getIntent().getIntExtra("teamId", 0));
+        ausgewaehlteSpieler = new ArrayList<Spieler>();
         setTitle(team.getKurz_name());
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
-        lv.setAdapter(new SpielerAdapter(this, dbh.getAllPlayersFromTeam(team.getId())));
+        lv.setAdapter(new SpielerAdapter(this, dbh.getAllPlayersFromTeam(team.getId()), false));
     }
 
 
@@ -72,22 +74,18 @@ public class TeamActivity extends ActionBarActivity {
         // Set an EditText view to get user input
         final ListView lv = new ListView(this);
         lv.setMinimumHeight(50);
-        lv.setAdapter(new TeamSpielerAdapter(this, dbh.getAllPlayers()));
+        lv.setAdapter(new TeamSpielerAdapter(this, dbh.getAllPlayersNotFromTeam(team.getId()), true));
+
 
         alert.setView(lv);
 
         AlertDialog.Builder speichern = alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                List<Spieler> ausgewaehlteSpieler = new ArrayList<Spieler>();
-                for (int i = 0; i < lv.getAdapter().getCount(); i++){
-                    View v = (View) lv.getRootView();
-                    CheckBox cb = (CheckBox) v.findViewById(R.id.cbSpieler);
-
-                    if(cb.isChecked()){
-                        dbh.addSpielerToTeam((Spieler) lv.getAdapter().getItem(i), team);
-                    }
-
+                TeamSpielerAdapter tsa = (TeamSpielerAdapter) lv.getAdapter();
+                for(Spieler s : tsa.getSelectedSpieler()){
+                    dbh.addSpielerToTeam(s, team);
                 }
+
             }
         });
 
@@ -100,4 +98,5 @@ public class TeamActivity extends ActionBarActivity {
 
         alert.show();
     }
+
 }

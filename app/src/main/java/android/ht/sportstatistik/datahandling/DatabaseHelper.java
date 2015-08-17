@@ -392,6 +392,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleTeams;
     }
 
+    public List<Team> getAllTeamsFromPlayer(int id) {
+        List<Team> alleTeamsFromPlayer = new ArrayList<Team>();
+        String selectQuery = "SELECT  * FROM " + TABLE_TEAM_SPIELER + ", " + TABLE_TEAM +
+                " WHERE " + TABLE_TEAM + "." + KEY_ID + " = " + TEAM_SPIELER_TEAM +
+                " AND " + TEAM_SPIELER_SPIELER + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Team t = new Team();
+
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
+                t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
+                t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));
+                alleTeamsFromPlayer.add(t);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleTeamsFromPlayer;
+    }
+
     public List<Spiel> getAllGames() {
         List<Spiel> alleSpiele = new ArrayList<Spiel>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + ", " + TABLE_TEAM + " WHERE " +
