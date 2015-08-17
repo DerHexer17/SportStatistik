@@ -259,7 +259,8 @@ public class MainActivity extends ActionBarActivity
 
         alert.show();
         ListView lv = (ListView) findViewById(R.id.listViewSpiele);
-        
+
+
     }
 
     public void neuesTeam(View view){
@@ -358,6 +359,10 @@ public class MainActivity extends ActionBarActivity
 
 
                 dbh.addSpieler(sp);
+                ListView lv = (ListView) findViewById(R.id.listViewSpieler);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.add(sp);
+                adapter.notifyDataSetChanged();
                 // Do something with value!
             }
         });

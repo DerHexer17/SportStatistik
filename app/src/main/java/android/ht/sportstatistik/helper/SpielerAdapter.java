@@ -8,6 +8,7 @@ import android.ht.sportstatistik.datahandling.Spieler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -16,25 +17,36 @@ import java.util.List;
 /**
  * Created by heth on 30.03.2015.
  */
-public class SpielerAdapter extends BaseAdapter{
+public class SpielerAdapter extends ArrayAdapter<Spieler> {
 
      Context context;
      List<Spieler> spieler;
      DatabaseHelper dbh;
-    boolean complex;
-     public SpielerAdapter(Context context, List<Spieler> spieler, boolean complex){
+     boolean complex;
+
+
+     /*public SpielerAdapter(Context context, List<Spieler> spieler){
           this.context = context;
           this.spieler = spieler;
           dbh = DatabaseHelper.getInstance(context);
           this.complex=complex;
-        }
-        @Override
+        }*/
+
+    public SpielerAdapter(Context context, int resource, List<Spieler> spieler) {
+        super(context, resource, spieler);
+        this.spieler=spieler;
+        this.context=context;
+        complex = true;
+        dbh=DatabaseHelper.getInstance(context);
+    }
+
+    @Override
         public int getCount() {
             return spieler.size();
         }
 
         @Override
-        public Object getItem(int position) {
+        public Spieler getItem(int position) {
             return spieler.get(position);
         }
 
@@ -57,7 +69,6 @@ public class SpielerAdapter extends BaseAdapter{
                     txtTitle.setText(spieler.get(position).getVorname()+" "+
                             spieler.get(position).getNachname()+" ("+
                             spieler.get(position).getNummmer()+")");
-                    //txtTitle.setText(spiele.get(position).getNachname());
                     if(dbh.getAllTeamsFromPlayer(spieler.get(position).getId()).size() == 0){
                         txtMannschaft.setText("Ohne Mannschaft");
                     }else if(dbh.getAllTeamsFromPlayer(spieler.get(position).getId()).size() == 1){

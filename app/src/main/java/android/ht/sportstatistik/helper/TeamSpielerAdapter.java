@@ -20,8 +20,8 @@ import java.util.List;
 public class TeamSpielerAdapter extends SpielerAdapter {
     List<Spieler> selectedSpieler;
 
-    public TeamSpielerAdapter(Context context, List<Spieler> spieler) {
-        super(context, spieler);
+    public TeamSpielerAdapter(Context context, int resource, List<Spieler> objects) {
+        super(context, resource, objects);
         selectedSpieler = new ArrayList<Spieler>();
     }
 

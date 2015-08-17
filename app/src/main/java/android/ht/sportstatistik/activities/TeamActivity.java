@@ -39,7 +39,7 @@ public class TeamActivity extends ActionBarActivity {
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
-        lv.setAdapter(new SpielerAdapter(this, dbh.getAllPlayersFromTeam(team.getId()), false));
+        lv.setAdapter(new SpielerAdapter(this, R.id.spielerListTeam ,dbh.getAllPlayersFromTeam(team.getId())));
     }
 
 
@@ -74,7 +74,7 @@ public class TeamActivity extends ActionBarActivity {
         // Set an EditText view to get user input
         final ListView lv = new ListView(this);
         lv.setMinimumHeight(50);
-        lv.setAdapter(new TeamSpielerAdapter(this, dbh.getAllPlayersNotFromTeam(team.getId()), true));
+        lv.setAdapter(new TeamSpielerAdapter(this, R.id.spielerListTeam, dbh.getAllPlayersNotFromTeam(team.getId())));
 
 
         alert.setView(lv);

@@ -89,7 +89,7 @@ public class SpielerFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpieler);
-        lv.setAdapter(new SpielerAdapter(getActivity().getApplicationContext(), (List<Spieler>) dbh.getAllPlayers()));
+        lv.setAdapter(new SpielerAdapter(getActivity().getApplicationContext(), R.id.spielerListTeam, (List<Spieler>) dbh.getAllPlayers()));
 
         return rootView;
     }
