@@ -117,8 +117,12 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
     @Override
     public void spielerRemove(int position) {
         String toastText;
-        toastText = "Gelöscht wird: Spieler "+spielerAdapter.getItem(position).getVorname()+" und Team "+team.getLang_name();
-        Toast toast = Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT);
+
+        int i = dbh.removePlayerFromTeam(spielerAdapter.getItem(position), team);
+        spielerAdapter.remove(spielerAdapter.getItem(position));
+        spielerAuswahlAdapter.add(spielerAdapter.getItem(position));
+        //toastText = "Gelöscht wird: Spieler "+spielerAdapter.getItem(position).getVorname()+" und Team "+team.getLang_name();
+        Toast toast = Toast.makeText(getApplicationContext(), "Gelöschte Datensätze: "+i, Toast.LENGTH_SHORT);
         toast.show();
     }
 }

@@ -468,4 +468,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpiele;
     }
 
+    public int removePlayerFromTeam(Spieler s, Team t){
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        return db.delete(TABLE_TEAM_SPIELER, TEAM_SPIELER_SPIELER + " = " + s.getId() +
+                " AND " + TEAM_SPIELER_TEAM + " = " + t.getId(), null);
+    }
 }
