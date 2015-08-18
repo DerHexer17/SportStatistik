@@ -6,28 +6,30 @@ import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.SpielerAdapter;
-import android.ht.sportstatistik.helper.TeamSpielerAdapter;
+import android.ht.sportstatistik.helper.SpielerInTeamAdapter;
+import android.ht.sportstatistik.helper.SpielerZuTeamAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends ActionBarActivity {
+public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdapter.SpielerInTeamAdapterCallback{
 
     Team team;
     DatabaseHelper dbh;
     List<Spieler> ausgewaehlteSpieler;
+    SpielerInTeamAdapter spielerAdapter;
+    SpielerZuTeamAdapter spielerAuswahlAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,12 @@ public class TeamActivity extends ActionBarActivity {
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
-        lv.setAdapter(new SpielerAdapter(this, R.id.spielerListTeam ,dbh.getAllPlayersFromTeam(team.getId())));
+        spielerAdapter = new SpielerInTeamAdapter(this, R.id.spielerListTeam ,dbh.getAllPlayersFromTeam(team.getId()));
+        spielerAdapter.setNotifyOnChange(true);
+        spielerAdapter.setCallback(this);
+        spielerAuswahlAdapter = new SpielerZuTeamAdapter(this, R.id.spielerListTeam, dbh.getAllPlayersNotFromTeam(team.getId()));
+        spielerAuswahlAdapter.setNotifyOnChange(true);
+        lv.setAdapter(spielerAdapter);
     }
 
 
@@ -74,16 +81,24 @@ public class TeamActivity extends ActionBarActivity {
         // Set an EditText view to get user input
         final ListView lv = new ListView(this);
         lv.setMinimumHeight(50);
-        lv.setAdapter(new TeamSpielerAdapter(this, R.id.spielerListTeam, dbh.getAllPlayersNotFromTeam(team.getId())));
+        lv.setAdapter(spielerAuswahlAdapter);
 
 
         alert.setView(lv);
 
         AlertDialog.Builder speichern = alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                TeamSpielerAdapter tsa = (TeamSpielerAdapter) lv.getAdapter();
+                SpielerZuTeamAdapter tsa = (SpielerZuTeamAdapter) lv.getAdapter();
                 for(Spieler s : tsa.getSelectedSpieler()){
-                    dbh.addSpielerToTeam(s, team);
+                    if(dbh.addSpielerToTeam(s, team)){
+                        spielerAdapter.add(s);
+                        spielerAuswahlAdapter.remove(s);
+                    }else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "Spieler gehört schon zum Team", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+
                 }
 
             }
@@ -99,4 +114,11 @@ public class TeamActivity extends ActionBarActivity {
         alert.show();
     }
 
+    @Override
+    public void spielerRemove(int position) {
+        String toastText;
+        toastText = "Gelöscht wird: Spieler "+spielerAdapter.getItem(position).getVorname()+" und Team "+team.getLang_name();
+        Toast toast = Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 }

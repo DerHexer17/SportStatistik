@@ -64,13 +64,14 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         //setTitle("Sport Statistik App");
         mTitle = "Sport Statistik";
 
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
         dbh = DatabaseHelper.getInstance(this);
 
         // Set up the drawer.
@@ -82,7 +83,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
-        //setTitle(navMenuTitles[position]);
+
         switch(position){
             case 0:
                 fragment = new SpielFragment();
@@ -112,7 +113,7 @@ public class MainActivity extends ActionBarActivity
 
     public void onSectionAttached(int number) {
 
-        mTitle = navMenuTitles[number-1];
+        //mTitle = navMenuTitles[number-1];
 
     }
 
@@ -120,6 +121,7 @@ public class MainActivity extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+
         actionBar.setTitle(mTitle);
     }
 

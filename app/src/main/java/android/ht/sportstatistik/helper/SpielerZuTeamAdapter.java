@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * Created by heth on 30.03.2015.
  */
-public class TeamSpielerAdapter extends SpielerAdapter {
+public class SpielerZuTeamAdapter extends SpielerAdapter {
     List<Spieler> selectedSpieler;
 
-    public TeamSpielerAdapter(Context context, int resource, List<Spieler> objects) {
+    public SpielerZuTeamAdapter(Context context, int resource, List<Spieler> objects) {
         super(context, resource, objects);
         selectedSpieler = new ArrayList<Spieler>();
     }

@@ -37,10 +37,15 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /*if (v == null) {
+            LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = vi.inflate(R.layout.list_item_movie_medium, null);
+        }*/
         if (convertView == null) {
-                 LayoutInflater mInflater = (LayoutInflater)
-                         getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    convertView = mInflater.inflate(R.layout.list_item_spieler, null);
+            LayoutInflater mInflater = (LayoutInflater)
+                    getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            convertView = mInflater.inflate(R.layout.list_item_spieler, null);
+        }
 
                     TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
                     TextView txtMannschaft = (TextView) convertView.findViewById(R.id.spielerListTeam);
@@ -56,7 +61,7 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
                         txtMannschaft.setText("Mehrere Mannschaften");
                     }
 
-            }
+
 
 
 

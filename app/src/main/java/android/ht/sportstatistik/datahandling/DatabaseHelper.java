@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -221,16 +221,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addSpielerToTeam(Spieler s, Team t){
+    public boolean addSpielerToTeam(Spieler s, Team t){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(TEAM_SPIELER_SPIELER, s.getId());
-        values.put(TEAM_SPIELER_TEAM, t.getId());
-        values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
+        if(getAllTeamsFromPlayer(s.getId()).contains(t)){
+            return false;
+        }else {
+            ContentValues values = new ContentValues();
+            values.put(TEAM_SPIELER_SPIELER, s.getId());
+            values.put(TEAM_SPIELER_TEAM, t.getId());
+            values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
 
-        db.insert(TABLE_TEAM_SPIELER, null, values);
-        db.close();
+            db.insert(TABLE_TEAM_SPIELER, null, values);
+            db.close();
+            return true;
+        }
     }
 
     // ALL GETTER
