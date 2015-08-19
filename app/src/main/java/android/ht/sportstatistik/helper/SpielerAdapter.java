@@ -5,6 +5,7 @@ import android.content.Context;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Team;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,11 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
                     }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){
                         txtMannschaft.setText(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0).getLang_name());
                     }else{
-                        txtMannschaft.setText("Mehrere Mannschaften");
+                        String textMehrereMannschaften = "";
+                        for(Team t : dbh.getAllTeamsFromPlayer(getItem(position).getId())){
+                            textMehrereMannschaften = textMehrereMannschaften+" | "+t.getKurz_name();
+                        }
+                        txtMannschaft.setText(textMehrereMannschaften);
                     }
 
 

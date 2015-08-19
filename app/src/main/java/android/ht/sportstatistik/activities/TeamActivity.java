@@ -10,10 +10,12 @@ import android.ht.sportstatistik.helper.SpielerInTeamAdapter;
 import android.ht.sportstatistik.helper.SpielerZuTeamAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,10 +43,10 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
-        spielerAdapter = new SpielerInTeamAdapter(this, R.id.spielerListTeam ,dbh.getAllPlayersFromTeam(team.getId()));
+        spielerAdapter = new SpielerInTeamAdapter(this, R.id.label ,dbh.getAllPlayersFromTeam(team.getId()));
         spielerAdapter.setNotifyOnChange(true);
         spielerAdapter.setCallback(this);
-        spielerAuswahlAdapter = new SpielerZuTeamAdapter(this, R.id.spielerListTeam, dbh.getAllPlayersNotFromTeam(team.getId()));
+        spielerAuswahlAdapter = new SpielerZuTeamAdapter(this, R.id.cbSpieler, dbh.getAllPlayersNotFromTeam(team.getId()));
         spielerAuswahlAdapter.setNotifyOnChange(true);
         lv.setAdapter(spielerAdapter);
     }
@@ -79,25 +81,24 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
         alert.setMessage("Welche Spieler gehören zu diesem Team?");
 
         // Set an EditText view to get user input
-        final ListView lv = new ListView(this);
-        lv.setMinimumHeight(50);
-        lv.setAdapter(spielerAuswahlAdapter);
+        final ListView lvSpielerHinzu = new ListView(this);
+        lvSpielerHinzu.setMinimumHeight(50);
+        lvSpielerHinzu.setAdapter(spielerAuswahlAdapter);
 
 
-        alert.setView(lv);
+        alert.setView(lvSpielerHinzu);
 
-        AlertDialog.Builder speichern = alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                SpielerZuTeamAdapter tsa = (SpielerZuTeamAdapter) lv.getAdapter();
-                for(Spieler s : tsa.getSelectedSpieler()){
-                    if(dbh.addSpielerToTeam(s, team)){
-                        spielerAdapter.add(s);
-                        spielerAuswahlAdapter.remove(s);
-                    }else{
-                        Toast toast = Toast.makeText(getApplicationContext(), "Spieler gehört schon zum Team", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-
+                List<Spieler> selectedPlayers = new ArrayList<Spieler>();
+                int c = 0;
+                Log.d("addSpieler", "Größe selectedSpieler: "+spielerAuswahlAdapter.getSelectedSpieler().size());
+                Toast toast = Toast.makeText(getApplicationContext(), "Adapter: "+spielerAuswahlAdapter.getClass(), Toast.LENGTH_SHORT);
+                for(Spieler s : spielerAuswahlAdapter.getSelectedSpieler()){
+                    long l = dbh.addSpielerToTeam(s, team);
+                    Log.d("addSpieler", "dbh return: "+l);
+                    spielerAdapter.add(s);
+                    spielerAuswahlAdapter.remove(s);
 
                 }
 
@@ -116,13 +117,10 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
 
     @Override
     public void spielerRemove(int position) {
-        String toastText;
-
+        spielerAuswahlAdapter.add(spielerAdapter.getItem(position));
         int i = dbh.removePlayerFromTeam(spielerAdapter.getItem(position), team);
         spielerAdapter.remove(spielerAdapter.getItem(position));
-        spielerAuswahlAdapter.add(spielerAdapter.getItem(position));
-        //toastText = "Gelöscht wird: Spieler "+spielerAdapter.getItem(position).getVorname()+" und Team "+team.getLang_name();
-        Toast toast = Toast.makeText(getApplicationContext(), "Gelöschte Datensätze: "+i, Toast.LENGTH_SHORT);
-        toast.show();
+
+
     }
 }

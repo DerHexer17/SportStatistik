@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -184,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long id = db.insert(TABLE_SPIELER, null, values);
         db.close();
-        Log.d(TAG, "addSpieler durchgeführt");
+        Log.d(TAG, "addSpieler durchgeführt, ID: "+id);
         return id;
 
     }
@@ -221,21 +221,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean addSpielerToTeam(Spieler s, Team t){
+    public long addSpielerToTeam(Spieler s, Team t){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        if(getAllTeamsFromPlayer(s.getId()).contains(t)){
-            return false;
-        }else {
-            ContentValues values = new ContentValues();
-            values.put(TEAM_SPIELER_SPIELER, s.getId());
-            values.put(TEAM_SPIELER_TEAM, t.getId());
-            values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
+        ContentValues values = new ContentValues();
+        values.put(TEAM_SPIELER_SPIELER, s.getId());
+        values.put(TEAM_SPIELER_TEAM, t.getId());
+        values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
 
-            db.insert(TABLE_TEAM_SPIELER, null, values);
-            db.close();
-            return true;
-        }
+        long l = db.insert(TABLE_TEAM_SPIELER, null, values);
+        db.close();
+        return l;
     }
 
     // ALL GETTER
@@ -298,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
-                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                s.setId(c.getInt(0));
                 if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
                     s.setTorwart(true);
                 }else{
@@ -320,6 +316,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
+        String TAG = "allPlayersNotFromTeam";
         List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
@@ -336,7 +333,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
-                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                s.setId(c.getInt(0));
                 if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
                     s.setTorwart(true);
                 }else{
