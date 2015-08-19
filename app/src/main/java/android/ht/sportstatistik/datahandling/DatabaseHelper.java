@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 7;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -40,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_TEAM_SPIELER = "team_spieler";
     private static final String TABLE_SPIEL_SPIELER = "spiel_spieler";
     private static final String TABLE_STATISTIK = "statistik";
+    private static final String TABLE_SPORTART = "sportart";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -62,8 +63,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // EREIGNIS Table - column names
     private static final String EREIGNIS_NAME = "ereignis_name";
+    //private static final String EREIGNIS_EINHEIT = "ereignis_einheit";
     private static final String EREIGNIS_BESCHREIBUNG = "ereignis_beschreibung";
     private static final String EREIGNIS_BILD = "ereignis_bild";
+    private static final String EREIGNIS_SPORTART = "ereignis_sportart";
 
     // SPIELER Table - column names
     private static final String SPIELER_VORNAME = "spieler_vorname";
@@ -85,6 +88,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String STATISTIK_SPIELER = "statistik_spieler";
     private static final String STATISTIK_EREIGNIS = "statistik_ereignis";
 
+    //SPORTART Table - column names
+    private static final String SPORTART_TITEL = "sportart_titel";
+    private static final String SPORTART_BESCHREIBUNG = "sportart_beschreibung";
+
     // Table Create Statements
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE " + TABLE_TEAM + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_KURZ + " TEXT, " +
@@ -103,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_EREIGNIS = "CREATE TABLE " + TABLE_EREIGNIS + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + EREIGNIS_NAME + " TEXT, " +
             EREIGNIS_BESCHREIBUNG + " TEXT, " + EREIGNIS_BILD + " TEXT, " +
-            KEY_CREATED_AT + " DATE" + ")";
+            EREIGNIS_SPORTART + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIELER_VORNAME + " TEXT, " +
@@ -123,6 +130,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY, " + STATISTIK_SPIEL + " INTEGER, " +
             STATISTIK_SPIELER + " INTEGER, " + STATISTIK_EREIGNIS + " INTEGER, " +
             KEY_CREATED_AT + " DATE" + ")";
+
+    private static final String CREATE_TABLE_SPORTART = "CREATE TABLE " + TABLE_SPORTART + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY, " + SPORTART_TITEL + " TEXT, " +
+            SPORTART_BESCHREIBUNG + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
 
     public static DatabaseHelper getInstance(Context context) {
         if (sInstance == null) {
@@ -148,6 +159,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STATISTIK);
         db.execSQL(CREATE_TABLE_TEAM);
         db.execSQL(CREATE_TABLE_TEAM_SPIELER);
+        db.execSQL(CREATE_TABLE_SPORTART);
 
     }
 
@@ -162,6 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTIK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM_SPIELER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPORTART);
         // create new tables
         onCreate(db);
     }
@@ -205,20 +218,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addSpiel(Spiel spiel) {
+    public long addSpiel(Spiel spiel) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(SPIEL_BEENDET, spiel.getBeendet());
         values.put(SPIEL_GASTTEAM, spiel.getGastteam());
-        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam_id());
+        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(SPIEL_DATUM, formatter.format(spiel.getDatum()));
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
-        db.insert(TABLE_SPIEL, null, values);
+        long l = db.insert(TABLE_SPIEL, null, values);
         db.close();
+        return l;
 
+    }
+
+    public long addEreignis(Ereignis e){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(EREIGNIS_NAME, e.getName());
+        values.put(EREIGNIS_BESCHREIBUNG, e.getBeschreibung());
+        values.put(EREIGNIS_BILD, e.getBild());
+        //values.put(EREIGNIS_SPORTART, e.getSportart().getId());
+
+        long l = db.insert(TABLE_EREIGNIS, null, values);
+        db.close();
+        return l;
     }
 
     public long addSpielerToTeam(Spieler s, Team t){
@@ -426,6 +454,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleTeamsFromPlayer;
     }
 
+    public Spiel getSpiel(int id){
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + " WHERE " + KEY_ID + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Spiel sp = new Spiel();
+        if(c.moveToFirst()){
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+
+            Team t = getTeam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
+
+            sp.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
+            sp.setHeimteam(t);
+            sp.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
+            sp.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            try {
+                sp.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return sp;
+    }
+
     public List<Spiel> getAllGames() {
         List<Spiel> alleSpiele = new ArrayList<Spiel>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + ", " + TABLE_TEAM + " WHERE " +
@@ -445,10 +498,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }*/
+                Team t = getTeam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
 
                 s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
-                s.setHeimteam_id(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
-                s.setHeimteam_titel(c.getString(c.getColumnIndex(TABLE_TEAM+"."+TEAM_KURZ)));
+                s.setHeimteam(t);
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
                 s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 try {
@@ -463,6 +516,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleSpiele;
+    }
+
+    public List<Ereignis> getAlleEreignisse() {
+        List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
+        String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Ereignis e = new Ereignis();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
+                e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+                e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+
+                //SPORTART!
+
+                alleEreignisse.add(e);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleEreignisse;
     }
 
     public int removePlayerFromTeam(Spieler s, Team t){

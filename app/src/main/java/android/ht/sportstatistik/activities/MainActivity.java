@@ -157,7 +157,7 @@ public class MainActivity extends ActionBarActivity
                 break;
 
             case R.id.testdatenEinspielen:
-                new Testdaten(getApplicationContext()).testdatenEinspielen();
+                new Testdaten(getApplicationContext()).ereignisseEinspielen();
                 break;
         }
 
@@ -247,8 +247,13 @@ public class MainActivity extends ActionBarActivity
                 s.setGastteam(String.valueOf(gegner.getText()));
                 s.setDatum(new Date());
                 Team t = (Team) heimteam.getSelectedItem();
-                s.setHeimteam_id(t.getId());
-                dbh.addSpiel(s);
+                s.setHeimteam(t);
+
+                s.setId((int) dbh.addSpiel(s));
+                ListView lv = (ListView) findViewById(R.id.listViewSpiele);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.add(s);
+                adapter.notifyDataSetChanged();
                 // Do something with value!
             }
         });
@@ -298,7 +303,7 @@ public class MainActivity extends ActionBarActivity
                     t.setBeschreibung("");
                 }
 
-                dbh.addTeam(t);
+                t.setId((int) dbh.addTeam(t));
                 ListView lv = (ListView) findViewById(R.id.listViewTeams);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
                 adapter.add(t);

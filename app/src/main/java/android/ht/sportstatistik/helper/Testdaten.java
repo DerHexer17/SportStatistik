@@ -2,6 +2,7 @@ package android.ht.sportstatistik.helper;
 
 import android.content.Context;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
+import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
 
@@ -78,5 +79,42 @@ public class Testdaten {
         dbh.addSpielerToTeam(s14, t3);
 
 
+    }
+
+    public void ereignisseEinspielen(){
+        Ereignis e = new Ereignis("Tor", "Tor geworfen");
+        dbh.addEreignis(e);
+
+        e.setName("Assist");
+        e.setBeschreibung("Torerfolg vorbereitet");
+        dbh.addEreignis(e);
+
+        e.setName("Fehlpass");
+        e.setBeschreibung("Fehlpass gespielt");
+        dbh.addEreignis(e);
+
+        e.setName("Fehlwurf");
+        e.setBeschreibung("Wurfversucht ohne Torerfolg");
+        dbh.addEreignis(e);
+
+        e.setName("Gelbe Karte");
+        e.setBeschreibung("Gelbe Karte erhalten");
+        dbh.addEreignis(e);
+
+        e.setName("2 Minuten");
+        e.setBeschreibung("2 Minuten Zeitstrafe erhalten");
+        dbh.addEreignis(e);
+
+        e.setName("Rot");
+        e.setBeschreibung("Rote Karte erhalten");
+        dbh.addEreignis(e);
+
+        e.setName("Gehalten");
+        e.setBeschreibung("Gegnerischen Wurf pariert");
+        dbh.addEreignis(e);
+
+        e.setName("Block");
+        e.setBeschreibung("Gegnerischen Wurf geblockt");
+        dbh.addEreignis(e);
     }
 }

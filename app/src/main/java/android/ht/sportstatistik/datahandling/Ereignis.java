@@ -8,6 +8,24 @@ public class Ereignis {
     private String name;
     private String beschreibung;
     private String bild;
+    private Sportart sportart;
+
+    public Ereignis(){
+
+    }
+
+    public Ereignis(String name, String beschreibung){
+        this.name=name;
+        this.beschreibung=beschreibung;
+    }
+
+    public Sportart getSportart() {
+        return sportart;
+    }
+
+    public void setSportart(Sportart sportart) {
+        this.sportart = sportart;
+    }
 
     public String getName() {
         return name;

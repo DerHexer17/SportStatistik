@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sport Statistik</string>
+    <string name="app_name">SportStatistik</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -26,4 +26,5 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_team">TeamActivity</string>
+    <string name="title_activity_spiel">SpielActivity</string>
 </resources>

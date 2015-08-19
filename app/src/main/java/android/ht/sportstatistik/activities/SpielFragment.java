@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.helper.SpielAdapter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -87,7 +88,7 @@ public class SpielFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);
-        lv.setAdapter(new SpieleAdapter(getActivity().getApplicationContext(), (List<Spiel>) dbh.getAllGames()));
+        lv.setAdapter(new SpielAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames()));
 
         return rootView;
     }
@@ -132,45 +133,6 @@ public class SpielFragment extends Fragment {
         public void onFragmentInteraction(int position);
     }
 
-    private class SpieleAdapter extends BaseAdapter {
 
-        Context context;
-        List<Spiel> spiele;
-        public SpieleAdapter(Context context, List<Spiel> spiele){
-            this.context = context;
-            this.spiele = spiele;
-        }
-        @Override
-        public int getCount() {
-            return spiele.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return spiele.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater mInflater = (LayoutInflater)
-                        context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                convertView = mInflater.inflate(R.layout.list_item, null);
-            }
-
-
-            TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-
-            txtTitle.setText(spiele.get(position).getHeimteam_titel()+" gegen "+spiele.get(position).getGastteam());
-            //txtTitle.setText(spiele.get(position).getNachname());
-
-            return convertView;
-        }
-    }
 
 }

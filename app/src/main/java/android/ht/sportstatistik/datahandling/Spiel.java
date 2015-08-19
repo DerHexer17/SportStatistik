@@ -8,8 +8,7 @@ import java.util.Date;
 public class Spiel {
 
     private int id;
-    private int heimteam_id;
-    private String heimteam_titel;
+    private Team heimteam;
     private String gastteam;
     private Date datum;
     private String beendet;
@@ -22,20 +21,12 @@ public class Spiel {
         this.id = id;
     }
 
-    public int getHeimteam_id() {
-        return heimteam_id;
+    public Team getHeimteam() {
+        return heimteam;
     }
 
-    public void setHeimteam_id(int heimteam_id) {
-        this.heimteam_id = heimteam_id;
-    }
-
-    public String getHeimteam_titel() {
-        return heimteam_titel;
-    }
-
-    public void setHeimteam_titel(String heimteam_titel) {
-        this.heimteam_titel = heimteam_titel;
+    public void setHeimteam(Team heimteam) {
+        this.heimteam = heimteam;
     }
 
     public String getGastteam() {
