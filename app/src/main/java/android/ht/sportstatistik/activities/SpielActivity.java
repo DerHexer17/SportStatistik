@@ -11,6 +11,7 @@ import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
@@ -37,6 +38,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     SpielerInSpielAdapter spieler;
     EreignisAdapter ereignisse;
     AlertDialog alert;
+
+    private int gewaehlterSpieler;
+    private int gewaehltesEreignis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,49 +97,28 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         return super.onOptionsItemSelected(item);
     }
 
-    public void neuesEreignisWaehlen(){
+    public void neuesEreignisWaehlen(int position){
 
-        /*
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                Spiel s = new Spiel();
-                s.setBeendet("Nein");
-                s.setGastteam(String.valueOf(gegner.getText()));
-                s.setDatum(new Date());
-                Team t = (Team) heimteam.getSelectedItem();
-                s.setHeimteam(t);
-
-                s.setId((int) dbh.addSpiel(s));
-                ListView lv = (ListView) findViewById(R.id.listViewSpiele);
-                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
-                adapter.add(s);
-                adapter.notifyDataSetChanged();
-                // Do something with value!
-            }
-        });
-
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });*/
-
+        gewaehlterSpieler = spieler.getItem(position).getId();
         alert.show();
 
     }
 
-    public void neuesEreignisSpeichern(){
+    public void neuesEreignisSpeichern(int position){
+        gewaehltesEreignis = ereignisse.getItem(position).getId();
         alert.dismiss();
+        Log.d("ereignis", "Folgendes Ereignis gespeichert: Spieler ID " + gewaehlterSpieler + ", Ereignis ID " + gewaehltesEreignis);
     }
 
     @Override
     public void neuesEreignisPopUp(int position) {
-        neuesEreignisWaehlen();
+        neuesEreignisWaehlen(position);
+
     }
 
     @Override
-    public void neuesEreignisHinzufuegen(int positon){
-        neuesEreignisSpeichern();
+    public void neuesEreignisHinzufuegen(int position){
+        neuesEreignisSpeichern(position);
     }
 
     public void setupAlert(){

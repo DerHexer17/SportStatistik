@@ -536,7 +536,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }*/
-
+                e.setId(c.getInt(0));
                 e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
                 e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
                 e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
