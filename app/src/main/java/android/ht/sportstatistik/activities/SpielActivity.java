@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
+import android.ht.sportstatistik.datahandling.EreignisZuordnung;
 import android.ht.sportstatistik.datahandling.Spiel;
+import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.EreignisAdapter;
 import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
@@ -36,11 +39,13 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     Spiel spiel;
     DatabaseHelper dbh;
     SpielerInSpielAdapter spieler;
+    List<SpielerEreignisZuordnung> tempSpielerListe;
     EreignisAdapter ereignisse;
     AlertDialog alert;
 
-    private int gewaehlterSpieler;
-    private int gewaehltesEreignis;
+    private Spieler gewaehlterSpieler;
+    private Ereignis gewaehltesEreignis;
+    private int gewaehltePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +54,18 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         dbh = DatabaseHelper.getInstance(getApplicationContext());
         spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
-        setTitle(spiel.getHeimteam().getKurz_name()+"-"+spiel.getGastteam());
+        setTitle(spiel.getHeimteam().getKurz_name() + "-" + spiel.getGastteam());
         TextView titel = (TextView) findViewById(R.id.spielTitel);
         titel.setText(spiel.getHeimteam().getLang_name()+" - "+spiel.getGastteam());
 
-        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()));
+        tempSpielerListe = new ArrayList<SpielerEreignisZuordnung>();
+        for(Spieler s : dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId())){
+            SpielerEreignisZuordnung sez = new SpielerEreignisZuordnung();
+            sez.setSpieler(s);
+            tempSpielerListe.add(sez);
+        }
+
+        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()), spiel));
         spieler.setNotifyOnChange(true);
         spieler.setCallback(this);
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
@@ -98,16 +110,25 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     }
 
     public void neuesEreignisWaehlen(int position){
-
-        gewaehlterSpieler = spieler.getItem(position).getId();
+        gewaehltePosition = position;
+        gewaehlterSpieler = spieler.getItem(position).getSpieler();
         alert.show();
 
     }
 
     public void neuesEreignisSpeichern(int position){
-        gewaehltesEreignis = ereignisse.getItem(position).getId();
+        gewaehltesEreignis = ereignisse.getItem(position);
         alert.dismiss();
-        Log.d("ereignis", "Folgendes Ereignis gespeichert: Spieler ID " + gewaehlterSpieler + ", Ereignis ID " + gewaehltesEreignis);
+        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(gewaehltesEreignis.getName())){
+            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(gewaehltesEreignis.getName());
+            spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
+            spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), value+1);
+        }else{
+            spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), 1);
+        }
+        spieler.notifyDataSetChanged();
+        long l = dbh.addStatistik(new EreignisZuordnung(spiel, gewaehlterSpieler, gewaehltesEreignis));
+        Log.d("ereignis", "Spieler: "+gewaehlterSpieler.getVorname()+" , Ereignis: "+gewaehltesEreignis.getName()+", Position: "+gewaehltePosition);
     }
 
     @Override

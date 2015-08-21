@@ -4,24 +4,28 @@ import android.app.Activity;
 import android.content.Context;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
+import android.ht.sportstatistik.datahandling.EreignisZuordnung;
 import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class SpielerInSpielAdapter extends SpielerAdapter {
+public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung> {
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
 
-    public SpielerInSpielAdapter(Context context, int resource, List<Spieler> spieler) {
-        super(context, resource, spieler);
+    public SpielerInSpielAdapter(Context context, int resource, List<SpielerEreignisZuordnung> objects) {
+        super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }
 
@@ -34,9 +38,15 @@ public class SpielerInSpielAdapter extends SpielerAdapter {
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        TextView txtEreignisse = (TextView) convertView.findViewById(R.id.spielEreignisse);
 
-        txtTitle.setText(getItem(position).getVorname().substring(0,1)+". "+getItem(position).getNachname()+
-            " ("+getItem(position).getNummmer()+")");
+        txtTitle.setText(getItem(position).getSpieler().getVorname().substring(0, 1)+". "+getItem(position).getSpieler().getNachname()+
+            " ("+getItem(position).getSpieler().getNummmer()+")");
+
+        txtEreignisse.setText("");
+        for(Map.Entry<String, Integer> e : getItem(position).getEreignisse().entrySet()){
+            txtEreignisse.setText(txtEreignisse.getText()+" | "+e.getKey()+": "+e.getValue());
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,8 +11,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by HT on 18.03.2015.
@@ -26,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -197,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long id = db.insert(TABLE_SPIELER, null, values);
         db.close();
-        Log.d(TAG, "addSpieler durchgeführt, ID: "+id);
+        Log.d(TAG, "addSpieler durchgeführt, ID: " + id);
         return id;
 
     }
@@ -258,6 +260,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(TEAM_SPIELER_NUMMER, s.getNummmer());
 
         long l = db.insert(TABLE_TEAM_SPIELER, null, values);
+        db.close();
+        return l;
+    }
+
+    public long addStatistik(EreignisZuordnung stat) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(STATISTIK_SPIEL, stat.getSpiel().getId());
+        values.put(STATISTIK_SPIELER, stat.getSpieler().getId());
+        values.put(STATISTIK_EREIGNIS, stat.getEreignis().getId());
+
+        long l = db.insert(TABLE_STATISTIK, null, values);
         db.close();
         return l;
     }
@@ -518,6 +533,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpiele;
     }
 
+    public Ereignis getEreignis(int id){
+        String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS + " WHERE " + KEY_ID + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Ereignis e = new Ereignis();
+        if(c.moveToFirst()){
+
+            e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
+            e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+            e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BILD)));
+            //e.setSportart();
+            e.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+
+        }
+        return e;
+    }
+
     public List<Ereignis> getAlleEreignisse() {
         List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS;
@@ -548,6 +581,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleEreignisse;
+    }
+
+    public List<SpielerEreignisZuordnung> getAlleSpielEreignisse(List<Spieler> spieler, Spiel sp) {
+        List<SpielerEreignisZuordnung> alleSpielerMitEreignissen = new ArrayList<SpielerEreignisZuordnung>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        for(Spieler s : spieler) {
+            Map<String, Integer> map = new HashMap<String, Integer>();
+            String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")  FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_SPIEL + " = " + s.getId() +
+                    " GROUP BY " + STATISTIK_EREIGNIS;
+
+            Cursor c = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                do {
+                    map.put(getEreignis(c.getInt(0)).getName(), c.getInt(1));
+                } while(c.moveToNext());
+
+            }
+            c.close();
+            SpielerEreignisZuordnung sez = new SpielerEreignisZuordnung();
+            sez.setEreignisse(map);
+            sez.setSpieler(s);
+            alleSpielerMitEreignissen.add(sez);
+        }
+
+        return alleSpielerMitEreignissen;
     }
 
     public int removePlayerFromTeam(Spieler s, Team t){
