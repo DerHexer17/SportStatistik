@@ -590,7 +590,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         for(Spieler s : spieler) {
             Map<String, Integer> map = new HashMap<String, Integer>();
             String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")  FROM " + TABLE_STATISTIK +
-                    " WHERE " + STATISTIK_SPIEL + " = " + s.getId() +
+                    " WHERE " + STATISTIK_SPIEL + " = " + sp.getId() + " AND " + STATISTIK_SPIELER + " = " + s.getId() +
                     " GROUP BY " + STATISTIK_EREIGNIS;
 
             Cursor c = db.rawQuery(selectQuery, null);
