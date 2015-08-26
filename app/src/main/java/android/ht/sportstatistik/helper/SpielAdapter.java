@@ -8,6 +8,7 @@ import android.ht.sportstatistik.activities.SpielActivity;
 import android.ht.sportstatistik.activities.TeamActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,14 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
 
     DatabaseHelper dbh;
 
+
     public SpielAdapter(Context context, int resource, List<Spiel> spiele) {
         super(context, resource, spiele);
         dbh = DatabaseHelper.getInstance(context);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -40,13 +42,14 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
 
         txtTitle.setText(getItem(position).getHeimteam().getLang_name()+" - "+getItem(position).getGastteam());
 
+        final Spiel spiel = getItem(position);
         convertView.setContentDescription(String.valueOf(getItem(position).getId()));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SpielActivity.class);
-                intent.putExtra("spielId", Integer.parseInt((String) v.getContentDescription()));
+                intent.putExtra("spielId", spiel.getId());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             }

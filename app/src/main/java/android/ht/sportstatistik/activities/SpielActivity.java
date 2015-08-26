@@ -52,6 +52,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
+        Log.d("spiel", "Spiel ID: "+getIntent().getIntExtra("spielId", 0));
         spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
         setTitle(spiel.getHeimteam().getKurz_name() + "-" + spiel.getGastteam());

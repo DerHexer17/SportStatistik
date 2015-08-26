@@ -518,7 +518,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
                 s.setHeimteam(t);
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
-                s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                s.setId(c.getInt(0));
                 try {
                     s.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
                 } catch (ParseException e) {
