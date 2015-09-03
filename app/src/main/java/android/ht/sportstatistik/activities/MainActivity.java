@@ -242,11 +242,11 @@ public class MainActivity extends ActionBarActivity
         final EditText gegner = new EditText(this);
         gegner.setHint("Gegner");
         final EditText datum = new EditText(this);
-        //final Spinner datum = new Spinner(this);
-        //datum.setAdapter(new DatePicker(this));
+        final DatePicker date = new DatePicker(this);
+
         ll.addView(heimteam);
         ll.addView(gegner);
-        ll.addView(datum);
+        ll.addView(date);
         alert.setView(ll);
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
@@ -257,7 +257,7 @@ public class MainActivity extends ActionBarActivity
                 s.setDatum(new Date());
                 Team t = (Team) heimteam.getSelectedItem();
                 s.setHeimteam(t);
-
+                Log.d("DatePicker", "Gewähltes Datum: "+date.getDayOfMonth()+"."+date.getMonth()+1+"."+date.getYear());
                 s.setId((int) dbh.addSpiel(s));
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
@@ -341,24 +341,13 @@ public class MainActivity extends ActionBarActivity
         alert.setTitle("Spieler anlegen");
         alert.setMessage("Leg einen neuen Spieler an");
 
-        // Set an EditText view to get user input
-        final LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
-        final EditText vorname = new EditText(this);
-        vorname.setHint("Vorname");
-        final EditText nachname = new EditText(this);
-        nachname.setHint("Nachname");
-        final EditText nummer = new EditText(this);
-        nummer.setHint("Rückennummer (Zahl!)");
-        final CheckBox torwart = new CheckBox(this);
-        torwart.setText("Torwart?");
-        //final Spinner datum = new Spinner(this);
-        //datum.setAdapter(new DatePicker(this));
-        ll.addView(vorname);
-        ll.addView(nachname);
-        ll.addView(nummer);
-        ll.addView(torwart);
-        alert.setView(ll);
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.add_player, null);
+        final EditText vorname = (EditText) alertLayout.findViewById(R.id.addPlayerEditFirstname);
+        final EditText nachname = (EditText) alertLayout.findViewById(R.id.addPlayerEditLastname);
+        final EditText nummer = (EditText) alertLayout.findViewById(R.id.addPlayerEditNumber);
+        final CheckBox goalie = (CheckBox) alertLayout.findViewById(R.id.addPlayerCheckboxGoalie);
+        alert.setView(alertLayout);
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -368,7 +357,7 @@ public class MainActivity extends ActionBarActivity
                     sp.setVorname(String.valueOf(vorname.getText()).trim());
                     sp.setNachname(String.valueOf(nachname.getText()).trim());
                     sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
-                    if(torwart.isChecked()){
+                    if(goalie.isChecked()){
                         sp.setTorwart(true);
                     }else{
                         sp.setTorwart(false);
@@ -376,8 +365,6 @@ public class MainActivity extends ActionBarActivity
                 }catch (Exception e){
                     Log.d("Neuer Spieler", e.getMessage());
                 }
-
-
 
                 dbh.addSpieler(sp);
                 ListView lv = (ListView) findViewById(R.id.listViewSpieler);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPlayerEditFirstname"
+        android:hint="@string/addPlayerFirstname"
+        android:layout_margin="5dp"/>
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPlayerEditLastname"
+        android:hint="@string/addPlayerLastname"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/addPlayerEditFirstname"/>
+    <EditText
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPlayerEditNumber"
+        android:hint="@string/addPlayerNumber"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/addPlayerEditLastname"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPlayerCheckboxGoalie"
+        android:text="@string/addPlayerGoalie"
+        android:layout_below="@+id/addPlayerEditLastname"
+        android:layout_toRightOf="@+id/addPlayerEditNumber"/>
+
+</RelativeLayout>
