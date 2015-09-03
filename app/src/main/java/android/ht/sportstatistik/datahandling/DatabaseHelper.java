@@ -533,6 +533,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpiele;
     }
 
+
+
     public Ereignis getEreignis(int id){
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS + " WHERE " + KEY_ID + " = " + id;
 

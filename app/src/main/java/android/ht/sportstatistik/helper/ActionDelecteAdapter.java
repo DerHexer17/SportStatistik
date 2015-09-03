@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Hendrik on 03.09.2015.
  */
-public class ActionDelecteAdapter extends EreignisAdapter {
+public class ActionDelecteAdapter extends ActionInGameAdapter {
 
     DatabaseHelper dbh;
     ActionDeleteAdapterCallback callback;

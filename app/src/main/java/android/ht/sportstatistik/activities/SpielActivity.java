@@ -8,7 +8,7 @@ import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
 import android.ht.sportstatistik.helper.ActionDelecteAdapter;
-import android.ht.sportstatistik.helper.EreignisAdapter;
+import android.ht.sportstatistik.helper.ActionInGameAdapter;
 import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,9 +17,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,13 +25,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, EreignisAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback{
+public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback{
 
     Spiel spiel;
     DatabaseHelper dbh;
     SpielerInSpielAdapter spieler;
     List<SpielerEreignisZuordnung> tempSpielerListe;
-    EreignisAdapter newActionAdapter;
+    ActionInGameAdapter newActionAdapter;
     ActionDelecteAdapter deleteActionAdapter;
     AlertDialog alertAddAction;
     AlertDialog alertDeleteAction;
@@ -48,7 +45,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
-        Log.d("spiel", "Spiel ID: "+getIntent().getIntExtra("spielId", 0));
+        Log.d("spiel", "Spiel ID: " + getIntent().getIntExtra("spielId", 0));
         spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
         setTitle(spiel.getHeimteam().getKurz_name() + "-" + spiel.getGastteam());
@@ -68,19 +65,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
-        newActionAdapter = new EreignisAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
-        Ereignis e1 = new Ereignis();
-        e1.setName("Test");
-        newActionAdapter.add(e1);
-        Ereignis e2 = new Ereignis();
-        e1.setName("Test");
-        newActionAdapter.add(e2);
-        Ereignis e3 = new Ereignis();
-        e1.setName("Test");
-        newActionAdapter.add(e3);
-        
-
-
+        newActionAdapter = new ActionInGameAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
         newActionAdapter.setCallback(this);
         deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
         deleteActionAdapter.setCallback((ActionDelecteAdapter.ActionDeleteAdapterCallback) this);

@@ -16,12 +16,12 @@ import java.util.List;
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class EreignisAdapter extends ArrayAdapter<Ereignis> {
+public class ActionInGameAdapter extends ArrayAdapter<Ereignis> {
 
     DatabaseHelper dbh;
     EreignisAdapterCallback callback;
 
-    public EreignisAdapter(Context context, int resource, List<Ereignis> objects) {
+    public ActionInGameAdapter(Context context, int resource, List<Ereignis> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }

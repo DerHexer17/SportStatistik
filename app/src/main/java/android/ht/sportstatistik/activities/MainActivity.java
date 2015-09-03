@@ -12,6 +12,7 @@ import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -45,7 +46,7 @@ import java.util.List;
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -93,6 +94,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 2:
                 fragment = new SpielerFragment();
+                break;
+            case 3:
+                fragment = new ActionFragment();
                 break;
             default:
                 fragment = PlaceholderFragment.newInstance(position+1);
@@ -168,6 +172,11 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFragmentInteraction(int position) {
         setTitle(navMenuTitles[position]);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**
