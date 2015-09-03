@@ -618,4 +618,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_TEAM_SPIELER, TEAM_SPIELER_SPIELER + " = " + s.getId() +
                 " AND " + TEAM_SPIELER_TEAM + " = " + t.getId(), null);
     }
+
+    public int deleteActionFromGame(EreignisZuordnung e){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_STATISTIK + " WHERE " + STATISTIK_SPIEL + " = " + e.getSpiel().getId() + " AND " +
+                STATISTIK_SPIELER + " = " + e.getSpieler().getId() + " AND " + STATISTIK_EREIGNIS + " = " + e.getEreignis().getId();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            Log.d("db_deleteAction", "Anzahl der in Frage kommenden Ereignisse: "+c.getCount());
+            return db.delete(TABLE_STATISTIK, KEY_ID + " = " + c.getInt(0), null);
+        }else{
+            return 0;
+        }
+
+
+    }
 }

@@ -54,6 +54,15 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
                 callback.neuesEreignisPopUp(position);
             }
         });
+
+        convertView.setLongClickable(true);
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                callback.deleteActionPopUp(position);
+                return true;
+            }
+        });
         /*convertView.setContentDescription(String.valueOf(getItem(position).getId()));
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -76,5 +85,6 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
     }
     public interface SpielerInSpielAdapterCallback{
         public void neuesEreignisPopUp(int position);
+        public void deleteActionPopUp(int position);
     }
 }

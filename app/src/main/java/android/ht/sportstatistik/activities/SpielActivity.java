@@ -1,47 +1,43 @@
 package android.ht.sportstatistik.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.EreignisZuordnung;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
-import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.ActionDelecteAdapter;
 import android.ht.sportstatistik.helper.EreignisAdapter;
 import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
-import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, EreignisAdapter.EreignisAdapterCallback{
+public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, EreignisAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback{
 
     Spiel spiel;
     DatabaseHelper dbh;
     SpielerInSpielAdapter spieler;
     List<SpielerEreignisZuordnung> tempSpielerListe;
-    EreignisAdapter ereignisse;
-    AlertDialog alert;
+    EreignisAdapter newActionAdapter;
+    ActionDelecteAdapter deleteActionAdapter;
+    AlertDialog alertAddAction;
+    AlertDialog alertDeleteAction;
 
     private Spieler gewaehlterSpieler;
     private Ereignis gewaehltesEreignis;
@@ -72,17 +68,26 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
-        List<Ereignis> ereignisListe = new ArrayList<Ereignis>();
-        for(int i = 0; i<10; i++){
-            Ereignis e = new Ereignis();
-            e.setName("Ereignis"+i);
-            ereignisListe.add(e);
-        }
-        ereignisse = new EreignisAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
-        ereignisse.setCallback(this);
+        newActionAdapter = new EreignisAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
+        Ereignis e1 = new Ereignis();
+        e1.setName("Test");
+        newActionAdapter.add(e1);
+        Ereignis e2 = new Ereignis();
+        e1.setName("Test");
+        newActionAdapter.add(e2);
+        Ereignis e3 = new Ereignis();
+        e1.setName("Test");
+        newActionAdapter.add(e3);
+        
+
+
+        newActionAdapter.setCallback(this);
+        deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
+        deleteActionAdapter.setCallback((ActionDelecteAdapter.ActionDeleteAdapterCallback) this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        alert = builder.create();
+        alertAddAction = builder.create();
+        alertDeleteAction = builder.create();
         setupAlert();
 
     }
@@ -110,16 +115,23 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         return super.onOptionsItemSelected(item);
     }
 
-    public void neuesEreignisWaehlen(int position){
+    public void chooseAction(int position, boolean add){
         gewaehltePosition = position;
         gewaehlterSpieler = spieler.getItem(position).getSpieler();
-        alert.show();
+        if(add){
+            alertAddAction.show();
+        }else{
+            alertDeleteAction.show();
+        }
 
     }
-
-    public void neuesEreignisSpeichern(int position){
-        gewaehltesEreignis = ereignisse.getItem(position);
-        alert.dismiss();
+    /*
+    The Callback from the Action Interface. Gives us the action, we want to add to a player
+     */
+    @Override
+    public void addAction(int position){
+        gewaehltesEreignis = newActionAdapter.getItem(position);
+        alertAddAction.dismiss();
         if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(gewaehltesEreignis.getName())){
             int value = spieler.getItem(gewaehltePosition).getEreignisse().get(gewaehltesEreignis.getName());
             spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
@@ -129,30 +141,67 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         }
         spieler.notifyDataSetChanged();
         long l = dbh.addStatistik(new EreignisZuordnung(spiel, gewaehlterSpieler, gewaehltesEreignis));
-        Log.d("ereignis", "Spieler: "+gewaehlterSpieler.getVorname()+" , Ereignis: "+gewaehltesEreignis.getName()+", Position: "+gewaehltePosition);
+        Log.d("ereignis", "Spieler: " + gewaehlterSpieler.getVorname() + " , Ereignis: " + gewaehltesEreignis.getName() + ", Position: " + gewaehltePosition);
+    }
+    /*
+    The Callback from the ActionDelete Interface. Gives us the action, we want to reduce, meaning delete
+     */
+    @Override
+    public void deleteAction(int position) {
+        gewaehltesEreignis = deleteActionAdapter.getItem(position);
+        alertDeleteAction.dismiss();
+        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(gewaehltesEreignis.getName())){
+            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(gewaehltesEreignis.getName());
+            if(value == 1){
+                spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
+            }else {
+                spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
+                spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), value - 1);
+            }
+            dbh.deleteActionFromGame(new EreignisZuordnung(spiel, gewaehlterSpieler, gewaehltesEreignis));
+        }
+        spieler.notifyDataSetChanged();
+        Log.d("DeleteAction", "Folgendes wird entfernt: " + gewaehltesEreignis.getName() + " von " + gewaehlterSpieler.getVorname());
+
     }
 
+    /*
+    The Callback from the PlayerAdapter Interface. Gives us the player we chose. The Pop Up does not need this, but we need to know which player.
+     */
     @Override
     public void neuesEreignisPopUp(int position) {
-        neuesEreignisWaehlen(position);
+        chooseAction(position, true);
 
     }
 
     @Override
-    public void neuesEreignisHinzufuegen(int position){
-        neuesEreignisSpeichern(position);
+    public void deleteActionPopUp(int position){
+        chooseAction(position, false);
     }
 
+
+
+
+
+
     public void setupAlert(){
-        alert.setTitle("Ereignis hinzufügen");
+        alertAddAction.setTitle("Ereignis hinzufügen");
+        alertDeleteAction.setTitle("Ereignis entfernen");
         //alert.setMessage("Leg ein neues Spiel an");
 
-        final GridView grid = new GridView(this);
-        grid.setNumColumns(3);
+        final LinearLayout ll = new LinearLayout(this);
 
+        final GridView gridNewAction = new GridView(this);
+        gridNewAction.setNumColumns(3);
+        //gridNewAction.setStretchMode(GridView.STRETCH_SPACING_UNIFORM);
+        gridNewAction.setGravity(Gravity.CENTER);
+        gridNewAction.setAdapter(newActionAdapter);
+        ll.addView(gridNewAction);
+        alertAddAction.setView(ll,2,2,2,2);
 
-        grid.setAdapter(ereignisse);
-
-        alert.setView(grid);
+        final GridView gridDeleteAction = new GridView(this);
+        gridDeleteAction.setNumColumns(3);
+        gridDeleteAction.setAdapter(deleteActionAdapter);
+        alertDeleteAction.setView(gridDeleteAction);
     }
 }

@@ -2,26 +2,25 @@ package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import java.util.List;
 
 /**
- * Created by Hendrik on 19.08.2015.
+ * Created by Hendrik on 03.09.2015.
  */
-public class EreignisAdapter extends ArrayAdapter<Ereignis> {
+public class ActionDelecteAdapter extends EreignisAdapter {
 
     DatabaseHelper dbh;
-    EreignisAdapterCallback callback;
-
-    public EreignisAdapter(Context context, int resource, List<Ereignis> objects) {
+    ActionDeleteAdapterCallback callback;
+    public ActionDelecteAdapter(Context context, int resource, List<Ereignis> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }
@@ -36,37 +35,27 @@ public class EreignisAdapter extends ArrayAdapter<Ereignis> {
 
         Button button = (Button) convertView.findViewById(R.id.gridButton);
 
-        button.setText(getItem(position).getName());
+        button.setText("- "+getItem(position).getName());
+        //button.setBackground(getContext().getDrawable(R.drawable.drawer_shadow));
+        button.setTextColor(Color.RED);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.addAction(position);
+                callback.deleteAction(position);
             }
         });
 
-        /*
-        convertView.setContentDescription(String.valueOf(getItem(position).getId()));
-
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TeamActivity.class);
-                intent.putExtra("teamId", Integer.parseInt((String) v.getContentDescription()));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
-            }
-        });*/
 
 
         return convertView;
     }
 
-    public void setCallback(EreignisAdapterCallback callback){
+    public void setCallback(ActionDeleteAdapterCallback callback){
 
         this.callback = callback;
     }
-    public interface EreignisAdapterCallback{
-        public void addAction(int position);
+    public interface ActionDeleteAdapterCallback{
+        public void deleteAction(int position);
     }
 }
