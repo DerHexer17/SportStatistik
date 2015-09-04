@@ -2,12 +2,14 @@ package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
+import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.helper.ActionAdapter;
 import android.ht.sportstatistik.helper.TeamAdapter;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import android.widget.ListView;
  * Use the {@link ActionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ActionFragment extends Fragment {
+public class ActionFragment extends Fragment implements ActionAdapter.ActionAdapterCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,6 +37,7 @@ public class ActionFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
+    ActionAdapter actions;
 
     /**
      * Use this factory method to create a new instance of
@@ -75,7 +78,9 @@ public class ActionFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewActions);
-        lv.setAdapter(new ActionAdapter(getActivity().getApplicationContext(), R.id.teamSpieler, dbh.getAlleEreignisse()));
+        actions = new ActionAdapter(getActivity().getApplicationContext(), R.id.label, dbh.getAlleEreignisse());
+        actions.setCallback(this);
+        lv.setAdapter(actions);
 
         return rootView;
     }
@@ -102,6 +107,15 @@ public class ActionFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void changeActionStatus(int position, boolean isChecked) {
+        actions.getItem(position).setActive(isChecked);
+        dbh.updateAction(actions.getItem(position));
+        actions.notifyDataSetChanged();
+        //actions.notifyDataSetChanged();
+        Log.d("switch", "Position: " + position + ", isChecked: " + isChecked);
     }
 
     /**

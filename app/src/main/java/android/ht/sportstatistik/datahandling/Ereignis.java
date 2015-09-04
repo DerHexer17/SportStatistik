@@ -9,6 +9,7 @@ public class Ereignis {
     private String beschreibung;
     private String bild;
     private Sportart sportart;
+    private boolean active;
     private int id;
 
     public Ereignis(){
@@ -50,6 +51,14 @@ public class Ereignis {
 
     public void setBild(String bild) {
         this.bild = bild;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getId() {

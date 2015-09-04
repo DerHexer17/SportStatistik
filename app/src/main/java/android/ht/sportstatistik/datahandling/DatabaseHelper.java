@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String EREIGNIS_BESCHREIBUNG = "ereignis_beschreibung";
     private static final String EREIGNIS_BILD = "ereignis_bild";
     private static final String EREIGNIS_SPORTART = "ereignis_sportart";
+    private static final String EREIGNIS_AKTIV = "ereignis_aktiv";
 
     // SPIELER Table - column names
     private static final String SPIELER_VORNAME = "spieler_vorname";
@@ -112,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_EREIGNIS = "CREATE TABLE " + TABLE_EREIGNIS + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + EREIGNIS_NAME + " TEXT, " +
             EREIGNIS_BESCHREIBUNG + " TEXT, " + EREIGNIS_BILD + " TEXT, " +
-            EREIGNIS_SPORTART + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
+            EREIGNIS_SPORTART + " INTEGER, " + EREIGNIS_AKTIV + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIELER_VORNAME + " TEXT, " +
@@ -244,6 +245,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(EREIGNIS_NAME, e.getName());
         values.put(EREIGNIS_BESCHREIBUNG, e.getBeschreibung());
         values.put(EREIGNIS_BILD, e.getBild());
+        if(e.isActive()){
+            values.put(EREIGNIS_AKTIV, 1);
+        }else{
+            values.put(EREIGNIS_AKTIV, 0);
+        }
         //values.put(EREIGNIS_SPORTART, e.getSportart().getId());
 
         long l = db.insert(TABLE_EREIGNIS, null, values);
@@ -546,6 +552,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
             e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
             e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BILD)));
+            if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
+                e.setActive(true);
+            }else{
+                e.setActive(false);
+            }
             //e.setSportart();
             e.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
@@ -575,7 +586,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
                 e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
                 e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
-
+                if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
+                    e.setActive(true);
+                }else{
+                    e.setActive(false);
+                }
                 //SPORTART!
 
                 alleEreignisse.add(e);
@@ -635,5 +650,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
 
+    }
+
+    public int updateAction(Ereignis e){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(EREIGNIS_NAME, e.getName());
+        values.put(EREIGNIS_BESCHREIBUNG, e.getBeschreibung());
+        values.put(EREIGNIS_BILD, e.getBild());
+        if(e.isActive()){
+            values.put(EREIGNIS_AKTIV, 1);
+        }else{
+            values.put(EREIGNIS_AKTIV, 0);
+        }
+
+        int i = db.update(TABLE_EREIGNIS, values, KEY_ID + " = " + e.getId(), null);
+
+        db.close();
+
+        return i;
     }
 }

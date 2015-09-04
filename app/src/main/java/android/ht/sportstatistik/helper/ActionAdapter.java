@@ -3,6 +3,7 @@ package android.ht.sportstatistik.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.activities.SpielActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.List;
  */
 public class ActionAdapter extends ArrayAdapter<Ereignis> {
     DatabaseHelper dbh;
+    ActionAdapterCallback callback;
 
     public ActionAdapter(Context context, int resource, List<Ereignis> objects) {
         super(context, resource, objects);
@@ -32,13 +36,38 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_item_spiele, null);
+            convertView = mInflater.inflate(R.layout.list_item_actions, null);
         }
 
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        final TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        txtTitle.setText(getItem(position).getName()+" (Aktiv: "+getItem(position).isActive());
 
-        txtTitle.setText(getItem(position).getName());
+        Switch actionSwitch = (Switch) convertView.findViewById(R.id.actionActive);
+        if(getItem(position).isActive()){
+            actionSwitch.setChecked(true);
+            txtTitle.setTextColor(Color.BLACK);
+        }else{
+            actionSwitch.setChecked(false);
+            txtTitle.setTextColor(Color.GRAY);
+        }
+        
+        actionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                callback.changeActionStatus(position, isChecked);
+
+            }
+        });
 
         return convertView;
+    }
+
+    public void setCallback(ActionAdapterCallback callback){
+        this.callback = callback;
+    }
+
+    public interface ActionAdapterCallback{
+        public void changeActionStatus(int position, boolean isChecked);
     }
 }
