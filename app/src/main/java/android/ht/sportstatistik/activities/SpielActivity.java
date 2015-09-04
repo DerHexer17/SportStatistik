@@ -65,9 +65,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
-        newActionAdapter = new ActionInGameAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
+        newActionAdapter = new ActionInGameAdapter(getApplicationContext(), R.id.gridButton, dbh.getAllActiveActions());
         newActionAdapter.setCallback(this);
-        deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAlleEreignisse());
+        deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAllActiveActions());
         deleteActionAdapter.setCallback((ActionDelecteAdapter.ActionDeleteAdapterCallback) this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

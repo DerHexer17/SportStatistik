@@ -18,8 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/actionActive"
         android:layout_alignRight="@+id/label"
-        android:textColor="@android:color/darker_gray"
-        android:paddingRight="5dp"/>
+        android:padding="10dp"/>
 
 
 

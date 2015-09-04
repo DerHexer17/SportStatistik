@@ -228,7 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SPIEL_BEENDET, spiel.getBeendet());
         values.put(SPIEL_GASTTEAM, spiel.getGastteam());
         values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
         values.put(SPIEL_DATUM, formatter.format(spiel.getDatum()));
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
@@ -567,6 +567,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Ereignis> getAlleEreignisse() {
         List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Ereignis e = new Ereignis();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+                e.setId(c.getInt(0));
+                e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
+                e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+                e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+                if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
+                    e.setActive(true);
+                }else{
+                    e.setActive(false);
+                }
+                //SPORTART!
+
+                alleEreignisse.add(e);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleEreignisse;
+    }
+
+    public List<Ereignis> getAllActiveActions() {
+        List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
+        String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS + " WHERE " + EREIGNIS_AKTIV + " = 1";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

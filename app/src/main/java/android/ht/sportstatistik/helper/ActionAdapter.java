@@ -39,18 +39,35 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
             convertView = mInflater.inflate(R.layout.list_item_actions, null);
         }
 
-        final TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-        txtTitle.setText(getItem(position).getName()+" (Aktiv: "+getItem(position).isActive());
+        TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        txtTitle.setText(getItem(position).getName());
 
-        Switch actionSwitch = (Switch) convertView.findViewById(R.id.actionActive);
+        final Switch actionSwitch = (Switch) convertView.findViewById(R.id.actionActive);
+
         if(getItem(position).isActive()){
             actionSwitch.setChecked(true);
             txtTitle.setTextColor(Color.BLACK);
+            actionSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionSwitch.setChecked(false);
+                    callback.changeActionStatus(position, actionSwitch.isChecked());
+                }
+            });
         }else{
             actionSwitch.setChecked(false);
             txtTitle.setTextColor(Color.GRAY);
+            actionSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionSwitch.setChecked(true);
+                    callback.changeActionStatus(position, actionSwitch.isChecked());
+                }
+            });
         }
-        
+
+
+        /*
         actionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -58,7 +75,7 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
                 callback.changeActionStatus(position, isChecked);
 
             }
-        });
+        });*/
 
         return convertView;
     }
