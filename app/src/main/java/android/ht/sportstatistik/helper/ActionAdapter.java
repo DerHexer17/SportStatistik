@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -39,6 +40,16 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
             convertView = mInflater.inflate(R.layout.list_item_actions, null);
         }
 
+        ImageButton icon = (ImageButton) convertView.findViewById(R.id.icon);
+        switch (getItem(position).getName()){
+            case "Tor":
+                icon.setImageResource(R.drawable.goal_icon);
+                break;
+            case "Gelbe Karte":
+                icon.setImageResource(R.drawable.yellow_card_icon);
+                break;
+
+        }
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
         txtTitle.setText(getItem(position).getName());
 

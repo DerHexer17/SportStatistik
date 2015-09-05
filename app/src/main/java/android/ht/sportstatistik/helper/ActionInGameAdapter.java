@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import java.util.List;
 
@@ -34,9 +35,19 @@ public class ActionInGameAdapter extends ArrayAdapter<Ereignis> {
             convertView = mInflater.inflate(R.layout.grid_item_ereignis, null);
         }
 
-        Button button = (Button) convertView.findViewById(R.id.gridButton);
+        ImageButton button = (ImageButton) convertView.findViewById(R.id.gridButton);
 
-        button.setText(getItem(position).getName());
+        switch (getItem(position).getName()){
+            case "Tor":
+                button.setImageResource(R.drawable.goal_icon);
+                break;
+            case "Gelbe Karte":
+                button.setImageResource(R.drawable.yellow_card_icon);
+                break;
+            default:
+                button.setImageResource(R.drawable.default_icon);
+        }
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

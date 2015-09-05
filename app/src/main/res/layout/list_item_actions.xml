@@ -4,14 +4,22 @@
     android:id="@+id/spielerListLayout"
     android:layout_height="match_parent"
     android:padding="2dp" >
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:background="@android:color/transparent" />
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/label"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dip"
-    android:textSize="16dip"
-    android:textStyle="bold"
-    android:textColor="@android:color/black" />
+        android:id="@+id/label"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="200px"
+        android:padding="10dip"
+        android:textSize="16dip"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
 
     <Switch
         android:layout_width="wrap_content"
