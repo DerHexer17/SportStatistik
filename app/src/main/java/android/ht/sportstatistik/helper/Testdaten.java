@@ -1,6 +1,7 @@
 package android.ht.sportstatistik.helper;
 
 import android.content.Context;
+import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.Spieler;
@@ -83,6 +84,7 @@ public class Testdaten {
 
     public void ereignisseEinspielen(){
         Ereignis e = new Ereignis("Tor", "Tor geworfen");
+        e.setBild(R.drawable.goal_icon);
         dbh.addEreignis(e);
 
         e.setName("Assist");
@@ -99,6 +101,7 @@ public class Testdaten {
 
         e.setName("Gelbe Karte");
         e.setBeschreibung("Gelbe Karte erhalten");
+        e.setBild(R.drawable.yellow_card_icon);
         dbh.addEreignis(e);
 
         e.setName("2 Minuten");

@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageButton;
 
 import java.util.List;
 
@@ -31,13 +33,17 @@ public class ActionDelecteAdapter extends ActionInGameAdapter {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.grid_item_ereignis, null);
+            convertView.setLayoutParams(new GridView.LayoutParams(300, 200));
         }
 
-        Button button = (Button) convertView.findViewById(R.id.gridButton);
+        ImageButton button = (ImageButton) convertView.findViewById(R.id.gridButton);
+        button.setBackgroundResource(R.drawable.delete_action_background);
 
-        button.setText("- "+getItem(position).getName());
-        //button.setBackground(getContext().getDrawable(R.drawable.drawer_shadow));
-        button.setTextColor(Color.RED);
+        try{
+            button.setImageResource(getItem(position).getBild());
+        }catch(Exception e){
+            button.setImageResource(R.drawable.default_icon);
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

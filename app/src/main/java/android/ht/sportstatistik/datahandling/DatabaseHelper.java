@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -112,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_EREIGNIS = "CREATE TABLE " + TABLE_EREIGNIS + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + EREIGNIS_NAME + " TEXT, " +
-            EREIGNIS_BESCHREIBUNG + " TEXT, " + EREIGNIS_BILD + " TEXT, " +
+            EREIGNIS_BESCHREIBUNG + " TEXT, " + EREIGNIS_BILD + " INTEGER, " +
             EREIGNIS_SPORTART + " INTEGER, " + EREIGNIS_AKTIV + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
@@ -551,7 +551,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
             e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
-            e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BILD)));
+            e.setBild(c.getInt(c.getColumnIndex(EREIGNIS_BILD)));
             if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
                 e.setActive(true);
             }else{
@@ -585,7 +585,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 e.setId(c.getInt(0));
                 e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
                 e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
-                e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+                e.setBild(c.getInt(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
                 if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
                     e.setActive(true);
                 }else{
@@ -621,7 +621,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 e.setId(c.getInt(0));
                 e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
                 e.setBeschreibung(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
-                e.setBild(c.getString(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
+                e.setBild(c.getInt(c.getColumnIndex(EREIGNIS_BESCHREIBUNG)));
                 if(c.getInt(c.getColumnIndex(EREIGNIS_AKTIV)) == 1){
                     e.setActive(true);
                 }else{

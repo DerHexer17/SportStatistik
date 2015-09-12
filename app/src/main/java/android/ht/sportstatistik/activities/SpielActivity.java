@@ -1,6 +1,7 @@
 package android.ht.sportstatistik.activities;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.EreignisZuordnung;
@@ -174,18 +175,28 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         alertDeleteAction.setTitle("Ereignis entfernen");
         //alert.setMessage("Leg ein neues Spiel an");
 
-        final LinearLayout ll = new LinearLayout(this);
+        //final LinearLayout ll = new LinearLayout(this);
 
         final GridView gridNewAction = new GridView(this);
         gridNewAction.setNumColumns(3);
+        gridNewAction.setHorizontalSpacing(5);
+        gridNewAction.setVerticalSpacing(5);
+        gridNewAction.setPadding(5, 5, 5, 5);
+        gridNewAction.setBackgroundColor(Color.WHITE);
         //gridNewAction.setStretchMode(GridView.STRETCH_SPACING_UNIFORM);
         gridNewAction.setGravity(Gravity.CENTER);
         gridNewAction.setAdapter(newActionAdapter);
-        ll.addView(gridNewAction);
-        alertAddAction.setView(ll,2,2,2,2);
+        gridNewAction.setMinimumHeight(800);
+
+        //ll.addView(gridNewAction);
+        
+        alertAddAction.setView(gridNewAction, 2, 2, 2, 2);
 
         final GridView gridDeleteAction = new GridView(this);
         gridDeleteAction.setNumColumns(3);
+        gridDeleteAction.setHorizontalSpacing(5);
+        gridDeleteAction.setVerticalSpacing(5);
+        gridDeleteAction.setPadding(5,5,5,5);
         gridDeleteAction.setAdapter(deleteActionAdapter);
         alertDeleteAction.setView(gridDeleteAction);
     }

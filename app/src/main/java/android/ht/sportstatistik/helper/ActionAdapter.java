@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.activities.SpielActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.Spiel;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +43,10 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
         }
 
         ImageButton icon = (ImageButton) convertView.findViewById(R.id.icon);
-        switch (getItem(position).getName()){
-            case "Tor":
-                icon.setImageResource(R.drawable.goal_icon);
-                break;
-            case "Gelbe Karte":
-                icon.setImageResource(R.drawable.yellow_card_icon);
-                break;
+        try{
+            icon.setImageResource(getItem(position).getBild());
+        }catch(Exception e){
+            icon.setImageResource(R.drawable.default_icon);
 
         }
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);

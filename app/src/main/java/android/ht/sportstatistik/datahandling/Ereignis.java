@@ -7,7 +7,7 @@ public class Ereignis {
 
     private String name;
     private String beschreibung;
-    private String bild;
+    private int bild;
     private Sportart sportart;
     private boolean active;
     private int id;
@@ -45,11 +45,11 @@ public class Ereignis {
         this.beschreibung = beschreibung;
     }
 
-    public String getBild() {
+    public int getBild() {
         return bild;
     }
 
-    public void setBild(String bild) {
+    public void setBild(int bild) {
         this.bild = bild;
     }
 
