@@ -10,6 +10,7 @@ import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.SpielerAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
 import android.net.Uri;
@@ -40,13 +41,15 @@ import android.widget.TextView;
 import android.ht.sportstatistik.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -179,6 +182,16 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void dialogPlayer(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog d = builder.create();
+        TextView delete = new TextView(getApplicationContext());
+        delete.setText("Spieler löschen");
+        d.setView(delete, 5,5,5,5);
+        d.show();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -254,7 +267,8 @@ public class MainActivity extends ActionBarActivity
                 Spiel s = new Spiel();
                 s.setBeendet("Nein");
                 s.setGastteam(String.valueOf(gegner.getText()));
-                s.setDatum(new Date());
+                Calendar datum = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                s.setDatum(datum);
                 Team t = (Team) heimteam.getSelectedItem();
                 s.setHeimteam(t);
                 Log.d("DatePicker", "Gewähltes Datum: "+date.getDayOfMonth()+"."+date.getMonth()+1+"."+date.getYear());

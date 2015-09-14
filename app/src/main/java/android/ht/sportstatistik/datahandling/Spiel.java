@@ -1,5 +1,6 @@
 package android.ht.sportstatistik.datahandling;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ public class Spiel {
     private int id;
     private Team heimteam;
     private String gastteam;
-    private Date datum;
+    private Calendar datum;
     private String beendet;
 
     public int getId() {
@@ -37,11 +38,11 @@ public class Spiel {
         this.gastteam = gastteam;
     }
 
-    public Date getDatum() {
+    public Calendar getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(Calendar datum) {
         this.datum = datum;
     }
 

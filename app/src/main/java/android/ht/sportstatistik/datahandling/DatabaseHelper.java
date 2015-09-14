@@ -10,7 +10,9 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -228,8 +230,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SPIEL_BEENDET, spiel.getBeendet());
         values.put(SPIEL_GASTTEAM, spiel.getGastteam());
         values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
-        values.put(SPIEL_DATUM, formatter.format(spiel.getDatum()));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+        Calendar datum = spiel.getDatum();
+        values.put(SPIEL_DATUM, datum.YEAR+"-"+datum.MONTH+"-"+datum.DAY_OF_MONTH);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
         long l = db.insert(TABLE_SPIEL, null, values);
@@ -483,7 +486,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Spiel sp = new Spiel();
         if(c.moveToFirst()){
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+
 
             Team t = getTeam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
 
@@ -492,8 +495,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             sp.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
             sp.setId(c.getInt(c.getColumnIndex(KEY_ID)));
             try {
-                sp.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
-            } catch (ParseException e) {
+                String[] temp = c.getString(c.getColumnIndex(SPIEL_DATUM)).split(".");
+                Calendar datum;
+                datum = new GregorianCalendar(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
+                sp.setDatum(datum);
+            }catch(Exception e){
                 e.printStackTrace();
             }
         }
@@ -512,13 +518,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Spiel s = new Spiel();
-                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
-                /*try {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
-                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }*/
+
                 Team t = getTeam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
 
                 s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
@@ -526,8 +526,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
                 s.setId(c.getInt(0));
                 try {
-                    s.setDatum(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM))));
-                } catch (ParseException e) {
+                    String[] temp = c.getString(c.getColumnIndex(SPIEL_DATUM)).split(".");
+                    Calendar datum;
+                    datum = new GregorianCalendar(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
+                    s.setDatum(datum);
+                }catch(Exception e){
                     e.printStackTrace();
                 }
 
@@ -706,5 +709,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return i;
+    }
+
+    public int deleteAllActions(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_EREIGNIS, null, null);
     }
 }

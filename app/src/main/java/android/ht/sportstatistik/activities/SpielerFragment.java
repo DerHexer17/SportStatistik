@@ -45,6 +45,7 @@ public class SpielerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
+    SpielerAdapter players;
 
     /**
      * Use this factory method to create a new instance of
@@ -89,7 +90,9 @@ public class SpielerFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpieler);
-        lv.setAdapter(new SpielerAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spieler>) dbh.getAllPlayers()));
+        players = new SpielerAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spieler>) dbh.getAllPlayers());
+        players.setNotifyOnChange(true);
+        lv.setAdapter(players);
 
         return rootView;
     }

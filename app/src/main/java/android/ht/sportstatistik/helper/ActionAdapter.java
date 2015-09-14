@@ -44,7 +44,8 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
 
         ImageButton icon = (ImageButton) convertView.findViewById(R.id.icon);
         try{
-            icon.setImageResource(getItem(position).getBild());
+            Drawable d = getContext().getResources().getDrawable(new IconDrawableFetcher(getItem(position).getName()).fetchId());
+            icon.setImageDrawable(d);
         }catch(Exception e){
             icon.setImageResource(R.drawable.default_icon);
 
@@ -57,6 +58,7 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
         if(getItem(position).isActive()){
             actionSwitch.setChecked(true);
             txtTitle.setTextColor(Color.BLACK);
+            icon.setVisibility(View.VISIBLE);
             actionSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,6 +69,7 @@ public class ActionAdapter extends ArrayAdapter<Ereignis> {
         }else{
             actionSwitch.setChecked(false);
             txtTitle.setTextColor(Color.GRAY);
+            icon.setVisibility(View.INVISIBLE);
             actionSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

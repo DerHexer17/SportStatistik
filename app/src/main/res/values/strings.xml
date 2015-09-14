@@ -13,7 +13,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Zur Test Activity</string>
-    <string name="testdatenEinspielen">Testdaten Einspielen</string>
+    <string name="testdatenEinspielen">Ereignisse neu einspielen</string>
     <string name="addPlayerFirstname">Vorname</string>
     <string name="addPlayerLastname">Nachname</string>
     <string name="addPlayerNumber">Nummer (Zahl!)</string>

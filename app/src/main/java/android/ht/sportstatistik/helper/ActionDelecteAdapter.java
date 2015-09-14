@@ -3,6 +3,7 @@ package android.ht.sportstatistik.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
@@ -40,7 +41,8 @@ public class ActionDelecteAdapter extends ActionInGameAdapter {
         button.setBackgroundResource(R.drawable.delete_action_background);
 
         try{
-            button.setImageResource(getItem(position).getBild());
+            Drawable icon = getContext().getResources().getDrawable(new IconDrawableFetcher(getItem(position).getName()).fetchId());
+            button.setImageDrawable(icon);
         }catch(Exception e){
             button.setImageResource(R.drawable.default_icon);
         }

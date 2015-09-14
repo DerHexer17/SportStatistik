@@ -6,6 +6,7 @@ import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +84,9 @@ public class Testdaten {
     }
 
     public void ereignisseEinspielen(){
+        int i = dbh.deleteAllActions();
+        Log.d("Test", "Anzahl gelöschter Ereignisse: " + i);
+
         Ereignis e = new Ereignis("Tor", "Tor geworfen");
         e.setBild(R.drawable.goal_icon);
         dbh.addEreignis(e);
@@ -91,8 +95,8 @@ public class Testdaten {
         e.setBeschreibung("Torerfolg vorbereitet");
         dbh.addEreignis(e);
 
-        e.setName("Fehlpass");
-        e.setBeschreibung("Fehlpass gespielt");
+        e.setName("Technischer Fehler");
+        e.setBeschreibung("Ballverlust wegen technischem Fehler");
         dbh.addEreignis(e);
 
         e.setName("Fehlwurf");
@@ -108,7 +112,7 @@ public class Testdaten {
         e.setBeschreibung("2 Minuten Zeitstrafe erhalten");
         dbh.addEreignis(e);
 
-        e.setName("Rot");
+        e.setName("Rote Karte");
         e.setBeschreibung("Rote Karte erhalten");
         dbh.addEreignis(e);
 

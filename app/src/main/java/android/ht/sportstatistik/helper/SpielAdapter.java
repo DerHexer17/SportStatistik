@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Hendrik on 19.08.2015.
@@ -39,8 +42,21 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
+        Calendar temp = getItem(position).getDatum();
+        String datum = null;
+        try{
+            datum = temp.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.SHORT, Locale.GERMANY)+"."+
+                    temp.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.GERMANY)+"."+
+                    temp.getDisplayName(Calendar.YEAR, Calendar.SHORT, Locale.GERMANY);
+        }catch (Exception e){
+            e.printStackTrace();
+            datum = "Kein Datum gespeichert";
+        }
 
-        txtTitle.setText(getItem(position).getHeimteam().getLang_name()+" - "+getItem(position).getGastteam());
+
+        txtTitle.setText(getItem(position).getHeimteam().getLang_name()+" - "+
+                getItem(position).getGastteam()+" ("+datum+")");
 
         final Spiel spiel = getItem(position);
         convertView.setContentDescription(String.valueOf(getItem(position).getId()));

@@ -2,9 +2,11 @@ package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +43,9 @@ public class ActionInGameAdapter extends ArrayAdapter<Ereignis> {
         button.setBackgroundResource(R.drawable.add_action_background);
 
         try{
-            button.setImageResource(getItem(position).getBild());
+
+            Drawable icon = getContext().getResources().getDrawable(new IconDrawableFetcher(getItem(position).getName()).fetchId());
+            button.setImageDrawable(icon);
         }catch(Exception e){
             button.setImageResource(R.drawable.default_icon);
         }

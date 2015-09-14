@@ -1,6 +1,8 @@
 package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
@@ -22,7 +24,7 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
 
 
      DatabaseHelper dbh;
-
+    SpielerAdapterCallback callback;
 
      /*public SpielerAdapter(Context context, List<Spieler> spieler){
           this.context = context;
@@ -37,7 +39,7 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         /*if (v == null) {
             LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.list_item_movie_medium, null);
@@ -48,31 +50,45 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
             convertView = mInflater.inflate(R.layout.list_item_spieler, null);
         }
 
-                    TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-                    TextView txtMannschaft = (TextView) convertView.findViewById(R.id.spielerListTeam);
+        TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
+        TextView txtMannschaft = (TextView) convertView.findViewById(R.id.spielerListTeam);
 
-                    txtTitle.setText(getItem(position).getVorname()+" "+
-                            getItem(position).getNachname()+" ("+
-                            getItem(position).getNummmer()+")");
-                    if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 0){
-                        txtMannschaft.setText("Ohne Mannschaft");
-                    }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){
-                        txtMannschaft.setText(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0).getLang_name());
-                    }else{
-                        String textMehrereMannschaften = "";
-                        for(Team t : dbh.getAllTeamsFromPlayer(getItem(position).getId())){
-                            textMehrereMannschaften = textMehrereMannschaften+" | "+t.getKurz_name();
-                        }
-                        txtMannschaft.setText(textMehrereMannschaften);
-                    }
-
-
-
-
-
-
-
-            return convertView;
+        txtTitle.setText(getItem(position).getVorname() + " " +
+                getItem(position).getNachname() + " (" +
+                getItem(position).getNummmer() + ")");
+        if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 0){
+            txtMannschaft.setText("Ohne Mannschaft");
+        }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){
+            txtMannschaft.setText(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0).getLang_name());
+        }else{
+            String textMehrereMannschaften = "";
+            for(Team t : dbh.getAllTeamsFromPlayer(getItem(position).getId())){
+                textMehrereMannschaften = textMehrereMannschaften+" | "+t.getKurz_name();
+            }
+            txtMannschaft.setText(textMehrereMannschaften);
         }
+
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                callback.dialogPlayer(position);
+                return true;
+            }
+        });
+
+
+
+
+        return convertView;
+        }
+
+    public void setCallback(SpielerAdapterCallback callback){
+        this.callback = callback;
+    }
+
+    public interface SpielerAdapterCallback{
+        public void dialogPlayer(int position);
+    }
 
 }

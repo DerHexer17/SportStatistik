@@ -49,7 +49,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         Log.d("spiel", "Spiel ID: " + getIntent().getIntExtra("spielId", 0));
         spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
-        setTitle(spiel.getHeimteam().getKurz_name() + "-" + spiel.getGastteam());
+        setTitle(spiel.getHeimteam().getKurz_name() + " - " + spiel.getGastteam());
         TextView titel = (TextView) findViewById(R.id.spielTitel);
         titel.setText(spiel.getHeimteam().getLang_name()+" - "+spiel.getGastteam());
 
@@ -71,7 +71,8 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAllActiveActions());
         deleteActionAdapter.setCallback((ActionDelecteAdapter.ActionDeleteAdapterCallback) this);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+
         alertAddAction = builder.create();
         alertDeleteAction = builder.create();
         setupAlert();
@@ -189,7 +190,6 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         gridNewAction.setMinimumHeight(800);
 
         //ll.addView(gridNewAction);
-        
         alertAddAction.setView(gridNewAction, 2, 2, 2, 2);
 
         final GridView gridDeleteAction = new GridView(this);
