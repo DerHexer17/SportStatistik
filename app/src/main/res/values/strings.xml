@@ -13,11 +13,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Zur Test Activity</string>
-    <string name="testdatenEinspielen">Ereignisse neu einspielen</string>
+    <string name="testdatenEinspielen">Testdaten einspielen</string>
     <string name="addPlayerFirstname">Vorname</string>
     <string name="addPlayerLastname">Nachname</string>
     <string name="addPlayerNumber">Nummer (Zahl!)</string>
     <string name="addPlayerGoalie">Torwart?</string>
+    <string name="updatePlayerInGame">Spieler bearbeiten</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

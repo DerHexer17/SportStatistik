@@ -49,6 +49,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         Log.d("spiel", "Spiel ID: " + getIntent().getIntExtra("spielId", 0));
         spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
+        //Überschrift festlegen
         setTitle(spiel.getHeimteam().getKurz_name() + " - " + spiel.getGastteam());
         TextView titel = (TextView) findViewById(R.id.spielTitel);
         titel.setText(spiel.getHeimteam().getLang_name()+" - "+spiel.getGastteam());
@@ -60,12 +61,14 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
             tempSpielerListe.add(sez);
         }
 
-        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()), spiel));
+        //Holen aller Spieler des Teams und erstellen der Liste
+        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(spiel.getId()), spiel));
         spieler.setNotifyOnChange(true);
         spieler.setCallback(this);
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
+        //Vorbereiten der Pop-Ups für neue Ereignisse
         newActionAdapter = new ActionInGameAdapter(getApplicationContext(), R.id.gridButton, dbh.getAllActiveActions());
         newActionAdapter.setCallback(this);
         deleteActionAdapter = new ActionDelecteAdapter(getApplicationContext(), R.id.gridButton, dbh.getAllActiveActions());
@@ -95,7 +98,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.playerToGame) {
             return true;
         }
 

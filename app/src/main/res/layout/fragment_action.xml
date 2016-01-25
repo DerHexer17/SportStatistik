@@ -8,12 +8,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Neues Ereignis anlegen"
-            android:onClick="newAction"/>
-
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

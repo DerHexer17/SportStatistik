@@ -78,6 +78,9 @@ public class MainActivity extends ActionBarActivity
 
 
         dbh = DatabaseHelper.getInstance(this);
+        if(dbh.getAlleEreignisse().size() == 0){
+            new Testdaten(getApplicationContext()).ereignisseEinspielen();
+        }
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -156,16 +159,10 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         switch(id){
-            case R.id.action_settings:
-                return true;
 
-            case R.id.action_example:
-                Intent intent = new Intent(getApplicationContext(), TestDataActivity.class);
-                startActivity(intent);
-                break;
 
             case R.id.testdatenEinspielen:
-                new Testdaten(getApplicationContext()).ereignisseEinspielen();
+                new Testdaten(getApplicationContext()).testdatenEinspielen();
                 break;
         }
 
@@ -282,6 +279,12 @@ public class MainActivity extends ActionBarActivity
                 s.setId((int) dbh.addSpiel(s));
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+
+                //Einmal initial werden einfach alle Spieler des Teams dem Spiel zugeordnet
+                for(Spieler spieler : dbh.getAllPlayersFromTeam(s.getHeimteam().getId())){
+                    dbh.addSpielerToSpiel(spieler, s, spieler.getNummmer());
+                }
+
                 adapter.add(s);
                 adapter.notifyDataSetChanged();
                 // Do something with value!

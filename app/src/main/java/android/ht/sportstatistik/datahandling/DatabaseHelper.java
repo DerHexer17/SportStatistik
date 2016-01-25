@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -86,7 +86,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // SPIEL_SPIELER Table - column names
     private static final String SPIEL_SPIELER_SPIEL = "spiel_spieler_spiel";
-    private static final String SPIEL_SPIELER_TEAM_SPIELER = "spiel_spieler_team_spieler";
+    private static final String SPIEL_SPIELER_SPIELER = "spiel_spieler_spieler";
+    private static final String SPIEL_SPIELER_NUMMER = "spiel_spieler_nummer";
 
     // STATISTIK Table - column names
     private static final String STATISTIK_SPIEL = "statistik_spiel";
@@ -129,7 +130,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_SPIEL_SPIELER = "CREATE TABLE " + TABLE_SPIEL_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIEL_SPIELER_SPIEL + " INTEGER, " +
-            SPIEL_SPIELER_TEAM_SPIELER + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
+            SPIEL_SPIELER_SPIELER + " INTEGER, " + SPIEL_SPIELER_NUMMER + " INTEGER, " +
+            KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_STATISTIK = "CREATE TABLE " + TABLE_STATISTIK + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + STATISTIK_SPIEL + " INTEGER, " +
@@ -182,6 +184,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPORTART);
         // create new tables
         onCreate(db);
+    }
+
+    public int deleteAll(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SPIEL, null, null);
+        db.delete(TABLE_SPIEL_SPIELER, null, null);
+        db.delete(TABLE_STATISTIK, null, null);
+        db.delete(TABLE_TEAM, null, null);
+        db.delete(TABLE_TEAM_SPIELER, null, null);
+        db.delete(TABLE_SPIEL_SPIELER, null, null);
+
+        return 17;
     }
 
     // ADDER
@@ -282,6 +296,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(STATISTIK_EREIGNIS, stat.getEreignis().getId());
 
         long l = db.insert(TABLE_STATISTIK, null, values);
+        db.close();
+        return l;
+    }
+
+    public long addSpielerToSpiel(Spieler sp, Spiel s, int number){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SPIEL_SPIELER_SPIEL, s.getId());
+        values.put(SPIEL_SPIELER_SPIELER, sp.getId());
+        values.put(SPIEL_SPIELER_NUMMER, number);
+
+        long l = db.insert(TABLE_SPIEL_SPIELER, null, values);
         db.close();
         return l;
     }
@@ -396,6 +423,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleSpielerFromTeam;
+    }
+
+    public List<Spieler> getAllPlayersFromGame(int spielId) {
+        List<Spieler> alleSpielerFromGame = new ArrayList<Spieler>();
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_SPIEL_SPIELER +
+                " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + SPIEL_SPIELER_SPIELER +
+                " AND " + SPIEL_SPIELER_SPIEL + " = " + spielId;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Spieler s = new Spieler();
+
+                /*try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+                    s.setDate(formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATE))));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }*/
+
+                s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
+                s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
+                s.setNummmer(c.getInt(c.getColumnIndex(SPIEL_SPIELER_NUMMER)));
+                s.setId(c.getInt(0));
+                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                    s.setTorwart(true);
+                }else{
+                    s.setTorwart(false);
+                }
+                alleSpielerFromGame.add(s);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return alleSpielerFromGame;
     }
 
     public Team getTeam(int id){
@@ -678,6 +742,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpielerMitEreignissen;
     }
 
+    //Alle DELETER
+
     public int removePlayerFromTeam(Spieler s, Team t){
         SQLiteDatabase db = this.getReadableDatabase();
         
@@ -698,8 +764,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return 0;
         }
 
-
     }
+
+    public int deletePlayerFromGame(Spieler sp, Spiel s){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.delete(TABLE_SPIEL_SPIELER, SPIEL_SPIELER_SPIEL + " = " + s.getId() +
+                " AND " + SPIEL_SPIELER_SPIELER + " = " + sp.getId(), null);
+    }
+
+    public int deleteAllActions(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_EREIGNIS, null, null);
+    }
+
+    //Alle UPDATER
 
     public int updateAction(Ereignis e){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -721,8 +800,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public int deleteAllActions(){
+    public int updatePlayerInGame(Spieler sp, Spiel s, int number){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.delete(TABLE_EREIGNIS, null, null);
+
+        ContentValues values = new ContentValues();
+        values.put(SPIEL_SPIELER_SPIEL, s.getId());
+        values.put(SPIEL_SPIELER_SPIELER, sp.getId());
+        values.put(SPIEL_SPIELER_NUMMER, number);
+
+        int i = db.update(TABLE_SPIEL_SPIELER, values, SPIEL_SPIELER_SPIEL + " = " + s.getId() +
+                " AND " + SPIEL_SPIELER_SPIELER + " = " + sp.getId(), null);
+
+        db.close();
+
+        return i;
     }
+
+
 }

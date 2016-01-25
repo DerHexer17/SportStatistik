@@ -26,6 +26,8 @@ public class Testdaten {
     public void testdatenEinspielen(){
         List<Team> teams = new ArrayList<Team>();
         List<Spieler> spieler = new ArrayList<Spieler>();
+        dbh.deleteAll();
+
 
         Team t1 = new Team("esv_vlm", "ESV 1. Herren", "");
         t1.setId((int) dbh.addTeam(t1));
