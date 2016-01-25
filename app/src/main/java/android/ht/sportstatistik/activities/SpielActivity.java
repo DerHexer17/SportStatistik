@@ -1,6 +1,8 @@
 package android.ht.sportstatistik.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Ereignis;
@@ -11,13 +13,19 @@ import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
 import android.ht.sportstatistik.helper.ActionDelecteAdapter;
 import android.ht.sportstatistik.helper.ActionInGameAdapter;
 import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
+import android.ht.sportstatistik.helper.SpielerInSpielUpdateAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -99,7 +107,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.playerToGame) {
-            return true;
+            updatePlayerInGame();
         }
 
         return super.onOptionsItemSelected(item);
@@ -202,5 +210,58 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         gridDeleteAction.setPadding(5,5,5,5);
         gridDeleteAction.setAdapter(deleteActionAdapter);
         alertDeleteAction.setView(gridDeleteAction);
+    }
+
+    public void updatePlayerInGame(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final Context context = this;
+        alert.setTitle("Spieler bearbeiten");
+        alert.setMessage("Bearbeite die teilnehmenden Spieler");
+
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
+        final ListView list = (ListView) alertLayout.findViewById(R.id.listPlayerInGame);
+        SpielerInSpielUpdateAdapter updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()));
+        list.setAdapter(updateSpieler);
+        alert.setView(alertLayout);
+
+        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                /*Spieler sp = new Spieler();
+
+                try {
+                    sp.setVorname(String.valueOf(vorname.getText()).trim());
+                    sp.setNachname(String.valueOf(nachname.getText()).trim());
+                    sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
+                    if (goalie.isChecked()) {
+                        sp.setTorwart(true);
+                    } else {
+                        sp.setTorwart(false);
+                    }
+                } catch (Exception e) {
+                    Log.d("Neuer Spieler", e.getMessage());
+                }
+
+                dbh.addSpieler(sp);
+                ListView lv = (ListView) findViewById(R.id.listViewSpieler);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.add(sp);
+                adapter.notifyDataSetChanged();
+                // Do something with value!*/
+
+            }
+        });
+
+        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        alert.show();
+
+        //this.recreate();
+
     }
 }
