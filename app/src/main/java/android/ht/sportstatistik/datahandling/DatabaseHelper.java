@@ -232,7 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
         Calendar datum = spiel.getDatum();
-        values.put(SPIEL_DATUM, datum.YEAR+"-"+datum.MONTH+"-"+datum.DAY_OF_MONTH);
+        values.put(SPIEL_DATUM, formatter.format(datum.getTime()));
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
         long l = db.insert(TABLE_SPIEL, null, values);
@@ -494,14 +494,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             sp.setHeimteam(t);
             sp.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
             sp.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar datum = Calendar.getInstance();
+            datum.set(Calendar.YEAR, 1970);
             try {
-                String[] temp = c.getString(c.getColumnIndex(SPIEL_DATUM)).split(".");
-                Calendar datum;
-                datum = new GregorianCalendar(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
-                sp.setDatum(datum);
-            }catch(Exception e){
+                Date tempDate = formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM)));
+
+                datum.setTime(tempDate);
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+
+            sp.setDatum(datum);
+
         }
         return sp;
     }
@@ -525,15 +531,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setHeimteam(t);
                 s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
                 s.setId(c.getInt(0));
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar datum = Calendar.getInstance();
+                datum.set(Calendar.YEAR, 1970);
                 try {
-                    String[] temp = c.getString(c.getColumnIndex(SPIEL_DATUM)).split(".");
-                    Calendar datum;
-                    datum = new GregorianCalendar(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
-                    s.setDatum(datum);
-                }catch(Exception e){
+                    Date tempDate = formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM)));
+
+                    datum.setTime(tempDate);
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
+
+                s.setDatum(datum);
 
                 alleSpiele.add(s);
             } while (c.moveToNext());

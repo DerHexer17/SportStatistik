@@ -42,21 +42,12 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
-        Calendar temp = getItem(position).getDatum();
-        String datum = null;
-        try{
-            datum = temp.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.SHORT, Locale.GERMANY)+"."+
-                    temp.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.GERMANY)+"."+
-                    temp.getDisplayName(Calendar.YEAR, Calendar.SHORT, Locale.GERMANY);
-        }catch (Exception e){
-            e.printStackTrace();
-            datum = "Kein Datum gespeichert";
-        }
 
 
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         txtTitle.setText(getItem(position).getHeimteam().getLang_name()+" - "+
-                getItem(position).getGastteam()+" ("+datum+")");
+                getItem(position).getGastteam()+" ("+sdf.format(getItem(position).getDatum().getTime())+")");
 
         final Spiel spiel = getItem(position);
         convertView.setContentDescription(String.valueOf(getItem(position).getId()));

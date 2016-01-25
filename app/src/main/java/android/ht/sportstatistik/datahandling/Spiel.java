@@ -53,4 +53,6 @@ public class Spiel {
     public void setBeendet(String beendet) {
         this.beendet = beendet;
     }
+
+
 }

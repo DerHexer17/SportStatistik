@@ -40,6 +40,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.ht.sportstatistik.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -267,11 +268,17 @@ public class MainActivity extends ActionBarActivity
                 Spiel s = new Spiel();
                 s.setBeendet("Nein");
                 s.setGastteam(String.valueOf(gegner.getText()));
-                Calendar datum = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                s.setDatum(datum);
                 Team t = (Team) heimteam.getSelectedItem();
                 s.setHeimteam(t);
-                Log.d("DatePicker", "Gewähltes Datum: "+date.getDayOfMonth()+"."+date.getMonth()+1+"."+date.getYear());
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, date.getDayOfMonth());
+                calendar.set(Calendar.MONTH, date.getMonth());
+                calendar.set(Calendar.YEAR, date.getYear());
+                s.setDatum(calendar);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                Log.d("DatePicker", "Gewähltes Datum: "+sdf.format(s.getDatum().getTime()));
                 s.setId((int) dbh.addSpiel(s));
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
