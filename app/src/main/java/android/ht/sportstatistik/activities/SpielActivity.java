@@ -235,6 +235,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
                 while (c < updateSpieler.getCount()) {
                     Log.d("Number", "Nummer: " + String.valueOf(updateSpieler.getItem(c).getNummmer()));
 
+                    if(updateSpieler.getItem(c).getNummmer() != dbh.getPlayer(updateSpieler.getItem(c).getId()).getNummmer()){
+                        dbh.updatePlayerInGame(updateSpieler.getItem(c), spiel, updateSpieler.getItem(c).getNummmer());
+                    }
                     c++;
                 }
 

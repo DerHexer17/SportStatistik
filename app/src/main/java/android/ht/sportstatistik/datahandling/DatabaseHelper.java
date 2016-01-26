@@ -314,6 +314,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ALL GETTER
+
+    public Spieler getPlayer(int id){
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + " WHERE " + KEY_ID + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Spieler s = new Spieler();
+        if(c.moveToFirst()){
+
+            s.setId(c.getInt(0));
+            s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
+            s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
+            s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
+            if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                s.setTorwart(true);
+            }else{
+                s.setTorwart(false);
+            }
+
+        }
+        c.close();
+        return s;
+    }
     public List<Spieler> getAllPlayers() {
         List<Spieler> alleSpieler = new ArrayList<Spieler>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER;
