@@ -13,13 +13,33 @@
         android:textSize="16dip"
         android:textStyle="bold"
         android:textColor="@android:color/black" />
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/number"
+    <Button
+        android:layout_width="50px"
+        android:layout_height="wrap_content"
+        android:text="-"
         android:textColor="@android:color/black"
-        android:editable="true"
-        android:layout_toRightOf="@id/name"/>
+        android:id="@+id/minus"
+        android:layout_toRightOf="@id/name"
+        android:textSize="15sp"
+        android:background="@drawable/abc_btn_check_to_on_mtrl_000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:padding="10dip"
+        android:textSize="16dip"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:id="@+id/number"
+        android:layout_toRightOf="@id/minus"/>
+    <Button
+        android:layout_width="50px"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textColor="@android:color/black"
+        android:id="@+id/plus"
+        android:layout_toRightOf="@id/number"
+        android:textSize="15sp"
+        android:background="@drawable/abc_btn_check_to_on_mtrl_000"/>
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

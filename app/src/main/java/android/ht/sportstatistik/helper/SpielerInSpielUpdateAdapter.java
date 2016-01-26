@@ -43,34 +43,34 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
         }
 
         final TextView txtName = (TextView) convertView.findViewById(R.id.name);
-        final EditText editNumber = (EditText) convertView.findViewById(R.id.number);
+        final TextView txtNumber = (TextView) convertView.findViewById(R.id.number);
         txtName.setText(getItem(position).getVorname().substring(0, 1)+". "+getItem(position).getNachname());
-        editNumber.setText(String.valueOf(getItem(position).getNummmer()));
+        txtNumber.setText(String.valueOf(getItem(position).getNummmer()));
 
         final Switch actionSwitch = (Switch) convertView.findViewById(R.id.switchUpdatePlayer);
 
         if(dbh.isPlayerInGame(getItem(position), spiel)){
             actionSwitch.setChecked(true);
             txtName.setTextColor(Color.BLACK);
-            editNumber.setTextColor(Color.BLACK);
+            txtNumber.setTextColor(Color.BLACK);
             actionSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     actionSwitch.setChecked(false);
                     txtName.setTextColor(Color.GRAY);
-                    callback.changeSwitchStatus(position, false, Integer.parseInt(String.valueOf(editNumber.getText())));
+                    callback.changeSwitchStatus(position, false, Integer.parseInt(String.valueOf(txtNumber.getText())));
                 }
             });
         }else{
             actionSwitch.setChecked(false);
             txtName.setTextColor(Color.GRAY);
-            editNumber.setTextColor(Color.GRAY);
+            txtNumber.setTextColor(Color.GRAY);
             actionSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     actionSwitch.setChecked(true);
                     txtName.setTextColor(Color.BLACK);
-                    callback.changeSwitchStatus(position, true, Integer.parseInt(String.valueOf(editNumber.getText())));
+                    callback.changeSwitchStatus(position, true, Integer.parseInt(String.valueOf(txtNumber.getText())));
                 }
             });
         }
