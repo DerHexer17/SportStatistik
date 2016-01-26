@@ -353,7 +353,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_TEAM_SPIELER +
                 " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
-                " AND " + TEAM_SPIELER_TEAM + " = " + id;
+                " AND " + TEAM_SPIELER_TEAM + " = " + id + " ORDER BY " +
+                TEAM_SPIELER_TEAM + ", " + SPIELER_NUMMER + " ASC";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -429,7 +430,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Spieler> alleSpielerFromGame = new ArrayList<Spieler>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_SPIEL_SPIELER +
                 " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + SPIEL_SPIELER_SPIELER +
-                " AND " + SPIEL_SPIELER_SPIEL + " = " + spielId;
+                " AND " + SPIEL_SPIELER_SPIEL + " = " + spielId + " ORDER BY " +
+                SPIELER_NUMMER + " ASC";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -460,6 +462,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return alleSpielerFromGame;
+    }
+
+    public boolean isPlayerInGame(Spieler sp, Spiel s){
+        String selectQuery = "SELECT  * FROM " + TABLE_SPIEL_SPIELER + " WHERE " + SPIEL_SPIELER_SPIELER + " = " + sp.getId() +
+                " AND " + SPIEL_SPIELER_SPIEL + " = " + s.getId();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.getCount() == 0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public Team getTeam(int id){

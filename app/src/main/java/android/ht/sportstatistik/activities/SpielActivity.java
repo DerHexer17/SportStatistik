@@ -34,7 +34,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback{
+public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback, SpielerInSpielUpdateAdapter.SpielerInSpielAdapterCallback{
 
     Spiel spiel;
     DatabaseHelper dbh;
@@ -44,6 +44,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     ActionDelecteAdapter deleteActionAdapter;
     AlertDialog alertAddAction;
     AlertDialog alertDeleteAction;
+    SpielerInSpielUpdateAdapter updateSpieler;
 
     private Spieler gewaehlterSpieler;
     private Ereignis gewaehltesEreignis;
@@ -87,6 +88,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         alertAddAction = builder.create();
         alertDeleteAction = builder.create();
         setupAlert();
+
+        updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()), spiel);
+        updateSpieler.setCallback(this);
 
     }
 
@@ -221,47 +225,51 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
         final ListView list = (ListView) alertLayout.findViewById(R.id.listPlayerInGame);
-        SpielerInSpielUpdateAdapter updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()));
+
         list.setAdapter(updateSpieler);
         alert.setView(alertLayout);
 
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Schließen", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                /*Spieler sp = new Spieler();
+                int c = 0;
+                while (c < updateSpieler.getCount()) {
+                    Log.d("Number", "Nummer: " + String.valueOf(updateSpieler.getItem(c).getNummmer()));
 
-                try {
-                    sp.setVorname(String.valueOf(vorname.getText()).trim());
-                    sp.setNachname(String.valueOf(nachname.getText()).trim());
-                    sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
-                    if (goalie.isChecked()) {
-                        sp.setTorwart(true);
-                    } else {
-                        sp.setTorwart(false);
-                    }
-                } catch (Exception e) {
-                    Log.d("Neuer Spieler", e.getMessage());
+                    c++;
                 }
 
-                dbh.addSpieler(sp);
-                ListView lv = (ListView) findViewById(R.id.listViewSpieler);
-                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
-                adapter.add(sp);
-                adapter.notifyDataSetChanged();
-                // Do something with value!*/
+                spieler.clear();
+                spieler.addAll(dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(spiel.getId()), spiel));
+                spieler.notifyDataSetChanged();
 
             }
         });
 
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        /*alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
-        });
+        });*/
 
 
         alert.show();
 
         //this.recreate();
 
+    }
+
+    public void dataSet(){
+        spieler.notifyDataSetChanged();
+    }
+
+    @Override
+    public void changeSwitchStatus(int position, boolean status, int number) {
+        if(status == false){
+            dbh.deletePlayerFromGame(updateSpieler.getItem(position), spiel);
+            updateSpieler.notifyDataSetChanged();
+        }else{
+            dbh.addSpielerToSpiel(updateSpieler.getItem(position), spiel, updateSpieler.getItem(position).getNummmer());
+            updateSpieler.notifyDataSetChanged();
+        }
     }
 }

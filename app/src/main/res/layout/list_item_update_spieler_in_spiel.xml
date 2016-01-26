@@ -19,6 +19,12 @@
         android:id="@+id/number"
         android:textColor="@android:color/black"
         android:editable="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_toRightOf="@id/name"/>
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchUpdatePlayer"
+        android:layout_alignParentRight="true"
+        android:padding="10dp"/>
 
 </RelativeLayout>
