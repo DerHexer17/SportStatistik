@@ -50,7 +50,7 @@ import java.util.List;
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -104,6 +104,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 fragment = new ActionFragment();
+                break;
+            case 4:
+                fragment = new StatsFragment();
                 break;
             default:
                 fragment = PlaceholderFragment.newInstance(position+1);

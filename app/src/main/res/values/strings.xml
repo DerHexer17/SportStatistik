@@ -22,13 +22,14 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item >Spiele</item>
-        <item >Teams</item>
-        <item >Spieler</item>
-        <item >Ereignisse</item>
+        <item>Spiele</item>
+        <item>Teams</item>
+        <item>Spieler</item>
+        <item>Ereignisse</item>
+        <item>Auswertung</item>
     </string-array>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_team">TeamActivity</string>
     <string name="title_activity_spiel">SpielActivity</string>

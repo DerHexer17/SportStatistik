@@ -1,6 +1,7 @@
 package android.ht.sportstatistik.activities;
 
 import android.ht.sportstatistik.R;
+import android.ht.sportstatistik.helper.NavigationDrawerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -103,11 +104,12 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActionBar().getThemedContext(), R.id.label, navMenuTitles));
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                navMenuTitles));
+                navMenuTitles));*/
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

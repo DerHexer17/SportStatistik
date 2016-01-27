@@ -4,16 +4,12 @@
     tools:context="android.ht.sportstatistik.activities.SpielFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Neues Spiel anlegen"
-            android:onClick="neuesSpiel"/>
+
 
         <ListView
             android:layout_width="fill_parent"
@@ -21,6 +17,18 @@
             android:id="@+id/listViewSpiele">
 
             </ListView>
-        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:onClick="neuesSpiel"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10px"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_light"/>
+        </RelativeLayout>
 
 </FrameLayout>
