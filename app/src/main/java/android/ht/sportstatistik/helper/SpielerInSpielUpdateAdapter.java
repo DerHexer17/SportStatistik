@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -44,12 +45,40 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
 
         final TextView txtName = (TextView) convertView.findViewById(R.id.name);
         final TextView txtNumber = (TextView) convertView.findViewById(R.id.number);
+        final Button minus = (Button) convertView.findViewById(R.id.minus);
+        final Button plus = (Button) convertView.findViewById(R.id.plus);
         txtName.setText(getItem(position).getVorname().substring(0, 1)+". "+getItem(position).getNachname());
-        txtNumber.setText(String.valueOf(getItem(position).getNummmer()));
+        if(dbh.isPlayerInGame(getItem(position), spiel) >= 0) {
+            txtNumber.setText(String.valueOf(dbh.isPlayerInGame(getItem(position), spiel)));
+        }else{
+            txtNumber.setText(String.valueOf(getItem(position).getNummmer()));
+        }
+
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Integer.parseInt((String) txtNumber.getText()) >= 1 & dbh.isPlayerInGame(getItem(position), spiel) >= 0){
+                    txtNumber.setText(String.valueOf(Integer.parseInt((String) txtNumber.getText()) - 1));
+                    dbh.updatePlayerInGame(getItem(position), spiel, Integer.parseInt((String) txtNumber.getText()));
+                }
+
+            }
+        });
+
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dbh.isPlayerInGame(getItem(position), spiel) >=0){
+                    txtNumber.setText(String.valueOf(Integer.parseInt((String) txtNumber.getText()) + 1));
+                    dbh.updatePlayerInGame(getItem(position), spiel, Integer.parseInt((String) txtNumber.getText()));
+                }
+
+            }
+        });
 
         final Switch actionSwitch = (Switch) convertView.findViewById(R.id.switchUpdatePlayer);
 
-        if(dbh.isPlayerInGame(getItem(position), spiel)){
+        if(dbh.isPlayerInGame(getItem(position), spiel) >= 0){
             actionSwitch.setChecked(true);
             txtName.setTextColor(Color.BLACK);
             txtNumber.setTextColor(Color.BLACK);

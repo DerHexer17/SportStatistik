@@ -14,7 +14,7 @@
         android:textStyle="bold"
         android:textColor="@android:color/black" />
     <Button
-        android:layout_width="50px"
+        android:layout_width="100px"
         android:layout_height="wrap_content"
         android:text="-"
         android:textColor="@android:color/black"
@@ -32,7 +32,7 @@
         android:id="@+id/number"
         android:layout_toRightOf="@id/minus"/>
     <Button
-        android:layout_width="50px"
+        android:layout_width="100px"
         android:layout_height="wrap_content"
         android:text="+"
         android:textColor="@android:color/black"

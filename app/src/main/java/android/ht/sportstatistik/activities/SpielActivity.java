@@ -223,10 +223,11 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         alert.setMessage("Bearbeite die teilnehmenden Spieler");
 
         LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
+        final View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
         final ListView list = (ListView) alertLayout.findViewById(R.id.listPlayerInGame);
 
         list.setAdapter(updateSpieler);
+
         alert.setView(alertLayout);
 
         alert.setPositiveButton("Schließen", new DialogInterface.OnClickListener() {

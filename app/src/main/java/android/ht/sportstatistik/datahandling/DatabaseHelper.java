@@ -488,18 +488,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpielerFromGame;
     }
 
-    public boolean isPlayerInGame(Spieler sp, Spiel s){
+    public int isPlayerInGame(Spieler sp, Spiel s){
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL_SPIELER + " WHERE " + SPIEL_SPIELER_SPIELER + " = " + sp.getId() +
                 " AND " + SPIEL_SPIELER_SPIEL + " = " + s.getId();
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if(c.getCount() == 0){
-            return false;
+
+        if (c.getCount() == 0) {
+            return -1;
         }else{
-            return true;
+            c.moveToFirst();
+            return c.getInt(c.getColumnIndex(SPIEL_SPIELER_NUMMER));
         }
+
     }
 
     public Team getTeam(int id){
