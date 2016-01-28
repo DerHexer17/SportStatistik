@@ -343,7 +343,7 @@ public class MainActivity extends ActionBarActivity
                 ListView lv = (ListView) findViewById(R.id.listViewTeams);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
                 adapter.add(t);
-                Log.d("Adapter", "Objekt t geadded. Kurztitel: "+t.getKurz_name());
+                Log.d("Adapter", "Objekt t geadded. Kurztitel: " + t.getKurz_name());
                 adapter.notifyDataSetChanged();
                 // Do something with value!
             }
@@ -417,5 +417,10 @@ public class MainActivity extends ActionBarActivity
 
     public void cancel(View view){
         Log.d("Cancel", "Button gedrückt"+view.getParent().toString());
+    }
+
+    public void teamStats(View view){
+        Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
+        startActivity(intent);
     }
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.ht.sportstatistik.R;
+import android.widget.GridView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +71,8 @@ public class StatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_stats, container, false);
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+        //GridView grid = (GridView) rootView.findViewById(R.id.gridStats);
+        //grid.setNumColumns(2);
         return rootView;
     }
 

@@ -785,6 +785,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpielerMitEreignissen;
     }
 
+    public Stats getStatsActionForTeam(int id, Team t){
+        List<Stats> allTeamStats = new ArrayList<Stats>();
+        String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")" +
+                " FROM " + TABLE_STATISTIK +
+                " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                " GROUP BY " + STATISTIK_EREIGNIS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Stats stat = new Stats();
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            stat.setTitle(getEreignis(id).getName());
+
+            stat.setSum(c.getInt(1));
+            //stat.setAverage(c.getDouble(c.getColumnIndex("AVG")));
+
+        }else{
+            stat.setTitle(getEreignis(id).getName());
+
+            stat.setSum(0);
+        }
+
+        c.close();
+        return stat;
+    }
+
     //Alle DELETER
 
     public int removePlayerFromTeam(Spieler s, Team t){
