@@ -90,7 +90,7 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final String childText = "Child ID: "+getChild(groupPosition, childPosition);
+        //final String childText = "Child ID: "+getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -100,12 +100,16 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.label);
 
-        txtListChild.setText(childText);
+        txtListChild.setText(dbh.getPlayer((Integer) getChild(groupPosition, childPosition)).getVorname());
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+        if(getChildrenCount(groupPosition) > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

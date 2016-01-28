@@ -785,6 +785,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleSpielerMitEreignissen;
     }
 
+    public List<Integer> getAllActionsFromTeam(Team t){
+        List<Integer> actions = new ArrayList<Integer>();
+        String selectQuery = "SELECT " + STATISTIK_EREIGNIS + " FROM " + TABLE_STATISTIK +
+                " GROUP BY " + STATISTIK_EREIGNIS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                actions.add(c.getInt(0));
+            }while (c.moveToNext());
+        }
+        return actions;
+    }
+
     public Stats getStatsActionForTeam(int id, Team t){
         List<Stats> allTeamStats = new ArrayList<Stats>();
         String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")" +

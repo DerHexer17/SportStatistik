@@ -30,7 +30,7 @@ public class StatsActivity extends ActionBarActivity {
 
         //testGroups = statTestGroup();
 
-        adapter = new StatsTeamAdaper(getApplicationContext(), statTestGroup(), statTestItem());
+        adapter = new StatsTeamAdaper(getApplicationContext(), dbh.getAllActionsFromTeam(dbh.getTeam(1)), statTestItem());
         Log.d("Stats", "Größe Adapter " + adapter.getGroupCount());
         elv.setAdapter(adapter);
     }
@@ -47,8 +47,14 @@ public class StatsActivity extends ActionBarActivity {
 
     public HashMap<Integer, List<Integer>> statTestItem(){
         HashMap<Integer, List<Integer>> itemStats = new HashMap<Integer, List<Integer>>();
-        itemStats.put(1, statTestGroup());
-        itemStats.put(2, statTestGroup());
+        List<Integer> temp = new ArrayList<Integer>();
+        temp.add(1);
+        temp.add(2);
+        temp.add(3);
+        for(Integer i : dbh.getAllActionsFromTeam(dbh.getTeam(1))){
+            itemStats.put(i, temp);
+        }
+
         return itemStats;
     }
 
