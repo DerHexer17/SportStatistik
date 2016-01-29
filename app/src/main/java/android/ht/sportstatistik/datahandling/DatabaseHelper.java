@@ -802,10 +802,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Stats getStatsActionForTeam(int id, Team t){
         List<Stats> allTeamStats = new ArrayList<Stats>();
-        String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")" +
-                " FROM " + TABLE_STATISTIK +
-                " WHERE " + STATISTIK_EREIGNIS + " = " + id +
-                " GROUP BY " + STATISTIK_EREIGNIS;
+        String selectQuery;
+        if(t == null){
+            selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")" +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_EREIGNIS;
+        }else {
+            selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")" +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_EREIGNIS;
+        }
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -823,8 +831,92 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             stat.setSum(0);
         }
 
+        if(t == null){
+            selectQuery = "SELECT " + STATISTIK_SPIEL +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_SPIEL;
+        }else {
+            selectQuery = "SELECT " + STATISTIK_SPIEL +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_SPIEL;
+        }
+
+        c = db.rawQuery(selectQuery, null);
+        stat.setAverage(new Double(stat.getSum())/new Double(c.getCount()));
+        Log.d("Stats", "Average Berechnung: Sum = "+stat.getSum()+", Count = "+c.getCount());
+
+
         c.close();
         return stat;
+    }
+
+    public List<Stats> getStatsFromPlayerForAction(int id, Team t){
+        List<Stats> allPlayerStatsForAction = new ArrayList<Stats>();
+        String selectQuery;
+        String selectQuery_avg;
+        if(t == null){
+            selectQuery = "SELECT " + STATISTIK_SPIELER + ", COUNT(" + STATISTIK_SPIEL + ")" +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_SPIELER;
+        }else {
+            selectQuery = "SELECT " + STATISTIK_SPIELER + ", COUNT(" + STATISTIK_SPIEL + ")" +
+                    " FROM " + TABLE_STATISTIK +
+                    " WHERE " + STATISTIK_EREIGNIS + " = " + id +
+                    " GROUP BY " + STATISTIK_SPIELER;
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+
+            do {
+                Stats stat = new Stats();
+                stat.setSpieler(getPlayer(c.getInt(0)));
+
+                try{
+                    stat.setSum(c.getInt(1));
+                }catch(Exception e){
+                    stat.setSum(0);
+                }
+
+
+                if(t == null){
+                    selectQuery_avg = "SELECT " + STATISTIK_SPIEL +
+                            " FROM " + TABLE_STATISTIK +
+                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getSpieler().getId() +
+                            " GROUP BY " + STATISTIK_SPIEL;
+                }else {
+                    selectQuery_avg = "SELECT " + STATISTIK_SPIEL +
+                            " FROM " + TABLE_STATISTIK +
+                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getSpieler().getId() +
+                            " GROUP BY " + STATISTIK_SPIEL;
+                }
+
+                Cursor c_avg = db.rawQuery(selectQuery_avg, null);
+                try{
+                    stat.setAverage(new Double(stat.getSum())/new Double(c_avg.getCount()));
+                }catch(Exception e){
+                    stat.setAverage(0);
+                }
+
+
+                allPlayerStatsForAction.add(stat);
+            } while (c.moveToNext());
+        }
+
+            //stat.setAverage(c.getDouble(c.getColumnIndex("AVG")));
+
+
+
+
+
+        c.close();
+        return allPlayerStatsForAction;
     }
 
     //Alle DELETER

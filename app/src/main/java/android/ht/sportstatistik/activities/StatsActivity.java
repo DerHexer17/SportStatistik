@@ -17,7 +17,7 @@ public class StatsActivity extends ActionBarActivity {
 
     DatabaseHelper dbh;
     private StatsTeamAdaper adapter;
-    List<Stats> testGroups;
+    List<Integer> statGroupsInteger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +27,11 @@ public class StatsActivity extends ActionBarActivity {
 
         ExpandableListView elv = (ExpandableListView) findViewById(R.id.expendableStatsTeam);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
+        statGroupsInteger = dbh.getAllActionsFromTeam(null);
 
         //testGroups = statTestGroup();
 
-        adapter = new StatsTeamAdaper(getApplicationContext(), dbh.getAllActionsFromTeam(dbh.getTeam(1)), statTestItem());
+        adapter = new StatsTeamAdaper(getApplicationContext(), statGroupsInteger, statItems());
         Log.d("Stats", "Größe Adapter " + adapter.getGroupCount());
         elv.setAdapter(adapter);
     }
@@ -45,15 +46,12 @@ public class StatsActivity extends ActionBarActivity {
         return groupStats;
     }
 
-    public HashMap<Integer, List<Integer>> statTestItem(){
-        HashMap<Integer, List<Integer>> itemStats = new HashMap<Integer, List<Integer>>();
-        List<Integer> temp = new ArrayList<Integer>();
-        temp.add(1);
-        temp.add(2);
-        temp.add(3);
-        for(Integer i : dbh.getAllActionsFromTeam(dbh.getTeam(1))){
-            itemStats.put(i, temp);
+    public HashMap<Integer, List<Stats>> statItems(){
+        HashMap<Integer, List<Stats>> itemStats = new HashMap<Integer, List<Stats>>();
+        for(Integer i : statGroupsInteger){
+            itemStats.put(i, dbh.getStatsFromPlayerForAction(i, null));
         }
+
 
         return itemStats;
     }

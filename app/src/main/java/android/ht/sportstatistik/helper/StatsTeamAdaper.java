@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,11 +23,11 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
     private Context context;
     private List<Integer> listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<Integer, List<Integer>> listDataChild;
+    private HashMap<Integer, List<Stats>> listDataChild;
     DatabaseHelper dbh;
 
     public StatsTeamAdaper(Context context, List<Integer> listDataHeader,
-                           HashMap<Integer, List<Integer>> listChildData) {
+                           HashMap<Integer, List<Stats>> listChildData) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataChild = listChildData;
@@ -50,7 +51,7 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public Stats getChild(int groupPosition, int childPosition) {
         return this.listDataChild.get(this.listDataHeader.get(groupPosition)).get(childPosition);
     }
 
@@ -79,9 +80,11 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.label);
+        DecimalFormat f = new DecimalFormat("#0.00");
         //lblListHeader.setTypeface(null, Typeface.BOLD);
-        Stats stat = dbh.getStatsActionForTeam((Integer) getGroup(groupPosition), dbh.getTeam(1));
-        lblListHeader.setText(stat.getTitle()+" | Summe: "+stat.getSum());
+        Stats stat = dbh.getStatsActionForTeam((Integer) getGroup(groupPosition), null);
+        lblListHeader.setText(stat.getTitle()+" | Summe: " +stat.getSum()+" | Schnitt: " + f.format(stat.getAverage()));
+        Log.d("AVG", "Double: "+stat.getAverage());
 
         Log.d("Stats", dbh.getStatsActionForTeam(1, dbh.getTeam(1)).getTitle() + " Summe: " + dbh.getStatsActionForTeam(1, dbh.getTeam(1)).getSum());
 
@@ -99,8 +102,9 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
         }
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.label);
+        Stats stat = getChild(groupPosition, childPosition);
 
-        txtListChild.setText(dbh.getPlayer((Integer) getChild(groupPosition, childPosition)).getVorname());
+        txtListChild.setText(stat.getSpieler().getVorname()+" | Summe: "+stat.getSum()+" | Schnitt: "+stat.getAverage());
         return convertView;
     }
 
