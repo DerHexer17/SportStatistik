@@ -63,17 +63,18 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         TextView titel = (TextView) findViewById(R.id.spielTitel);
         titel.setText(spiel.getHeimteam().getLang_name()+" - "+spiel.getGastteam());
 
-        tempSpielerListe = new ArrayList<SpielerEreignisZuordnung>();
+        /*tempSpielerListe = new ArrayList<SpielerEreignisZuordnung>();
         for(Spieler s : dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId())){
             SpielerEreignisZuordnung sez = new SpielerEreignisZuordnung();
             sez.setSpieler(s);
             tempSpielerListe.add(sez);
-        }
+        }*/
 
         //Holen aller Spieler des Teams und erstellen der Liste
         spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(spiel.getId()), spiel));
         spieler.setNotifyOnChange(true);
         spieler.setCallback(this);
+        spieler.setFinished(spiel.isBeendet());
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
@@ -98,7 +99,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_spiel, menu);
+        if(!spiel.isBeendet()){
+            getMenuInflater().inflate(R.menu.menu_spiel, menu);
+        }
         return true;
     }
 
@@ -286,5 +289,6 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     public void setGameInactive(){
         spiel.setBeendet(true);
         dbh.updateGame(spiel);
+        this.finish();
     }
 }

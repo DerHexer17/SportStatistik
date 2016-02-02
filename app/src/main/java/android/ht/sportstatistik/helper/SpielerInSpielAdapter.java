@@ -23,6 +23,7 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
+    Boolean finished;
 
     public SpielerInSpielAdapter(Context context, int resource, List<SpielerEreignisZuordnung> objects) {
         super(context, resource, objects);
@@ -48,21 +49,25 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
             txtEreignisse.setText(txtEreignisse.getText()+" | "+e.getKey()+": "+e.getValue());
         }
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.neuesEreignisPopUp(position);
-            }
-        });
+        if(!finished){
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.neuesEreignisPopUp(position);
+                }
+            });
+        }
 
-        convertView.setLongClickable(true);
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                callback.deleteActionPopUp(position);
-                return true;
-            }
-        });
+        if(!finished) {
+            convertView.setLongClickable(true);
+            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    callback.deleteActionPopUp(position);
+                    return true;
+                }
+            });
+        }
         /*convertView.setContentDescription(String.valueOf(getItem(position).getId()));
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +82,14 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
 
 
         return convertView;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 
     public void setCallback(SpielerInSpielAdapterCallback callback){

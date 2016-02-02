@@ -192,13 +192,34 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void dialogPlayer(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        AlertDialog d = builder.create();
+    public void deletePlayer(final int playerId, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("Spiel löschen");
+        //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Spieler löschen");
-        d.setView(delete, 5,5,5,5);
-        d.show();
+        delete.setText("Spieler löschen?");
+        delete.setTextColor(Color.BLACK);
+        builder.setView(delete);
+        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                dbh.deletePlayer(playerId);
+                ListView lv = (ListView) findViewById(R.id.listViewSpieler);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.remove(adapter.getItem(position));
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        builder.show();
     }
 
     @Override
@@ -249,8 +270,7 @@ public class MainActivity extends ActionBarActivity
                 Spiel spiel = (Spiel) adapter.getItem(position);
                 spiel.setBeendet(false);
                 dbh.updateGame(spiel);
-
-                adapter.insert(spiel, position);
+                ((Spiel) adapter.getItem(position)).setBeendet(false);
                 adapter.notifyDataSetChanged();
 
             }

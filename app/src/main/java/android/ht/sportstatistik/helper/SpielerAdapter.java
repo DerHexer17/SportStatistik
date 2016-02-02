@@ -72,7 +72,7 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                callback.dialogPlayer(position);
+                callback.deletePlayer(getItem(position).getId(), position);
                 return true;
             }
         });
@@ -88,7 +88,7 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
     }
 
     public interface SpielerAdapterCallback{
-        public void dialogPlayer(int position);
+        public void deletePlayer(int playerId, int position);
     }
 
 }
