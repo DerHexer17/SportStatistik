@@ -32,7 +32,7 @@ import java.util.List;
  * Use the {@link SpielFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpielFragment extends Fragment {
+public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapterCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,6 +44,7 @@ public class SpielFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
+    SpielAdapter spiele;
 
     /**
      * Use this factory method to create a new instance of
@@ -67,6 +68,7 @@ public class SpielFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +90,10 @@ public class SpielFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);
-        lv.setAdapter(new SpielAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames()));
+        this.spiele = new SpielAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames());
+        spiele.setCallback(this);
+        lv.setAdapter(spiele);
+
 
         return rootView;
     }
@@ -118,6 +123,13 @@ public class SpielFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void deleteGame(int spielId, int position) {
+        //spiele.remove(spiele.getItem(position));
+        //spiele.notifyDataSetChanged();
+        mListener.deleteGame(spielId, position);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -131,6 +143,7 @@ public class SpielFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(int position);
+        public void deleteGame(int gameId, int position);
     }
 
 

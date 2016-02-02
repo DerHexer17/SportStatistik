@@ -1,6 +1,7 @@
 package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.ht.sportstatistik.R;
@@ -26,6 +27,7 @@ import java.util.Locale;
 public class SpielAdapter extends ArrayAdapter<Spiel> {
 
     DatabaseHelper dbh;
+    SpielAdapterCallback callback;
 
 
     public SpielAdapter(Context context, int resource, List<Spiel> spiele) {
@@ -62,7 +64,23 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
             }
         });
 
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                callback.deleteGame(getItem(position).getId(), position);
+                return true;
+            }
+        });
+
 
         return convertView;
+    }
+
+    public void setCallback(SpielAdapterCallback callback){
+        this.callback = callback;
+    }
+
+    public interface SpielAdapterCallback{
+        public void deleteGame(int spielId, int position);
     }
 }

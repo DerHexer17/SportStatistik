@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.ht.sportstatistik.TestDataActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Spiel;
 import android.ht.sportstatistik.datahandling.Spieler;
 import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.SpielAdapter;
 import android.ht.sportstatistik.helper.SpielerAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
@@ -50,7 +52,7 @@ import java.util.List;
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback, SpielAdapter.SpielAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -62,6 +64,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     DatabaseHelper dbh;
+    SpielAdapter spieler;
 
     private String[] navMenuTitles;
 
@@ -75,9 +78,10 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         //setTitle("Sport Statistik App");
         mTitle = "Sport Statistik";
-
-
         dbh = DatabaseHelper.getInstance(this);
+        spieler = new SpielAdapter(getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames());
+
+
         if(dbh.getAlleEreignisse().size() == 0){
             new Testdaten(getApplicationContext()).ereignisseEinspielen();
         }
@@ -101,6 +105,10 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 2:
                 fragment = new SpielerFragment();
+
+                /*Bundle b = new Bundle();
+                b.putParcelable(spieler);
+                fragment.setArguments();*/
                 break;
             case 3:
                 fragment = new ActionFragment();
@@ -191,6 +199,37 @@ public class MainActivity extends ActionBarActivity
         delete.setText("Spieler löschen");
         d.setView(delete, 5,5,5,5);
         d.show();
+    }
+
+    @Override
+    public void deleteGame(final int spielId, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("Spiel löschen");
+        //AlertDialog d = builder.create();
+        TextView delete = new TextView(getApplicationContext());
+        delete.setText("Spiel löschen?");
+        delete.setTextColor(Color.BLACK);
+        builder.setView(delete);
+        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.d("Delete", "Spiel ID: " + spielId);
+                dbh.deleteGame(spielId);
+                ListView lv = (ListView) findViewById(R.id.listViewSpiele);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.remove(adapter.getItem(position));
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        builder.show();
     }
 
     /**

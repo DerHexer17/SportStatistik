@@ -950,9 +950,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " AND " + SPIEL_SPIELER_SPIELER + " = " + sp.getId(), null);
     }
 
+    public int deleteAllPlayersFromGame(int spielId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_SPIEL_SPIELER, SPIEL_SPIELER_SPIEL + " = " + spielId, null);
+    }
+
     public int deleteAllActions(){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.delete(TABLE_EREIGNIS, null, null);
+    }
+
+    public int deleteAllStatsFromGame(int spielId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_STATISTIK, STATISTIK_SPIEL + " = " + spielId, null);
+    }
+
+
+    public int deleteGame(int spielId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        deleteAllPlayersFromGame(spielId);
+        deleteAllStatsFromGame(spielId);
+        return db.delete(TABLE_SPIEL, KEY_ID + " = " + spielId, null);
     }
 
     //Alle UPDATER
