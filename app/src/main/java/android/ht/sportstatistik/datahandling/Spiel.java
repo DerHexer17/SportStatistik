@@ -12,7 +12,7 @@ public class Spiel {
     private Team heimteam;
     private String gastteam;
     private Calendar datum;
-    private String beendet;
+    private boolean beendet;
 
     public int getId() {
         return id;
@@ -46,11 +46,11 @@ public class Spiel {
         this.datum = datum;
     }
 
-    public String getBeendet() {
+    public Boolean isBeendet() {
         return beendet;
     }
 
-    public void setBeendet(String beendet) {
+    public void setBeendet(Boolean beendet) {
         this.beendet = beendet;
     }
 

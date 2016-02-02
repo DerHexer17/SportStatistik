@@ -110,8 +110,14 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.playerToGame) {
-            updatePlayerInGame();
+        switch(id){
+            case R.id.playerToGame:
+                updatePlayerInGame();
+                break;
+            case R.id.gameIsFinished:
+                setGameInactive();
+                break;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -275,5 +281,10 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
             dbh.addSpielerToSpiel(updateSpieler.getItem(position), spiel, updateSpieler.getItem(position).getNummmer());
             updateSpieler.notifyDataSetChanged();
         }
+    }
+
+    public void setGameInactive(){
+        spiel.setBeendet(true);
+        dbh.updateGame(spiel);
     }
 }

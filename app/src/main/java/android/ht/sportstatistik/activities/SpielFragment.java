@@ -130,6 +130,12 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
         mListener.deleteGame(spielId, position);
     }
 
+    @Override
+    public void setGameActive(int spielId, int position) {
+        mListener.setGameActive(spielId, position);
+    }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -144,6 +150,7 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
         // TODO: Update argument type and name
         public void onFragmentInteraction(int position);
         public void deleteGame(int gameId, int position);
+        public void setGameActive(int spielId, int position);
     }
 
 

@@ -65,6 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SPIEL_DATUM = "spiel_datum";
     private static final String SPIEL_BEENDET = "spiel_beendet";
 
+
     // EREIGNIS Table - column names
     private static final String EREIGNIS_NAME = "ereignis_name";
     //private static final String EREIGNIS_EINHEIT = "ereignis_einheit";
@@ -110,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_SPIEL = "CREATE TABLE " + TABLE_SPIEL + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIEL_HEIMTEAM + " INTEGER, " +
-            SPIEL_GASTTEAM + " TEXT, " + SPIEL_DATUM + " DATE, " + SPIEL_BEENDET + " TEXT, " +
+            SPIEL_GASTTEAM + " TEXT, " + SPIEL_DATUM + " DATE, " + SPIEL_BEENDET + " INTEGER, " +
             KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_EREIGNIS = "CREATE TABLE " + TABLE_EREIGNIS + "(" +
@@ -241,7 +242,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SPIEL_BEENDET, spiel.getBeendet());
+        if(spiel.isBeendet()) {
+            values.put(SPIEL_BEENDET, 1);
+        }else{
+            values.put(SPIEL_BEENDET, 0);
+        }
         values.put(SPIEL_GASTTEAM, spiel.getGastteam());
         values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
@@ -599,7 +604,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             sp.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
             sp.setHeimteam(t);
-            sp.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
+            if(c.getInt(c.getColumnIndex(SPIEL_BEENDET)) == 1) {
+                sp.setBeendet(true);
+            }else{
+                sp.setBeendet(false);
+            }
             sp.setId(c.getInt(c.getColumnIndex(KEY_ID)));
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Calendar datum = Calendar.getInstance();
@@ -636,7 +645,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 s.setGastteam(c.getString(c.getColumnIndex(SPIEL_GASTTEAM)));
                 s.setHeimteam(t);
-                s.setBeendet(c.getString(c.getColumnIndex(SPIEL_BEENDET)));
+                if(c.getInt(c.getColumnIndex(SPIEL_BEENDET)) == 1) {
+                    s.setBeendet(true);
+                }else{
+                    s.setBeendet(false);
+                }
                 s.setId(c.getInt(0));
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar datum = Calendar.getInstance();
@@ -989,6 +1002,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         int i = db.update(TABLE_EREIGNIS, values, KEY_ID + " = " + e.getId(), null);
+
+        db.close();
+
+        return i;
+    }
+
+    public int updateGame(Spiel s){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        if(s.isBeendet()) {
+            values.put(SPIEL_BEENDET, 1);
+        }else{
+            values.put(SPIEL_BEENDET, 0);
+        }
+        values.put(SPIEL_GASTTEAM, s.getGastteam());
+        values.put(SPIEL_HEIMTEAM, s.getHeimteam().getId());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+        Calendar datum = s.getDatum();
+        values.put(SPIEL_DATUM, formatter.format(datum.getTime()));
+        //values.put(KEY_CREATED_AT, formatter.format(new Date()));
+
+        int i = db.update(TABLE_SPIEL, values, KEY_ID + " = " + s.getId(), null);
 
         db.close();
 

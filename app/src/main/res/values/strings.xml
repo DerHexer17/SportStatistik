@@ -34,4 +34,5 @@
     <string name="title_activity_team">TeamActivity</string>
     <string name="title_activity_spiel">SpielActivity</string>
     <string name="title_activity_stats">StatsActivity</string>
+    <string name="menuGameIsFinished">Spiel beenden</string>
 </resources>

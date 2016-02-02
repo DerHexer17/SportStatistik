@@ -232,6 +232,40 @@ public class MainActivity extends ActionBarActivity
         builder.show();
     }
 
+    @Override
+    public void setGameActive(final int spielId, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("Spiel löschen");
+        //AlertDialog d = builder.create();
+        TextView delete = new TextView(getApplicationContext());
+        delete.setText("Spiel wieder aktivieren?");
+        delete.setTextColor(Color.BLACK);
+        builder.setView(delete);
+        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.d("Delete", "Spiel ID: " + spielId);
+                ListView lv = (ListView) findViewById(R.id.listViewSpiele);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                Spiel spiel = (Spiel) adapter.getItem(position);
+                spiel.setBeendet(false);
+                dbh.updateGame(spiel);
+
+                adapter.insert(spiel, position);
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        builder.show();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -305,7 +339,7 @@ public class MainActivity extends ActionBarActivity
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Spiel s = new Spiel();
-                s.setBeendet("Nein");
+                s.setBeendet(false);
                 s.setGastteam(String.valueOf(gegner.getText()));
                 Team t = (Team) heimteam.getSelectedItem();
                 s.setHeimteam(t);

@@ -4,4 +4,7 @@
     tools:context="android.ht.sportstatistik.activities.SpielActivity">
     <item android:id="@+id/playerToGame" android:title="@string/updatePlayerInGame"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/gameIsFinished"
+        android:title="@string/menuGameIsFinished"
+        app:showAsAction="never" />
 </menu>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.activities.SpielActivity;
 import android.ht.sportstatistik.activities.TeamActivity;
@@ -50,6 +51,11 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         txtTitle.setText(getItem(position).getHeimteam().getLang_name()+" - "+
                 getItem(position).getGastteam()+" ("+sdf.format(getItem(position).getDatum().getTime())+")");
+        if(getItem(position).isBeendet()){
+            txtTitle.setTextColor(Color.GRAY);
+        }else{
+            txtTitle.setTextColor(Color.BLACK);
+        }
 
         final Spiel spiel = getItem(position);
         convertView.setContentDescription(String.valueOf(getItem(position).getId()));
@@ -67,7 +73,12 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                callback.deleteGame(getItem(position).getId(), position);
+                if(!getItem(position).isBeendet()){
+                    callback.deleteGame(getItem(position).getId(), position);
+                }else{
+                    //Hier dann wieder aktiv schalten
+                    callback.setGameActive(getItem(position).getId(), position);
+                }
                 return true;
             }
         });
@@ -82,5 +93,6 @@ public class SpielAdapter extends ArrayAdapter<Spiel> {
 
     public interface SpielAdapterCallback{
         public void deleteGame(int spielId, int position);
+        public void setGameActive(int spielId, int position);
     }
 }
