@@ -34,7 +34,7 @@ import java.util.List;
  * Use the {@link SpielFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamFragment extends Fragment {
+public class TeamFragment extends Fragment implements TeamAdapter.TeamAdapterCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,6 +46,7 @@ public class TeamFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
+    TeamAdapter teams;
 
     /**
      * Use this factory method to create a new instance of
@@ -90,7 +91,10 @@ public class TeamFragment extends Fragment {
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewTeams);
-        lv.setAdapter(new TeamAdapter(getActivity().getApplicationContext(), R.id.teamSpieler, dbh.getAllTeams()));
+        teams = new TeamAdapter(getActivity().getApplicationContext(), R.id.teamSpieler, dbh.getAllTeams());
+        teams.setCallback(this);
+        teams.setNotifyOnChange(true);
+        lv.setAdapter(teams);
 
         return rootView;
     }
@@ -120,6 +124,11 @@ public class TeamFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void deleteTeam(int teamId, int position) {
+        mListener.deleteTeam(teamId, position);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -133,6 +142,7 @@ public class TeamFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(int position);
+        public void deleteTeam(int teamId, int position);
 
     }
 

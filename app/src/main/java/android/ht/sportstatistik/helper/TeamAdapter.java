@@ -21,6 +21,7 @@ import java.util.List;
 public class TeamAdapter extends ArrayAdapter<Team> {
 
     DatabaseHelper dbh;
+    TeamAdapterCallback callback;
 
     public TeamAdapter(Context context, int resource, List<Team> teams) {
         super(context, resource, teams);
@@ -28,7 +29,7 @@ public class TeamAdapter extends ArrayAdapter<Team> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -51,7 +52,23 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             }
         });
 
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                callback.deleteTeam(getItem(position).getId(), position);
+                return true;
+            }
+        });
+
 
         return convertView;
+    }
+
+    public void setCallback(TeamAdapterCallback callback){
+        this.callback = callback;
+    }
+
+    public interface TeamAdapterCallback{
+        public void deleteTeam(int teamId, int position);
     }
 }

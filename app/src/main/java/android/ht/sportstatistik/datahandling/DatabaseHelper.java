@@ -986,6 +986,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_SPIEL, KEY_ID + " = " + spielId, null);
     }
 
+    public int deletePlayer(int playerId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        deleteAllStatsFromPlayer(playerId);
+        deleteAllGamesFromPlayer(playerId);
+        return db.delete(TABLE_SPIELER, KEY_ID + " = " + playerId, null);
+    }
+
+    public int deleteAllStatsFromPlayer(int playerId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_STATISTIK, STATISTIK_SPIELER + " = " + playerId, null);
+    }
+
+    public int deleteAllGamesFromPlayer(int playerId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_SPIEL_SPIELER, SPIEL_SPIELER_SPIELER + " = " + playerId, null);
+    }
+
+    public int deleteAllPlayersFromTeam(int teamId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.delete(TABLE_TEAM_SPIELER, TEAM_SPIELER_TEAM + " = " + teamId, null);
+    }
+
+    public int deleteTeam(int teamId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        deleteAllPlayersFromTeam(teamId);
+        return db.delete(TABLE_TEAM, KEY_ID + " = " + teamId, null);
+    }
+
     //Alle UPDATER
 
     public int updateAction(Ereignis e){

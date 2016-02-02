@@ -192,6 +192,37 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    public void deleteTeam(final int teamId, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("Spiel löschen");
+        //AlertDialog d = builder.create();
+        TextView delete = new TextView(getApplicationContext());
+        delete.setText("Mannschaft löschen?");
+        delete.setTextColor(Color.BLACK);
+        builder.setView(delete);
+        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                dbh.deleteTeam(teamId);
+                ListView lv = (ListView) findViewById(R.id.listViewTeams);
+                ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
+                adapter.remove(adapter.getItem(position));
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        builder.show();
+    }
+
+    @Override
     public void deletePlayer(final int playerId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("Spiel löschen");
