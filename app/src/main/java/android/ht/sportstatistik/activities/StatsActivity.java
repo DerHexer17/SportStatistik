@@ -25,6 +25,8 @@ public class StatsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_stats);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setTitle("Auswertung");
+
         ExpandableListView elv = (ExpandableListView) findViewById(R.id.expendableStatsTeam);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
         statGroupsInteger = dbh.getAllActionsFromTeam(null);

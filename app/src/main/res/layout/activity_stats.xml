@@ -8,9 +8,31 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="android.ht.sportstatistik.activities.StatsActivity">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:id="@+id/expendableStatsIconAvg"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/average_icon"/>
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:id="@+id/expendableStatsIconSum"
+        android:layout_toLeftOf="@id/expendableStatsIconAvg"
+        android:background="@drawable/sum_icon"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/statsTitle"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"/>
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/expendableStatsTeam"></ExpandableListView>
+        android:id="@+id/expendableStatsTeam"
+        android:layout_below="@id/expendableStatsIconAvg"></ExpandableListView>
 
 </RelativeLayout>

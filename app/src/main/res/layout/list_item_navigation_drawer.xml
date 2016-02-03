@@ -5,10 +5,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="10dip"
-    android:textSize="16dip"
+    android:textSize="20dip"
     android:textStyle="italic"
     android:gravity="center"
     android:textAppearance="@android:drawable/alert_dark_frame"
-    android:textColor="@android:color/holo_red_light">
+    android:textColor="@android:color/background_dark"
+    android:background="@android:drawable/edit_text">
 
 </TextView>
