@@ -41,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
@@ -58,7 +59,7 @@ public class MainActivity extends ActionBarActivity
     DatabaseHelper dbh;
     GameAdapter spieler;
 
-    private String[] navMenuTitles;
+    public String[] navMenuTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         //setTitle("Sport Statistik App");
-        mTitle = "Sport Statistik";
+        mTitle = "Handball Statistik";
         dbh = DatabaseHelper.getInstance(this);
         spieler = new GameAdapter(getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
 
@@ -87,6 +88,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
+
 
         switch(position){
             case 0:
@@ -122,6 +124,8 @@ public class MainActivity extends ActionBarActivity
 
 
         }
+
+        //mTitle = navMenuTitles[position];
 
     }
 
@@ -183,16 +187,18 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+
+
     @Override
     public void deleteTeam(final int teamId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Mannschaft löschen?");
+        delete.setText(getResources().getString(R.string.deleteTeam));
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
-        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 dbh.deleteTeam(teamId);
@@ -204,7 +210,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.deleteNegativeButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -220,10 +226,10 @@ public class MainActivity extends ActionBarActivity
         //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Player löschen?");
+        delete.setText(getResources().getString(R.string.deletePlayer));
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
-        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 dbh.deletePlayer(playerId);
@@ -235,7 +241,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.deleteNegativeButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -251,10 +257,10 @@ public class MainActivity extends ActionBarActivity
         //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Game löschen?");
+        delete.setText(getResources().getString(R.string.deleteGame));
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
-        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Log.d("Delete", "Game ID: " + spielId);
                 dbh.deleteGame(spielId);
@@ -266,7 +272,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.deleteNegativeButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -282,10 +288,10 @@ public class MainActivity extends ActionBarActivity
         //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Game wieder aktivieren?");
+        delete.setText(getResources().getString(R.string.setGameActive));
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
-        builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Log.d("Delete", "Game ID: " + spielId);
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
@@ -299,7 +305,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        builder.setNegativeButton("Ne!", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.deleteNegativeButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }

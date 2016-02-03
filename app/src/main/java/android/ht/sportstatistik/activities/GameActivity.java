@@ -12,8 +12,8 @@ import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.PlayerToActionMapping;
 import android.ht.sportstatistik.helper.ActionDelecteAdapter;
 import android.ht.sportstatistik.helper.ActionInGameAdapter;
-import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
-import android.ht.sportstatistik.helper.SpielerInSpielUpdateAdapter;
+import android.ht.sportstatistik.helper.PlayerInGameAdapter;
+import android.ht.sportstatistik.helper.PlayerInGameUpdateAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,17 +29,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class GameActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback, SpielerInSpielUpdateAdapter.SpielerInSpielAdapterCallback{
+public class GameActivity extends ActionBarActivity implements PlayerInGameAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback, PlayerInGameUpdateAdapter.SpielerInSpielAdapterCallback{
 
     Game game;
     DatabaseHelper dbh;
-    SpielerInSpielAdapter spieler;
+    PlayerInGameAdapter spieler;
     List<PlayerToActionMapping> tempSpielerListe;
     ActionInGameAdapter newActionAdapter;
     ActionDelecteAdapter deleteActionAdapter;
     AlertDialog alertAddAction;
     AlertDialog alertDeleteAction;
-    SpielerInSpielUpdateAdapter updateSpieler;
+    PlayerInGameUpdateAdapter updateSpieler;
 
     private Player chosenPlayer;
     private Action selectedAction;
@@ -48,7 +48,7 @@ public class GameActivity extends ActionBarActivity implements SpielerInSpielAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spiel);
+        setContentView(R.layout.activity_game);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
         Log.d("game", "Game ID: " + getIntent().getIntExtra("spielId", 0));
         game = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
@@ -66,7 +66,7 @@ public class GameActivity extends ActionBarActivity implements SpielerInSpielAda
         }*/
 
         //Holen aller Player des Teams und erstellen der Liste
-        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(game.getId()), game));
+        spieler = new PlayerInGameAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(game.getId()), game));
         spieler.setNotifyOnChange(true);
         spieler.setCallback(this);
         spieler.setFinished(game.isBeendet());
@@ -85,7 +85,7 @@ public class GameActivity extends ActionBarActivity implements SpielerInSpielAda
         alertDeleteAction = builder.create();
         setupAlert();
 
-        updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(game.getHeimteam().getId()), game);
+        updateSpieler = new PlayerInGameUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(game.getHeimteam().getId()), game);
         updateSpieler.setCallback(this);
 
     }
@@ -95,7 +95,7 @@ public class GameActivity extends ActionBarActivity implements SpielerInSpielAda
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if(!game.isBeendet()){
-            getMenuInflater().inflate(R.menu.menu_spiel, menu);
+            getMenuInflater().inflate(R.menu.menu_game, menu);
         }
         return true;
     }
@@ -284,6 +284,7 @@ public class GameActivity extends ActionBarActivity implements SpielerInSpielAda
     public void setGameInactive(){
         game.setBeendet(true);
         dbh.updateGame(game);
+
         this.finish();
     }
 }

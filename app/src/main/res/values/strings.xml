@@ -14,10 +14,24 @@
 
     <string name="action_example">Zur Test Activity</string>
     <string name="testdatenEinspielen">Testdaten einspielen</string>
+
+    <!-- Pop-Ups in Main Activity -->
     <string name="addPlayerFirstname">Vorname</string>
     <string name="addPlayerLastname">Nachname</string>
     <string name="addPlayerNumber">Nummer (Zahl!)</string>
     <string name="addPlayerGoalie">Torwart?</string>
+    <string name="deleteTeam">Mannschaft löschen?</string>
+    <string name="deletePlayer">Spieler löschen?</string>
+    <string name="deleteGame">Spiel löschen?</string>
+    <string name="setGameActive">Spiel wieder aktivieren?</string>
+    <string name="deletePositiveButton">Jawohl</string>
+    <string name="deleteNegativeButton">Ne</string>
+
+    <!-- Player Activity-->
+    <string name="saveEditedPlayer">Speichern</string>
+    <string name="pictureDummy">Bild Platzhalter</string>
+
+    <!-- Game Activity -->
     <string name="updatePlayerInGame">Spieler bearbeiten</string>
 
     <!-- Nav Drawer Menu Items -->
@@ -36,6 +50,5 @@
     <string name="title_activity_stats">StatsActivity</string>
     <string name="menuGameIsFinished">Spiel beenden</string>
     <string name="title_activity_player">PlayerActivity</string>
-    <string name="saveEditedPlayer">Speichern</string>
-    <string name="pictureDummy">Bild Platzhalter</string>
+
 </resources>

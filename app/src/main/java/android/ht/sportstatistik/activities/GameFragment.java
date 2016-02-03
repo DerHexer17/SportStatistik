@@ -73,11 +73,19 @@ public class GameFragment extends Fragment implements GameAdapter.SpielAdapterCa
     }
 
     @Override
+    public void onStart() {
+        this.spiele = new GameAdapter(getActivity().getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
+        spiele.notifyDataSetChanged();
+        super.onStart();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_spiel, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_game, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);

@@ -76,7 +76,7 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_spieler, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_player, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewSpieler);

@@ -46,7 +46,7 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_item_spieler, null);
+            convertView = mInflater.inflate(R.layout.list_item_player, null);
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);

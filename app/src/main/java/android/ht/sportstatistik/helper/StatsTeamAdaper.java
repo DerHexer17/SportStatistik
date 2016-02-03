@@ -79,11 +79,15 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.ex_list_group_stats_team, null);
         }
 
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.label);
+        TextView statTitle = (TextView) convertView.findViewById(R.id.labelGroup);
+        TextView sum = (TextView) convertView.findViewById(R.id.sumGroup);
+        TextView avg = (TextView) convertView.findViewById(R.id.averageGroup);
         DecimalFormat f = new DecimalFormat("#0.00");
         //lblListHeader.setTypeface(null, Typeface.BOLD);
         Stats stat = dbh.getStatsActionForTeam((Integer) getGroup(groupPosition), null);
-        lblListHeader.setText(stat.getTitle()+" | Summe: " +stat.getSum()+" | Schnitt: " + f.format(stat.getAverage()));
+        statTitle.setText(stat.getTitle());
+        sum.setText(String.valueOf(stat.getSum()));
+        avg.setText(String.valueOf(f.format(stat.getAverage())));
         Log.d("AVG", "Double: "+stat.getAverage());
 
         Log.d("Stats", dbh.getStatsActionForTeam(1, dbh.getTeam(1)).getTitle() + " Summe: " + dbh.getStatsActionForTeam(1, dbh.getTeam(1)).getSum());
@@ -101,10 +105,16 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.ex_list_item_stats_team, null);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.label);
+        TextView statTitleItem = (TextView) convertView.findViewById(R.id.labelItem);
+        TextView sumItem = (TextView) convertView.findViewById(R.id.sumItem);
+        TextView avgItem = (TextView) convertView.findViewById(R.id.averageItem);
+        DecimalFormat f = new DecimalFormat("#0.00");
+        //lblListHeader.setTypeface(null, Typeface.BOLD);
         Stats stat = getChild(groupPosition, childPosition);
-
-        txtListChild.setText(stat.getPlayer().getVorname()+" | Summe: "+stat.getSum()+" | Schnitt: "+stat.getAverage());
+        String readablePlayerName = stat.getPlayer().getVorname().substring(0,1)+". "+stat.getPlayer().getNachname();
+        statTitleItem.setText(readablePlayerName);
+        sumItem.setText(String.valueOf(stat.getSum()));
+        avgItem.setText(String.valueOf(f.format(stat.getAverage())));
         return convertView;
     }
 

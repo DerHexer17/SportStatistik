@@ -34,7 +34,7 @@ public class PlayerInTeamAdapter extends PlayerAdapter {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_item_spieler_in_team, null);
+            convertView = mInflater.inflate(R.layout.list_item_player_in_team, null);
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);

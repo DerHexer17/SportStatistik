@@ -20,13 +20,13 @@ import java.util.List;
 /**
  * Created by heth on 25.01.2016.
  */
-public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Player> {
+public class PlayerInGameUpdateAdapter extends ArrayAdapter<Player> {
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
     Game game;
 
-    public SpielerInSpielUpdateAdapter(Context context, int resource, List<Player> objects, Game game) {
+    public PlayerInGameUpdateAdapter(Context context, int resource, List<Player> objects, Game game) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
         this.game = game;
@@ -37,7 +37,7 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Player> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_item_update_spieler_in_spiel, null);
+            convertView = mInflater.inflate(R.layout.list_item_update_player_in_game, null);
         }
 
         final TextView txtName = (TextView) convertView.findViewById(R.id.name);

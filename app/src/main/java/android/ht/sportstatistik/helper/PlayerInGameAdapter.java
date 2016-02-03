@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class SpielerInSpielAdapter extends ArrayAdapter<PlayerToActionMapping> {
+public class PlayerInGameAdapter extends ArrayAdapter<PlayerToActionMapping> {
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
     Boolean finished;
 
-    public SpielerInSpielAdapter(Context context, int resource, List<PlayerToActionMapping> objects) {
+    public PlayerInGameAdapter(Context context, int resource, List<PlayerToActionMapping> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }
@@ -33,7 +33,7 @@ public class SpielerInSpielAdapter extends ArrayAdapter<PlayerToActionMapping> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_item_spiele_spieler, null);
+            convertView = mInflater.inflate(R.layout.list_item_games_player, null);
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
