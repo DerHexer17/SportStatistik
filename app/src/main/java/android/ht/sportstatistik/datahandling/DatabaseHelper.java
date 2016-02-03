@@ -121,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIELER_VORNAME + " TEXT, " +
             SPIELER_NACHNAME + " TEXT, " + SPIELER_NUMMER + " INTEGER, " +
-            SPIELER_TORWART + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
+            SPIELER_TORWART + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_TEAM_SPIELER = "CREATE TABLE " + TABLE_TEAM_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_SPIELER_TEAM + " INTEGER, " +
@@ -207,9 +207,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SPIELER_NACHNAME, player.getNachname());
         values.put(SPIELER_NUMMER, player.getNummmer());
         if(player.isTorwart()){
-            values.put(SPIELER_TORWART, "Ja");
+            values.put(SPIELER_TORWART, 1);
         }else{
-            values.put(SPIELER_TORWART, "Nein");
+            values.put(SPIELER_TORWART, 0);
         }
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
@@ -332,7 +332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
             s.setVorname(c.getString(c.getColumnIndex(SPIELER_VORNAME)));
             s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
-            if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+            if(c.getInt(c.getColumnIndex(SPIELER_TORWART)) == 1){
                 s.setTorwart(true);
             }else{
                 s.setTorwart(false);
@@ -365,7 +365,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
                 s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                if(c.getInt(c.getColumnIndex(SPIELER_TORWART)) == 1){
                     s.setTorwart(true);
                 }else{
                     s.setTorwart(false);
@@ -403,7 +403,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
                 s.setId(c.getInt(0));
-                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                if(c.getInt(c.getColumnIndex(SPIELER_TORWART)) == 1){
                     s.setTorwart(true);
                 }else{
                     s.setTorwart(false);
@@ -442,7 +442,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIELER_NUMMER)));
                 s.setId(c.getInt(0));
-                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                if(c.getInt(c.getColumnIndex(SPIELER_TORWART)) == 1){
                     s.setTorwart(true);
                 }else{
                     s.setTorwart(false);
@@ -480,7 +480,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 s.setNachname(c.getString(c.getColumnIndex(SPIELER_NACHNAME)));
                 s.setNummmer(c.getInt(c.getColumnIndex(SPIEL_SPIELER_NUMMER)));
                 s.setId(c.getInt(0));
-                if(c.getString(c.getColumnIndex(SPIELER_TORWART)).equals("Ja")){
+                if(c.getInt(c.getColumnIndex(SPIELER_TORWART)) == 1){
                     s.setTorwart(true);
                 }else{
                     s.setTorwart(false);
@@ -1053,6 +1053,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int i = db.update(TABLE_SPIEL, values, KEY_ID + " = " + s.getId(), null);
 
+        db.close();
+
+        return i;
+    }
+
+    public int updatePlayer(Player p){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SPIELER_VORNAME, p.getVorname());
+        values.put(SPIELER_NACHNAME, p.getNachname());
+        values.put(SPIELER_NUMMER, p.getNummmer());
+        if(p.isTorwart()){
+            values.put(SPIELER_TORWART, 1);
+        }else{
+            values.put(SPIELER_TORWART, 0);
+        }
+
+
+        int i = db.update(TABLE_SPIELER, values, KEY_ID + " = " + p.getId(), null);
         db.close();
 
         return i;

@@ -36,4 +36,6 @@
     <string name="title_activity_stats">StatsActivity</string>
     <string name="menuGameIsFinished">Spiel beenden</string>
     <string name="title_activity_player">PlayerActivity</string>
+    <string name="saveEditedPlayer">Speichern</string>
+    <string name="pictureDummy">Bild Platzhalter</string>
 </resources>
