@@ -2,9 +2,7 @@ package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
 import android.ht.sportstatistik.helper.ActionAdapter;
-import android.ht.sportstatistik.helper.TeamAdapter;
 import android.net.Uri;
 import android.os.Bundle;
 

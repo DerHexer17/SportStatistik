@@ -3,26 +3,25 @@ package android.ht.sportstatistik.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.ht.sportstatistik.R;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 /**
  * Created by heth on 18.08.2015.
  */
-public class SpielerInTeamAdapter extends SpielerAdapter {
+public class PlayerInTeamAdapter extends PlayerAdapter {
     private Team team;
     private SpielerInTeamAdapterCallback callback;
 
-    public SpielerInTeamAdapter(Context context, int resource, List<Spieler> spieler) {
-        super(context, resource, spieler);
+    public PlayerInTeamAdapter(Context context, int resource, List<Player> player) {
+        super(context, resource, player);
 
     }
 

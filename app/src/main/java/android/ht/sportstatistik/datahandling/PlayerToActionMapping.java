@@ -6,12 +6,12 @@ import java.util.Map;
 /**
  * Created by HT on 21.08.2015.
  */
-public class SpielerEreignisZuordnung {
+public class PlayerToActionMapping {
 
-    private Spieler spieler;
+    private Player player;
     private Map<String, Integer> ereignisse;
 
-    public SpielerEreignisZuordnung(){
+    public PlayerToActionMapping(){
         ereignisse = new HashMap<String, Integer>();
     }
 
@@ -23,11 +23,11 @@ public class SpielerEreignisZuordnung {
         this.ereignisse = ereignisse;
     }
 
-    public Spieler getSpieler() {
-        return spieler;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setSpieler(Spieler spieler) {
-        this.spieler = spieler;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

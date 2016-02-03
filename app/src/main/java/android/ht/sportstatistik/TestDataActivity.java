@@ -1,14 +1,13 @@
 package android.ht.sportstatistik;
 
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -21,7 +20,7 @@ public class TestDataActivity extends ActionBarActivity {
         setContentView(R.layout.activity_test_data);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
         String alleSpieler = "";
-        for(Spieler s : dbh.getAllPlayers()){
+        for(Player s : dbh.getAllPlayers()){
             alleSpieler = alleSpieler+s.getVorname()+" "+s.getNachname()+" ("+
             s.getNummmer()+")"+"\n";
         }
@@ -54,15 +53,15 @@ public class TestDataActivity extends ActionBarActivity {
     }
 
     public void neuerSpieler(View v){
-        Spieler spieler = new Spieler();
+        Player player = new Player();
         EditText et = (EditText) findViewById(R.id.vorname);
-        spieler.setVorname(String.valueOf(et.getText()));
+        player.setVorname(String.valueOf(et.getText()));
         et = (EditText) findViewById(R.id.nachname);
-        spieler.setNachname(String.valueOf(et.getText()));
+        player.setNachname(String.valueOf(et.getText()));
         et = (EditText) findViewById(R.id.nummer);
-        spieler.setNummmer(Integer.parseInt(String.valueOf(et.getText())));
+        player.setNummmer(Integer.parseInt(String.valueOf(et.getText())));
 
-        dbh.addSpieler(spieler);
+        dbh.addSpieler(player);
         this.recreate();
 
     }

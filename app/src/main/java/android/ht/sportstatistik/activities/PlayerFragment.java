@@ -1,38 +1,29 @@
 package android.ht.sportstatistik.activities;
 
 import android.app.Activity;
-import android.content.Context;
-import android.database.DataSetObserver;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spiel;
-import android.ht.sportstatistik.datahandling.Spieler;
-import android.ht.sportstatistik.helper.SpielAdapter;
-import android.net.Uri;
+import android.ht.sportstatistik.datahandling.Player;
+import android.ht.sportstatistik.helper.PlayerAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.ht.sportstatistik.R;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SpielFragment.OnFragmentInteractionListener} interface
+ * {@link GameFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SpielFragment#newInstance} factory method to
+ * Use the {@link GameFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapterCallback{
+public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAdapterCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +35,7 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
 
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
-    SpielAdapter spiele;
+    PlayerAdapter players;
 
     /**
      * Use this factory method to create a new instance of
@@ -52,11 +43,11 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SpielFragment.
+     * @return A new instance of fragment GameFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SpielFragment newInstance(String param1, String param2) {
-        SpielFragment fragment = new SpielFragment();
+    public static GameFragment newInstance(String param1, String param2) {
+        GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,10 +55,9 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
         return fragment;
     }
 
-    public SpielFragment() {
+    public PlayerFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,14 +76,14 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_spiel, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_spieler, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
-        ListView lv = (ListView) rootView.findViewById(R.id.listViewSpiele);
-        this.spiele = new SpielAdapter(getActivity().getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames());
-        spiele.setCallback(this);
-        lv.setAdapter(spiele);
-
+        ListView lv = (ListView) rootView.findViewById(R.id.listViewSpieler);
+        players = new PlayerAdapter(getActivity().getApplicationContext(), R.id.label, (List<Player>) dbh.getAllPlayers());
+        players.setNotifyOnChange(true);
+        players.setCallback(this);
+        lv.setAdapter(players);
 
         return rootView;
     }
@@ -124,17 +114,9 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
     }
 
     @Override
-    public void deleteGame(int spielId, int position) {
-        //spiele.remove(spiele.getItem(position));
-        //spiele.notifyDataSetChanged();
-        mListener.deleteGame(spielId, position);
+    public void deletePlayer(int playerId, int position) {
+        mListener.deletePlayer(playerId, position);
     }
-
-    @Override
-    public void setGameActive(int spielId, int position) {
-        mListener.setGameActive(spielId, position);
-    }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -149,8 +131,7 @@ public class SpielFragment extends Fragment implements SpielAdapter.SpielAdapter
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(int position);
-        public void deleteGame(int gameId, int position);
-        public void setGameActive(int spielId, int position);
+        public void deletePlayer(int playerId, int position);
     }
 
 

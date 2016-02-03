@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by HT on 18.03.2015.
  */
-public class Spiel {
+public class Game {
 
     private int id;
     private Team heimteam;

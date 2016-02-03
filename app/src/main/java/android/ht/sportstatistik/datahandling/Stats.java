@@ -8,7 +8,7 @@ public class Stats {
     private String title;
     private int sum;
     private double average;
-    private Spieler spieler;
+    private Player player;
     private Team team;
     private int id;
 
@@ -52,11 +52,11 @@ public class Stats {
         this.average = average;
     }
 
-    public Spieler getSpieler() {
-        return spieler;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setSpieler(Spieler spieler) {
-        this.spieler = spieler;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

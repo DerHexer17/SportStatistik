@@ -2,20 +2,15 @@ package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
-import android.ht.sportstatistik.activities.SpielActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
-import android.ht.sportstatistik.datahandling.Spiel;
-import android.util.Log;
+import android.ht.sportstatistik.datahandling.Action;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,11 +20,11 @@ import java.util.List;
 /**
  * Created by Hendrik on 03.09.2015.
  */
-public class ActionAdapter extends ArrayAdapter<Ereignis> {
+public class ActionAdapter extends ArrayAdapter<Action> {
     DatabaseHelper dbh;
     ActionAdapterCallback callback;
 
-    public ActionAdapter(Context context, int resource, List<Ereignis> objects) {
+    public ActionAdapter(Context context, int resource, List<Action> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }

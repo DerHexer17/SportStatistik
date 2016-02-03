@@ -104,7 +104,7 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
         TextView txtListChild = (TextView) convertView.findViewById(R.id.label);
         Stats stat = getChild(groupPosition, childPosition);
 
-        txtListChild.setText(stat.getSpieler().getVorname()+" | Summe: "+stat.getSum()+" | Schnitt: "+stat.getAverage());
+        txtListChild.setText(stat.getPlayer().getVorname()+" | Summe: "+stat.getSum()+" | Schnitt: "+stat.getAverage());
         return convertView;
     }
 

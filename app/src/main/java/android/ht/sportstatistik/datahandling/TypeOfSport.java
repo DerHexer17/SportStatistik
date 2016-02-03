@@ -3,7 +3,7 @@ package android.ht.sportstatistik.datahandling;
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class Sportart {
+public class TypeOfSport {
 
     private int id;
     private String titel;

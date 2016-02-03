@@ -5,34 +5,31 @@ import android.content.Context;
 import android.graphics.Color;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spiel;
-import android.ht.sportstatistik.datahandling.Spieler;
-import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
+import android.ht.sportstatistik.datahandling.Game;
+import android.ht.sportstatistik.datahandling.Player;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by heth on 25.01.2016.
  */
-public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
+public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Player> {
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
-    Spiel spiel;
+    Game game;
 
-    public SpielerInSpielUpdateAdapter(Context context, int resource, List<Spieler> objects, Spiel spiel) {
+    public SpielerInSpielUpdateAdapter(Context context, int resource, List<Player> objects, Game game) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
-        this.spiel = spiel;
+        this.game = game;
     }
 
     @Override
@@ -48,8 +45,8 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
         final Button minus = (Button) convertView.findViewById(R.id.minus);
         final Button plus = (Button) convertView.findViewById(R.id.plus);
         txtName.setText(getItem(position).getVorname().substring(0, 1)+". "+getItem(position).getNachname());
-        if(dbh.isPlayerInGame(getItem(position), spiel) >= 0) {
-            txtNumber.setText(String.valueOf(dbh.isPlayerInGame(getItem(position), spiel)));
+        if(dbh.isPlayerInGame(getItem(position), game) >= 0) {
+            txtNumber.setText(String.valueOf(dbh.isPlayerInGame(getItem(position), game)));
         }else{
             txtNumber.setText(String.valueOf(getItem(position).getNummmer()));
         }
@@ -57,9 +54,9 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Integer.parseInt((String) txtNumber.getText()) >= 1 & dbh.isPlayerInGame(getItem(position), spiel) >= 0){
+                if(Integer.parseInt((String) txtNumber.getText()) >= 1 & dbh.isPlayerInGame(getItem(position), game) >= 0){
                     txtNumber.setText(String.valueOf(Integer.parseInt((String) txtNumber.getText()) - 1));
-                    dbh.updatePlayerInGame(getItem(position), spiel, Integer.parseInt((String) txtNumber.getText()));
+                    dbh.updatePlayerInGame(getItem(position), game, Integer.parseInt((String) txtNumber.getText()));
                 }
 
             }
@@ -68,9 +65,9 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dbh.isPlayerInGame(getItem(position), spiel) >=0){
+                if(dbh.isPlayerInGame(getItem(position), game) >=0){
                     txtNumber.setText(String.valueOf(Integer.parseInt((String) txtNumber.getText()) + 1));
-                    dbh.updatePlayerInGame(getItem(position), spiel, Integer.parseInt((String) txtNumber.getText()));
+                    dbh.updatePlayerInGame(getItem(position), game, Integer.parseInt((String) txtNumber.getText()));
                 }
 
             }
@@ -78,7 +75,7 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
 
         final Switch actionSwitch = (Switch) convertView.findViewById(R.id.switchUpdatePlayer);
 
-        if(dbh.isPlayerInGame(getItem(position), spiel) >= 0){
+        if(dbh.isPlayerInGame(getItem(position), game) >= 0){
             actionSwitch.setChecked(true);
             txtName.setTextColor(Color.BLACK);
             txtNumber.setTextColor(Color.BLACK);
@@ -156,7 +153,7 @@ public class SpielerInSpielUpdateAdapter extends ArrayAdapter<Spieler> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SpielActivity.class);
+                Intent intent = new Intent(getContext(), GameActivity.class);
                 intent.putExtra("spielId", Integer.parseInt((String) v.getContentDescription()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);

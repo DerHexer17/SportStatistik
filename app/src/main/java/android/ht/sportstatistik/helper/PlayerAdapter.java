@@ -1,18 +1,17 @@
 package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.ht.sportstatistik.R;
+import android.ht.sportstatistik.activities.PlayerActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,21 +19,21 @@ import java.util.List;
 /**
  * Created by heth on 30.03.2015.
  */
-public class SpielerAdapter extends ArrayAdapter<Spieler> {
+public class PlayerAdapter extends ArrayAdapter<Player> {
 
 
      DatabaseHelper dbh;
     SpielerAdapterCallback callback;
 
-     /*public SpielerAdapter(Context context, List<Spieler> spieler){
+     /*public PlayerAdapter(Context context, List<Player> spieler){
           this.context = context;
           this.spieler = spieler;
           dbh = DatabaseHelper.getInstance(context);
           this.complex=complex;
         }*/
 
-    public SpielerAdapter(Context context, int resource, List<Spieler> spieler) {
-        super(context, resource, spieler);
+    public PlayerAdapter(Context context, int resource, List<Player> player) {
+        super(context, resource, player);
         dbh=DatabaseHelper.getInstance(context);
     }
 
@@ -67,6 +66,18 @@ public class SpielerAdapter extends ArrayAdapter<Spieler> {
             }
             txtMannschaft.setText(textMehrereMannschaften);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PlayerActivity.class);
+                Player p = getItem(position);
+                intent.putExtra("player", p.getId());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+
+            }
+        });
 
 
         convertView.setOnLongClickListener(new View.OnLongClickListener() {

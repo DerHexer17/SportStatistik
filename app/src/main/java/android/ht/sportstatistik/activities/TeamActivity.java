@@ -3,11 +3,10 @@ package android.ht.sportstatistik.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
-import android.ht.sportstatistik.helper.SpielerAdapter;
-import android.ht.sportstatistik.helper.SpielerInTeamAdapter;
-import android.ht.sportstatistik.helper.SpielerZuTeamAdapter;
+import android.ht.sportstatistik.helper.PlayerForTeamAdapter;
+import android.ht.sportstatistik.helper.PlayerInTeamAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +21,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdapter.SpielerInTeamAdapterCallback{
+public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapter.SpielerInTeamAdapterCallback{
 
     Team team;
     DatabaseHelper dbh;
-    List<Spieler> ausgewaehlteSpieler;
-    SpielerInTeamAdapter spielerAdapter;
-    SpielerZuTeamAdapter spielerAuswahlAdapter;
+    List<Player> chosenPlayer;
+    PlayerInTeamAdapter spielerAdapter;
+    PlayerForTeamAdapter spielerAuswahlAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +35,15 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
         setContentView(R.layout.activity_team);
         dbh = DatabaseHelper.getInstance(this);
         team = dbh.getTeam(getIntent().getIntExtra("teamId", 0));
-        ausgewaehlteSpieler = new ArrayList<Spieler>();
+        chosenPlayer = new ArrayList<Player>();
         setTitle(team.getKurz_name());
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
-        spielerAdapter = new SpielerInTeamAdapter(this, R.id.label ,dbh.getAllPlayersFromTeam(team.getId()));
+        spielerAdapter = new PlayerInTeamAdapter(this, R.id.label ,dbh.getAllPlayersFromTeam(team.getId()));
         spielerAdapter.setNotifyOnChange(true);
         spielerAdapter.setCallback(this);
-        spielerAuswahlAdapter = new SpielerZuTeamAdapter(this, R.id.cbSpieler, dbh.getAllPlayersNotFromTeam(team.getId()));
+        spielerAuswahlAdapter = new PlayerForTeamAdapter(this, R.id.cbSpieler, dbh.getAllPlayersNotFromTeam(team.getId()));
         spielerAuswahlAdapter.setNotifyOnChange(true);
         lv.setAdapter(spielerAdapter);
     }
@@ -77,8 +74,8 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
     public void addSpieler(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Spieler hinzufügen");
-        alert.setMessage("Welche Spieler gehören zu diesem Team?");
+        alert.setTitle("Player hinzufügen");
+        alert.setMessage("Welche Player gehören zu diesem Team?");
 
         // Set an EditText view to get user input
         final ListView lvSpielerHinzu = new ListView(this);
@@ -90,11 +87,11 @@ public class TeamActivity extends ActionBarActivity implements SpielerInTeamAdap
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                List<Spieler> selectedPlayers = new ArrayList<Spieler>();
+                List<Player> selectedPlayers = new ArrayList<Player>();
                 int c = 0;
-                Log.d("addSpieler", "Größe selectedSpieler: "+spielerAuswahlAdapter.getSelectedSpieler().size());
+                Log.d("addSpieler", "Größe selectedSpieler: "+spielerAuswahlAdapter.getSelectedPlayer().size());
                 Toast toast = Toast.makeText(getApplicationContext(), "Adapter: "+spielerAuswahlAdapter.getClass(), Toast.LENGTH_SHORT);
-                for(Spieler s : spielerAuswahlAdapter.getSelectedSpieler()){
+                for(Player s : spielerAuswahlAdapter.getSelectedPlayer()){
                     long l = dbh.addSpielerToTeam(s, team);
                     Log.d("addSpieler", "dbh return: "+l);
                     spielerAdapter.add(s);

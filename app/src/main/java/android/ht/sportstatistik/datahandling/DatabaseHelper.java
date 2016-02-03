@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -200,14 +199,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ADDER
-    public long addSpieler(Spieler spieler) {
+    public long addSpieler(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SPIELER_VORNAME, spieler.getVorname());
-        values.put(SPIELER_NACHNAME, spieler.getNachname());
-        values.put(SPIELER_NUMMER, spieler.getNummmer());
-        if(spieler.isTorwart()){
+        values.put(SPIELER_VORNAME, player.getVorname());
+        values.put(SPIELER_NACHNAME, player.getNachname());
+        values.put(SPIELER_NUMMER, player.getNummmer());
+        if(player.isTorwart()){
             values.put(SPIELER_TORWART, "Ja");
         }else{
             values.put(SPIELER_TORWART, "Nein");
@@ -238,19 +237,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public long addSpiel(Spiel spiel) {
+    public long addSpiel(Game game) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        if(spiel.isBeendet()) {
+        if(game.isBeendet()) {
             values.put(SPIEL_BEENDET, 1);
         }else{
             values.put(SPIEL_BEENDET, 0);
         }
-        values.put(SPIEL_GASTTEAM, spiel.getGastteam());
-        values.put(SPIEL_HEIMTEAM, spiel.getHeimteam().getId());
+        values.put(SPIEL_GASTTEAM, game.getGastteam());
+        values.put(SPIEL_HEIMTEAM, game.getHeimteam().getId());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-        Calendar datum = spiel.getDatum();
+        Calendar datum = game.getDatum();
         values.put(SPIEL_DATUM, formatter.format(datum.getTime()));
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
@@ -260,7 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public long addEreignis(Ereignis e){
+    public long addEreignis(Action e){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -272,14 +271,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }else{
             values.put(EREIGNIS_AKTIV, 0);
         }
-        //values.put(EREIGNIS_SPORTART, e.getSportart().getId());
+        //values.put(EREIGNIS_SPORTART, e.getTypeOfSport().getId());
 
         long l = db.insert(TABLE_EREIGNIS, null, values);
         db.close();
         return l;
     }
 
-    public long addSpielerToTeam(Spieler s, Team t){
+    public long addSpielerToTeam(Player s, Team t){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -292,20 +291,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return l;
     }
 
-    public long addStatistik(EreignisZuordnung stat) {
+    public long addStatistik(ActionMapping stat) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(STATISTIK_SPIEL, stat.getSpiel().getId());
-        values.put(STATISTIK_SPIELER, stat.getSpieler().getId());
-        values.put(STATISTIK_EREIGNIS, stat.getEreignis().getId());
+        values.put(STATISTIK_SPIEL, stat.getGame().getId());
+        values.put(STATISTIK_SPIELER, stat.getPlayer().getId());
+        values.put(STATISTIK_EREIGNIS, stat.getAction().getId());
 
         long l = db.insert(TABLE_STATISTIK, null, values);
         db.close();
         return l;
     }
 
-    public long addSpielerToSpiel(Spieler sp, Spiel s, int number){
+    public long addSpielerToSpiel(Player sp, Game s, int number){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -320,13 +319,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ALL GETTER
 
-    public Spieler getPlayer(int id){
+    public Player getPlayer(int id){
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + " WHERE " + KEY_ID + " = " + id;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        Spieler s = new Spieler();
+        Player s = new Player();
         if(c.moveToFirst()){
 
             s.setId(c.getInt(0));
@@ -343,8 +342,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         c.close();
         return s;
     }
-    public List<Spieler> getAllPlayers() {
-        List<Spieler> alleSpieler = new ArrayList<Spieler>();
+    public List<Player> getAllPlayers() {
+        List<Player> allPlayer = new ArrayList<Player>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -353,7 +352,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Spieler s = new Spieler();
+                Player s = new Player();
 
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -371,15 +370,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }else{
                     s.setTorwart(false);
                 }
-                alleSpieler.add(s);
+                allPlayer.add(s);
             } while (c.moveToNext());
         }
         c.close();
-        return alleSpieler;
+        return allPlayer;
     }
 
-    public List<Spieler> getAllPlayersFromTeam(int id) {
-        List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
+    public List<Player> getAllPlayersFromTeam(int id) {
+        List<Player> allPlayerFromTeam = new ArrayList<Player>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_TEAM_SPIELER +
                 " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
                 " AND " + TEAM_SPIELER_TEAM + " = " + id + " ORDER BY " +
@@ -391,7 +390,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Spieler s = new Spieler();
+                Player s = new Player();
 
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -409,14 +408,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }else{
                     s.setTorwart(false);
                 }
-                alleSpielerFromTeam.add(s);
+                allPlayerFromTeam.add(s);
             } while (c.moveToNext());
         }
         c.close();
-        return alleSpielerFromTeam;
+        return allPlayerFromTeam;
     }
 
-    public List<Spieler> getAllPlayersNotFromTeam(int id) {
+    public List<Player> getAllPlayersNotFromTeam(int id) {
         String selectQuery = "SELECT * FROM " + TABLE_SPIELER + " LEFT JOIN " + TABLE_TEAM_SPIELER +
                 " ON " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
                 " WHERE " + TEAM_SPIELER_TEAM + " IS NULL OR " +
@@ -426,11 +425,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(selectQuery, null);
 
         String TAG = "allPlayersNotFromTeam";
-        List<Spieler> alleSpielerFromTeam = new ArrayList<Spieler>();
+        List<Player> allPlayerFromTeam = new ArrayList<Player>();
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Spieler s = new Spieler();
+                Player s = new Player();
 
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -448,15 +447,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }else{
                     s.setTorwart(false);
                 }
-                alleSpielerFromTeam.add(s);
+                allPlayerFromTeam.add(s);
             } while (c.moveToNext());
         }
         c.close();
-        return alleSpielerFromTeam;
+        return allPlayerFromTeam;
     }
 
-    public List<Spieler> getAllPlayersFromGame(int spielId) {
-        List<Spieler> alleSpielerFromGame = new ArrayList<Spieler>();
+    public List<Player> getAllPlayersFromGame(int spielId) {
+        List<Player> allPlayerFromGame = new ArrayList<Player>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIELER + ", " + TABLE_SPIEL_SPIELER +
                 " WHERE " + TABLE_SPIELER + "." + KEY_ID + " = " + SPIEL_SPIELER_SPIELER +
                 " AND " + SPIEL_SPIELER_SPIEL + " = " + spielId + " ORDER BY " +
@@ -468,7 +467,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Spieler s = new Spieler();
+                Player s = new Player();
 
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -486,14 +485,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }else{
                     s.setTorwart(false);
                 }
-                alleSpielerFromGame.add(s);
+                allPlayerFromGame.add(s);
             } while (c.moveToNext());
         }
         c.close();
-        return alleSpielerFromGame;
+        return allPlayerFromGame;
     }
 
-    public int isPlayerInGame(Spieler sp, Spiel s){
+    public int isPlayerInGame(Player sp, Game s){
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL_SPIELER + " WHERE " + SPIEL_SPIELER_SPIELER + " = " + sp.getId() +
                 " AND " + SPIEL_SPIELER_SPIEL + " = " + s.getId();
 
@@ -590,12 +589,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleTeamsFromPlayer;
     }
 
-    public Spiel getSpiel(int id){
+    public Game getSpiel(int id){
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + " WHERE " + KEY_ID + " = " + id;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
-        Spiel sp = new Spiel();
+        Game sp = new Game();
         if(c.moveToFirst()){
 
 
@@ -628,8 +627,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sp;
     }
 
-    public List<Spiel> getAllGames() {
-        List<Spiel> alleSpiele = new ArrayList<Spiel>();
+    public List<Game> getAllGames() {
+        List<Game> alleSpiele = new ArrayList<Game>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + ", " + TABLE_TEAM + " WHERE " +
                 SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID;
 
@@ -639,7 +638,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Spiel s = new Spiel();
+                Game s = new Game();
 
                 Team t = getTeam(c.getInt(c.getColumnIndex(SPIEL_HEIMTEAM)));
 
@@ -674,12 +673,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public Ereignis getEreignis(int id){
+    public Action getEreignis(int id){
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS + " WHERE " + KEY_ID + " = " + id;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
-        Ereignis e = new Ereignis();
+        Action e = new Action();
         if(c.moveToFirst()){
 
             e.setName(c.getString(c.getColumnIndex(EREIGNIS_NAME)));
@@ -690,15 +689,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }else{
                 e.setActive(false);
             }
-            //e.setSportart();
+            //e.setTypeOfSport();
             e.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
         }
         return e;
     }
 
-    public List<Ereignis> getAlleEreignisse() {
-        List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
+    public List<Action> getAlleEreignisse() {
+        List<Action> alleEreignisse = new ArrayList<Action>();
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -707,7 +706,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Ereignis e = new Ereignis();
+                Action e = new Action();
                 SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -733,8 +732,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleEreignisse;
     }
 
-    public List<Ereignis> getAllActiveActions() {
-        List<Ereignis> alleEreignisse = new ArrayList<Ereignis>();
+    public List<Action> getAllActiveActions() {
+        List<Action> alleEreignisse = new ArrayList<Action>();
         String selectQuery = "SELECT  * FROM " + TABLE_EREIGNIS + " WHERE " + EREIGNIS_AKTIV + " = 1";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -743,7 +742,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Ereignis e = new Ereignis();
+                Action e = new Action();
                 SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
                 /*try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
@@ -769,11 +768,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return alleEreignisse;
     }
 
-    public List<SpielerEreignisZuordnung> getAlleSpielEreignisse(List<Spieler> spieler, Spiel sp) {
-        List<SpielerEreignisZuordnung> alleSpielerMitEreignissen = new ArrayList<SpielerEreignisZuordnung>();
+    public List<PlayerToActionMapping> getAlleSpielEreignisse(List<Player> player, Game sp) {
+        List<PlayerToActionMapping> alleSpielerMitEreignissen = new ArrayList<PlayerToActionMapping>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        for(Spieler s : spieler) {
+        for(Player s : player) {
             Map<String, Integer> map = new HashMap<String, Integer>();
             String selectQuery = "SELECT " + STATISTIK_EREIGNIS + ", COUNT(" + STATISTIK_SPIELER + ")  FROM " + TABLE_STATISTIK +
                     " WHERE " + STATISTIK_SPIEL + " = " + sp.getId() + " AND " + STATISTIK_SPIELER + " = " + s.getId() +
@@ -789,9 +788,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             }
             c.close();
-            SpielerEreignisZuordnung sez = new SpielerEreignisZuordnung();
+            PlayerToActionMapping sez = new PlayerToActionMapping();
             sez.setEreignisse(map);
-            sez.setSpieler(s);
+            sez.setPlayer(s);
             alleSpielerMitEreignissen.add(sez);
         }
 
@@ -889,7 +888,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             do {
                 Stats stat = new Stats();
-                stat.setSpieler(getPlayer(c.getInt(0)));
+                stat.setPlayer(getPlayer(c.getInt(0)));
 
                 try{
                     stat.setSum(c.getInt(1));
@@ -901,12 +900,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 if(t == null){
                     selectQuery_avg = "SELECT " + STATISTIK_SPIEL +
                             " FROM " + TABLE_STATISTIK +
-                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getSpieler().getId() +
+                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getPlayer().getId() +
                             " GROUP BY " + STATISTIK_SPIEL;
                 }else {
                     selectQuery_avg = "SELECT " + STATISTIK_SPIEL +
                             " FROM " + TABLE_STATISTIK +
-                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getSpieler().getId() +
+                            " WHERE " + STATISTIK_SPIELER + " = " + stat.getPlayer().getId() +
                             " GROUP BY " + STATISTIK_SPIEL;
                 }
 
@@ -934,17 +933,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Alle DELETER
 
-    public int removePlayerFromTeam(Spieler s, Team t){
+    public int removePlayerFromTeam(Player s, Team t){
         SQLiteDatabase db = this.getReadableDatabase();
         
         return db.delete(TABLE_TEAM_SPIELER, TEAM_SPIELER_SPIELER + " = " + s.getId() +
                 " AND " + TEAM_SPIELER_TEAM + " = " + t.getId(), null);
     }
 
-    public int deleteActionFromGame(EreignisZuordnung e){
+    public int deleteActionFromGame(ActionMapping e){
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_STATISTIK + " WHERE " + STATISTIK_SPIEL + " = " + e.getSpiel().getId() + " AND " +
-                STATISTIK_SPIELER + " = " + e.getSpieler().getId() + " AND " + STATISTIK_EREIGNIS + " = " + e.getEreignis().getId();
+        String selectQuery = "SELECT * FROM " + TABLE_STATISTIK + " WHERE " + STATISTIK_SPIEL + " = " + e.getGame().getId() + " AND " +
+                STATISTIK_SPIELER + " = " + e.getPlayer().getId() + " AND " + STATISTIK_EREIGNIS + " = " + e.getAction().getId();
 
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.moveToFirst()){
@@ -956,7 +955,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public int deletePlayerFromGame(Spieler sp, Spiel s){
+    public int deletePlayerFromGame(Player sp, Game s){
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.delete(TABLE_SPIEL_SPIELER, SPIEL_SPIELER_SPIEL + " = " + s.getId() +
@@ -1016,7 +1015,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Alle UPDATER
 
-    public int updateAction(Ereignis e){
+    public int updateAction(Action e){
         SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();
@@ -1036,7 +1035,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public int updateGame(Spiel s){
+    public int updateGame(Game s){
         SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();
@@ -1059,7 +1058,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public int updatePlayerInGame(Spieler sp, Spiel s, int number){
+    public int updatePlayerInGame(Player sp, Game s, int number){
         SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();

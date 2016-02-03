@@ -2,9 +2,9 @@ package android.ht.sportstatistik.helper;
 
 import android.content.Context;
 import android.ht.sportstatistik.R;
+import android.ht.sportstatistik.datahandling.Action;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
 import android.util.Log;
 
@@ -25,7 +25,7 @@ public class Testdaten {
     }
     public void testdatenEinspielen(){
         List<Team> teams = new ArrayList<Team>();
-        List<Spieler> spieler = new ArrayList<Spieler>();
+        List<Player> player = new ArrayList<Player>();
         dbh.deleteAll();
 
 
@@ -39,46 +39,46 @@ public class Testdaten {
         t3.setId((int) dbh.addTeam(t3));
         teams.add(t3);
 
-        Spieler s1 = new Spieler("Hendrik", "Thüs", 18, false);
+        Player s1 = new Player("Hendrik", "Thüs", 18, false);
         s1.setId((int) dbh.addSpieler(s1));
         dbh.addSpielerToTeam(s1, t1);
-        Spieler s2 = new Spieler("Jörg", "Ehrlich", 12, true);
+        Player s2 = new Player("Jörg", "Ehrlich", 12, true);
         s2.setId((int) dbh.addSpieler(s2));
         dbh.addSpielerToTeam(s2, t1);
-        Spieler s3 = new Spieler("Kevin", "Püchl", 1, true);
+        Player s3 = new Player("Kevin", "Püchl", 1, true);
         s3.setId((int) dbh.addSpieler(s3));
         dbh.addSpielerToTeam(s3, t1);
-        Spieler s4 = new Spieler("Marco", "Weithäuser", 2, false);
+        Player s4 = new Player("Marco", "Weithäuser", 2, false);
         s4.setId((int) dbh.addSpieler(s4));
         dbh.addSpielerToTeam(s4, t1);
-        Spieler s5 = new Spieler("Sebastian", "Sonntag", 3, false);
+        Player s5 = new Player("Sebastian", "Sonntag", 3, false);
         s5.setId((int) dbh.addSpieler(s5));
         dbh.addSpielerToTeam(s5, t1);
-        Spieler s6 = new Spieler("Konrad", "Ehelebe", 4, false);
+        Player s6 = new Player("Konrad", "Ehelebe", 4, false);
         s6.setId((int) dbh.addSpieler(s6));
         dbh.addSpielerToTeam(s6, t1);
-        Spieler s7 = new Spieler("Matti", "Fiehler", 5, false);
+        Player s7 = new Player("Matti", "Fiehler", 5, false);
         s7.setId((int) dbh.addSpieler(s7));
         dbh.addSpielerToTeam(s7, t1);
-        Spieler s8 = new Spieler("Nico", "Betzien", 7, false);
+        Player s8 = new Player("Nico", "Betzien", 7, false);
         s8.setId((int) dbh.addSpieler(s8));
         dbh.addSpielerToTeam(s8, t1);
-        Spieler s9 = new Spieler("Marius", "Dietrich", 8, false);
+        Player s9 = new Player("Marius", "Dietrich", 8, false);
         s9.setId((int) dbh.addSpieler(s9));
         dbh.addSpielerToTeam(s9, t1);
-        Spieler s10 = new Spieler("Christian", "Melzer", 10, false);
+        Player s10 = new Player("Christian", "Melzer", 10, false);
         s10.setId((int) dbh.addSpieler(s10));
         dbh.addSpielerToTeam(s10, t1);
-        Spieler s11 = new Spieler("Robin", "Gaida", 11, false);
+        Player s11 = new Player("Robin", "Gaida", 11, false);
         s11.setId((int) dbh.addSpieler(s11));
         dbh.addSpielerToTeam(s11, t1);
-        Spieler s12 = new Spieler("Ronny", "Reinhardt", 14, false);
+        Player s12 = new Player("Ronny", "Reinhardt", 14, false);
         s12.setId((int) dbh.addSpieler(s12));
         dbh.addSpielerToTeam(s12, t1);
-        Spieler s13 = new Spieler("Paul", "Hohlfeld", 15, false);
+        Player s13 = new Player("Paul", "Hohlfeld", 15, false);
         s13.setId((int) dbh.addSpieler(s13));
         dbh.addSpielerToTeam(s13, t1);
-        Spieler s14 = new Spieler("Alexander", "Schmidt", 17, false);
+        Player s14 = new Player("Alexander", "Schmidt", 17, false);
         s14.setId((int) dbh.addSpieler(s14));
         dbh.addSpielerToTeam(s14, t1);
 
@@ -90,7 +90,7 @@ public class Testdaten {
         int i = dbh.deleteAllActions();
         Log.d("Test", "Anzahl gelöschter Ereignisse: " + i);
 
-        Ereignis e = new Ereignis("Tor", "Tor geworfen");
+        Action e = new Action("Tor", "Tor geworfen");
         e.setBild(R.drawable.goal_icon);
         dbh.addEreignis(e);
 

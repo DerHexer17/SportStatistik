@@ -3,14 +3,13 @@ package android.ht.sportstatistik.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.ht.sportstatistik.R;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Player;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,12 +18,12 @@ import java.util.List;
 /**
  * Created by heth on 30.03.2015.
  */
-public class SpielerZuTeamAdapter extends SpielerAdapter {
-    List<Spieler> selectedSpieler;
+public class PlayerForTeamAdapter extends PlayerAdapter {
+    List<Player> selectedPlayer;
 
-    public SpielerZuTeamAdapter(Context context, int resource, List<Spieler> objects) {
+    public PlayerForTeamAdapter(Context context, int resource, List<Player> objects) {
         super(context, resource, objects);
-        selectedSpieler = new ArrayList<Spieler>();
+        selectedPlayer = new ArrayList<Player>();
     }
 
 
@@ -45,14 +44,14 @@ public class SpielerZuTeamAdapter extends SpielerAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    selectedSpieler.add(getItem(position));
+                    selectedPlayer.add(getItem(position));
                     Log.d("addSpieler", "position: "+position);
-                    Log.d("addSpieler", "Spieler ID: "+getItem(position).getId());
+                    Log.d("addSpieler", "Player ID: "+getItem(position).getId());
                 } else {
-                    selectedSpieler.remove(getItem(position));
+                    selectedPlayer.remove(getItem(position));
                 }
 
-                Toast toast = Toast.makeText(getContext(), "CheckBox gedrückt, aktueller size selectexSpieler: "+selectedSpieler.size(), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getContext(), "CheckBox gedrückt, aktueller size selectexSpieler: "+ selectedPlayer.size(), Toast.LENGTH_SHORT);
             }
         });
 
@@ -60,12 +59,12 @@ public class SpielerZuTeamAdapter extends SpielerAdapter {
         return convertView;
     }
 
-    public List<Spieler> getSelectedSpieler(){
-        return selectedSpieler;
+    public List<Player> getSelectedPlayer(){
+        return selectedPlayer;
     }
 
-    public void addSelectedSpieler(Spieler s){
-        selectedSpieler.add(s);
+    public void addSelectedSpieler(Player s){
+        selectedPlayer.add(s);
     }
 
 }

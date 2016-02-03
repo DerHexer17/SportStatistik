@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.ht.sportstatistik.TestDataActivity;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Spiel;
-import android.ht.sportstatistik.datahandling.Spieler;
+import android.ht.sportstatistik.datahandling.Game;
+import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
-import android.ht.sportstatistik.helper.SpielAdapter;
-import android.ht.sportstatistik.helper.SpielerAdapter;
+import android.ht.sportstatistik.helper.GameAdapter;
+import android.ht.sportstatistik.helper.PlayerAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
 import android.net.Uri;
@@ -21,10 +19,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,21 +34,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.ht.sportstatistik.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SpielerFragment.OnFragmentInteractionListener, SpielFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, SpielerAdapter.SpielerAdapterCallback, SpielAdapter.SpielAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -64,7 +56,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     DatabaseHelper dbh;
-    SpielAdapter spieler;
+    GameAdapter spieler;
 
     private String[] navMenuTitles;
 
@@ -79,7 +71,7 @@ public class MainActivity extends ActionBarActivity
         //setTitle("Sport Statistik App");
         mTitle = "Sport Statistik";
         dbh = DatabaseHelper.getInstance(this);
-        spieler = new SpielAdapter(getApplicationContext(), R.id.label, (List<Spiel>) dbh.getAllGames());
+        spieler = new GameAdapter(getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
 
 
         if(dbh.getAlleEreignisse().size() == 0){
@@ -98,13 +90,13 @@ public class MainActivity extends ActionBarActivity
 
         switch(position){
             case 0:
-                fragment = new SpielFragment();
+                fragment = new GameFragment();
                 break;
             case 1:
                 fragment = new TeamFragment();
                 break;
             case 2:
-                fragment = new SpielerFragment();
+                fragment = new PlayerFragment();
 
                 /*Bundle b = new Bundle();
                 b.putParcelable(spieler);
@@ -194,7 +186,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void deleteTeam(final int teamId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle("Spiel löschen");
+        //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
         delete.setText("Mannschaft löschen?");
@@ -225,10 +217,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void deletePlayer(final int playerId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle("Spiel löschen");
+        //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Spieler löschen?");
+        delete.setText("Player löschen?");
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
         builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
@@ -256,15 +248,15 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void deleteGame(final int spielId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle("Spiel löschen");
+        //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Spiel löschen?");
+        delete.setText("Game löschen?");
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
         builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Log.d("Delete", "Spiel ID: " + spielId);
+                Log.d("Delete", "Game ID: " + spielId);
                 dbh.deleteGame(spielId);
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
@@ -287,21 +279,21 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void setGameActive(final int spielId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle("Spiel löschen");
+        //builder.setTitle("Game löschen");
         //AlertDialog d = builder.create();
         TextView delete = new TextView(getApplicationContext());
-        delete.setText("Spiel wieder aktivieren?");
+        delete.setText("Game wieder aktivieren?");
         delete.setTextColor(Color.BLACK);
         builder.setView(delete);
         builder.setPositiveButton("Jawohl", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Log.d("Delete", "Spiel ID: " + spielId);
+                Log.d("Delete", "Game ID: " + spielId);
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
-                Spiel spiel = (Spiel) adapter.getItem(position);
-                spiel.setBeendet(false);
-                dbh.updateGame(spiel);
-                ((Spiel) adapter.getItem(position)).setBeendet(false);
+                Game game = (Game) adapter.getItem(position);
+                game.setBeendet(false);
+                dbh.updateGame(game);
+                ((Game) adapter.getItem(position)).setBeendet(false);
                 adapter.notifyDataSetChanged();
 
             }
@@ -360,8 +352,8 @@ public class MainActivity extends ActionBarActivity
     public void neuesSpiel(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Spiel anlegen");
-        alert.setMessage("Leg ein neues Spiel an");
+        alert.setTitle("Game anlegen");
+        alert.setMessage("Leg ein neues Game an");
 
         final Spinner heimteam = new Spinner(this);
         /*List<String> heimteams = new ArrayList<String>();
@@ -389,7 +381,7 @@ public class MainActivity extends ActionBarActivity
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Spiel s = new Spiel();
+                Game s = new Game();
                 s.setBeendet(false);
                 s.setGastteam(String.valueOf(gegner.getText()));
                 Team t = (Team) heimteam.getSelectedItem();
@@ -407,9 +399,9 @@ public class MainActivity extends ActionBarActivity
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
 
-                //Einmal initial werden einfach alle Spieler des Teams dem Spiel zugeordnet
-                for(Spieler spieler : dbh.getAllPlayersFromTeam(s.getHeimteam().getId())){
-                    dbh.addSpielerToSpiel(spieler, s, spieler.getNummmer());
+                //Einmal initial werden einfach alle Player des Teams dem Game zugeordnet
+                for(Player player : dbh.getAllPlayersFromTeam(s.getHeimteam().getId())){
+                    dbh.addSpielerToSpiel(player, s, player.getNummmer());
                 }
 
                 adapter.add(s);
@@ -489,8 +481,8 @@ public class MainActivity extends ActionBarActivity
     public void neuerSpieler(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
-        alert.setTitle("Spieler anlegen");
-        alert.setMessage("Leg einen neuen Spieler an");
+        alert.setTitle("Player anlegen");
+        alert.setMessage("Leg einen neuen Player an");
 
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.add_player, null);
@@ -502,7 +494,7 @@ public class MainActivity extends ActionBarActivity
 
         alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Spieler sp = new Spieler();
+                Player sp = new Player();
 
                 try{
                     sp.setVorname(String.valueOf(vorname.getText()).trim());
@@ -514,7 +506,7 @@ public class MainActivity extends ActionBarActivity
                         sp.setTorwart(false);
                     }
                 }catch (Exception e){
-                    Log.d("Neuer Spieler", e.getMessage());
+                    Log.d("Neuer Player", e.getMessage());
                 }
 
                 dbh.addSpieler(sp);

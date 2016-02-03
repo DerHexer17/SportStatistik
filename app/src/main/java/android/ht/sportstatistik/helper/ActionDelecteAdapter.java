@@ -2,15 +2,13 @@ package android.ht.sportstatistik.helper;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
+import android.ht.sportstatistik.datahandling.Action;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
@@ -23,7 +21,7 @@ public class ActionDelecteAdapter extends ActionInGameAdapter {
 
     DatabaseHelper dbh;
     ActionDeleteAdapterCallback callback;
-    public ActionDelecteAdapter(Context context, int resource, List<Ereignis> objects) {
+    public ActionDelecteAdapter(Context context, int resource, List<Action> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }

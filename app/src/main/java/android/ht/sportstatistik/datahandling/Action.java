@@ -3,30 +3,30 @@ package android.ht.sportstatistik.datahandling;
 /**
  * Created by HT on 18.03.2015.
  */
-public class Ereignis {
+public class Action {
 
     private String name;
     private String beschreibung;
     private int bild;
-    private Sportart sportart;
+    private TypeOfSport typeOfSport;
     private boolean active;
     private int id;
 
-    public Ereignis(){
+    public Action(){
 
     }
 
-    public Ereignis(String name, String beschreibung){
+    public Action(String name, String beschreibung){
         this.name=name;
         this.beschreibung=beschreibung;
     }
 
-    public Sportart getSportart() {
-        return sportart;
+    public TypeOfSport getTypeOfSport() {
+        return typeOfSport;
     }
 
-    public void setSportart(Sportart sportart) {
-        this.sportart = sportart;
+    public void setTypeOfSport(TypeOfSport typeOfSport) {
+        this.typeOfSport = typeOfSport;
     }
 
     public String getName() {

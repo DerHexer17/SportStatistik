@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.ht.sportstatistik.R;
+import android.ht.sportstatistik.datahandling.Action;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
@@ -20,12 +18,12 @@ import java.util.List;
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class ActionInGameAdapter extends ArrayAdapter<Ereignis> {
+public class ActionInGameAdapter extends ArrayAdapter<Action> {
 
     DatabaseHelper dbh;
     EreignisAdapterCallback callback;
 
-    public ActionInGameAdapter(Context context, int resource, List<Ereignis> objects) {
+    public ActionInGameAdapter(Context context, int resource, List<Action> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }

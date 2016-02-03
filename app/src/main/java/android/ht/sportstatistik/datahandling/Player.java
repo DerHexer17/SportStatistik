@@ -3,7 +3,7 @@ package android.ht.sportstatistik.datahandling;
 /**
  * Created by HT on 18.03.2015.
  */
-public class Spieler {
+public class Player {
 
     private int id;
     private String vorname;
@@ -11,14 +11,14 @@ public class Spieler {
     private int nummmer;
     private boolean torwart;
 
-    public Spieler(String vorname, String nachname, int nummer, boolean torwart){
+    public Player(String vorname, String nachname, int nummer, boolean torwart){
         this.vorname=vorname;
         this.nachname=nachname;
         this.nummmer=nummer;
         this.torwart=torwart;
     }
 
-    public Spieler(){}
+    public Player(){}
 
     public int getId() {
         return id;

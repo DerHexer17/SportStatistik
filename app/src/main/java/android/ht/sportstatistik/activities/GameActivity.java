@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.Ereignis;
-import android.ht.sportstatistik.datahandling.EreignisZuordnung;
-import android.ht.sportstatistik.datahandling.Spiel;
-import android.ht.sportstatistik.datahandling.Spieler;
-import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
+import android.ht.sportstatistik.datahandling.Action;
+import android.ht.sportstatistik.datahandling.ActionMapping;
+import android.ht.sportstatistik.datahandling.Game;
+import android.ht.sportstatistik.datahandling.Player;
+import android.ht.sportstatistik.datahandling.PlayerToActionMapping;
 import android.ht.sportstatistik.helper.ActionDelecteAdapter;
 import android.ht.sportstatistik.helper.ActionInGameAdapter;
 import android.ht.sportstatistik.helper.SpielerInSpielAdapter;
@@ -23,31 +23,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class SpielActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback, SpielerInSpielUpdateAdapter.SpielerInSpielAdapterCallback{
+public class GameActivity extends ActionBarActivity implements SpielerInSpielAdapter.SpielerInSpielAdapterCallback, ActionInGameAdapter.EreignisAdapterCallback, ActionDelecteAdapter.ActionDeleteAdapterCallback, SpielerInSpielUpdateAdapter.SpielerInSpielAdapterCallback{
 
-    Spiel spiel;
+    Game game;
     DatabaseHelper dbh;
     SpielerInSpielAdapter spieler;
-    List<SpielerEreignisZuordnung> tempSpielerListe;
+    List<PlayerToActionMapping> tempSpielerListe;
     ActionInGameAdapter newActionAdapter;
     ActionDelecteAdapter deleteActionAdapter;
     AlertDialog alertAddAction;
     AlertDialog alertDeleteAction;
     SpielerInSpielUpdateAdapter updateSpieler;
 
-    private Spieler gewaehlterSpieler;
-    private Ereignis gewaehltesEreignis;
+    private Player chosenPlayer;
+    private Action selectedAction;
     private int gewaehltePosition;
 
     @Override
@@ -55,26 +50,26 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
         dbh = DatabaseHelper.getInstance(getApplicationContext());
-        Log.d("spiel", "Spiel ID: " + getIntent().getIntExtra("spielId", 0));
-        spiel = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
+        Log.d("game", "Game ID: " + getIntent().getIntExtra("spielId", 0));
+        game = dbh.getSpiel(getIntent().getIntExtra("spielId", 0));
 
         //Überschrift festlegen
-        setTitle(spiel.getHeimteam().getKurz_name() + " - " + spiel.getGastteam());
+        setTitle(game.getHeimteam().getKurz_name() + " - " + game.getGastteam());
         TextView titel = (TextView) findViewById(R.id.spielTitel);
-        titel.setText(spiel.getHeimteam().getLang_name()+" - "+spiel.getGastteam());
+        titel.setText(game.getHeimteam().getLang_name()+" - "+ game.getGastteam());
 
-        /*tempSpielerListe = new ArrayList<SpielerEreignisZuordnung>();
-        for(Spieler s : dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId())){
-            SpielerEreignisZuordnung sez = new SpielerEreignisZuordnung();
-            sez.setSpieler(s);
+        /*tempSpielerListe = new ArrayList<PlayerToActionMapping>();
+        for(Player s : dbh.getAllPlayersFromTeam(game.getHeimteam().getId())){
+            PlayerToActionMapping sez = new PlayerToActionMapping();
+            sez.setPlayer(s);
             tempSpielerListe.add(sez);
         }*/
 
-        //Holen aller Spieler des Teams und erstellen der Liste
-        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(spiel.getId()), spiel));
+        //Holen aller Player des Teams und erstellen der Liste
+        spieler = new SpielerInSpielAdapter(getApplicationContext(), R.id.label, dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(game.getId()), game));
         spieler.setNotifyOnChange(true);
         spieler.setCallback(this);
-        spieler.setFinished(spiel.isBeendet());
+        spieler.setFinished(game.isBeendet());
         ListView lv = (ListView) findViewById(R.id.spielListSpieler);
         lv.setAdapter(spieler);
 
@@ -90,7 +85,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
         alertDeleteAction = builder.create();
         setupAlert();
 
-        updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(spiel.getHeimteam().getId()), spiel);
+        updateSpieler = new SpielerInSpielUpdateAdapter(getApplicationContext(), R.id.name, dbh.getAllPlayersFromTeam(game.getHeimteam().getId()), game);
         updateSpieler.setCallback(this);
 
     }
@@ -99,7 +94,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(!spiel.isBeendet()){
+        if(!game.isBeendet()){
             getMenuInflater().inflate(R.menu.menu_spiel, menu);
         }
         return true;
@@ -128,7 +123,7 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
 
     public void chooseAction(int position, boolean add){
         gewaehltePosition = position;
-        gewaehlterSpieler = spieler.getItem(position).getSpieler();
+        chosenPlayer = spieler.getItem(position).getPlayer();
         if(add){
             alertAddAction.show();
         }else{
@@ -141,38 +136,38 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
      */
     @Override
     public void addAction(int position){
-        gewaehltesEreignis = newActionAdapter.getItem(position);
+        selectedAction = newActionAdapter.getItem(position);
         alertAddAction.dismiss();
-        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(gewaehltesEreignis.getName())){
-            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(gewaehltesEreignis.getName());
-            spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
-            spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), value+1);
+        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(selectedAction.getName())){
+            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(selectedAction.getName());
+            spieler.getItem(gewaehltePosition).getEreignisse().remove(selectedAction.getName());
+            spieler.getItem(gewaehltePosition).getEreignisse().put(selectedAction.getName(), value+1);
         }else{
-            spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), 1);
+            spieler.getItem(gewaehltePosition).getEreignisse().put(selectedAction.getName(), 1);
         }
         spieler.notifyDataSetChanged();
-        long l = dbh.addStatistik(new EreignisZuordnung(spiel, gewaehlterSpieler, gewaehltesEreignis));
-        Log.d("ereignis", "Spieler: " + gewaehlterSpieler.getVorname() + " , Ereignis: " + gewaehltesEreignis.getName() + ", Position: " + gewaehltePosition);
+        long l = dbh.addStatistik(new ActionMapping(game, chosenPlayer, selectedAction));
+        Log.d("ereignis", "Player: " + chosenPlayer.getVorname() + " , Action: " + selectedAction.getName() + ", Position: " + gewaehltePosition);
     }
     /*
     The Callback from the ActionDelete Interface. Gives us the action, we want to reduce, meaning delete
      */
     @Override
     public void deleteAction(int position) {
-        gewaehltesEreignis = deleteActionAdapter.getItem(position);
+        selectedAction = deleteActionAdapter.getItem(position);
         alertDeleteAction.dismiss();
-        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(gewaehltesEreignis.getName())){
-            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(gewaehltesEreignis.getName());
+        if(spieler.getItem(gewaehltePosition).getEreignisse().containsKey(selectedAction.getName())){
+            int value = spieler.getItem(gewaehltePosition).getEreignisse().get(selectedAction.getName());
             if(value == 1){
-                spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
+                spieler.getItem(gewaehltePosition).getEreignisse().remove(selectedAction.getName());
             }else {
-                spieler.getItem(gewaehltePosition).getEreignisse().remove(gewaehltesEreignis.getName());
-                spieler.getItem(gewaehltePosition).getEreignisse().put(gewaehltesEreignis.getName(), value - 1);
+                spieler.getItem(gewaehltePosition).getEreignisse().remove(selectedAction.getName());
+                spieler.getItem(gewaehltePosition).getEreignisse().put(selectedAction.getName(), value - 1);
             }
-            dbh.deleteActionFromGame(new EreignisZuordnung(spiel, gewaehlterSpieler, gewaehltesEreignis));
+            dbh.deleteActionFromGame(new ActionMapping(game, chosenPlayer, selectedAction));
         }
         spieler.notifyDataSetChanged();
-        Log.d("DeleteAction", "Folgendes wird entfernt: " + gewaehltesEreignis.getName() + " von " + gewaehlterSpieler.getVorname());
+        Log.d("DeleteAction", "Folgendes wird entfernt: " + selectedAction.getName() + " von " + chosenPlayer.getVorname());
 
     }
 
@@ -196,9 +191,9 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
 
 
     public void setupAlert(){
-        alertAddAction.setTitle("Ereignis hinzufügen");
-        alertDeleteAction.setTitle("Ereignis entfernen");
-        //alert.setMessage("Leg ein neues Spiel an");
+        alertAddAction.setTitle("Action hinzufügen");
+        alertDeleteAction.setTitle("Action entfernen");
+        //alert.setMessage("Leg ein neues Game an");
 
         //final LinearLayout ll = new LinearLayout(this);
 
@@ -228,8 +223,8 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     public void updatePlayerInGame(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
-        alert.setTitle("Spieler bearbeiten");
-        alert.setMessage("Bearbeite die teilnehmenden Spieler");
+        alert.setTitle("Player bearbeiten");
+        alert.setMessage("Bearbeite die teilnehmenden Player");
 
         LayoutInflater inflater = getLayoutInflater();
         final View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
@@ -246,13 +241,13 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
                     Log.d("Number", "Nummer: " + String.valueOf(updateSpieler.getItem(c).getNummmer()));
 
                     if(updateSpieler.getItem(c).getNummmer() != dbh.getPlayer(updateSpieler.getItem(c).getId()).getNummmer()){
-                        dbh.updatePlayerInGame(updateSpieler.getItem(c), spiel, updateSpieler.getItem(c).getNummmer());
+                        dbh.updatePlayerInGame(updateSpieler.getItem(c), game, updateSpieler.getItem(c).getNummmer());
                     }
                     c++;
                 }
 
                 spieler.clear();
-                spieler.addAll(dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(spiel.getId()), spiel));
+                spieler.addAll(dbh.getAlleSpielEreignisse(dbh.getAllPlayersFromGame(game.getId()), game));
                 spieler.notifyDataSetChanged();
 
             }
@@ -278,17 +273,17 @@ public class SpielActivity extends ActionBarActivity implements SpielerInSpielAd
     @Override
     public void changeSwitchStatus(int position, boolean status, int number) {
         if(status == false){
-            dbh.deletePlayerFromGame(updateSpieler.getItem(position), spiel);
+            dbh.deletePlayerFromGame(updateSpieler.getItem(position), game);
             updateSpieler.notifyDataSetChanged();
         }else{
-            dbh.addSpielerToSpiel(updateSpieler.getItem(position), spiel, updateSpieler.getItem(position).getNummmer());
+            dbh.addSpielerToSpiel(updateSpieler.getItem(position), game, updateSpieler.getItem(position).getNummmer());
             updateSpieler.notifyDataSetChanged();
         }
     }
 
     public void setGameInactive(){
-        spiel.setBeendet(true);
-        dbh.updateGame(spiel);
+        game.setBeendet(true);
+        dbh.updateGame(game);
         this.finish();
     }
 }

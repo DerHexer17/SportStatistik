@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.ht.sportstatistik.R;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
-import android.ht.sportstatistik.datahandling.EreignisZuordnung;
-import android.ht.sportstatistik.datahandling.Spieler;
-import android.ht.sportstatistik.datahandling.SpielerEreignisZuordnung;
+import android.ht.sportstatistik.datahandling.PlayerToActionMapping;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,13 @@ import java.util.Map;
 /**
  * Created by Hendrik on 19.08.2015.
  */
-public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung> {
+public class SpielerInSpielAdapter extends ArrayAdapter<PlayerToActionMapping> {
 
     DatabaseHelper dbh;
     SpielerInSpielAdapterCallback callback;
     Boolean finished;
 
-    public SpielerInSpielAdapter(Context context, int resource, List<SpielerEreignisZuordnung> objects) {
+    public SpielerInSpielAdapter(Context context, int resource, List<PlayerToActionMapping> objects) {
         super(context, resource, objects);
         dbh = DatabaseHelper.getInstance(context);
     }
@@ -41,8 +39,8 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
         TextView txtEreignisse = (TextView) convertView.findViewById(R.id.spielEreignisse);
 
-        txtTitle.setText(getItem(position).getSpieler().getVorname().substring(0, 1)+". "+getItem(position).getSpieler().getNachname()+
-            " ("+getItem(position).getSpieler().getNummmer()+")");
+        txtTitle.setText(getItem(position).getPlayer().getVorname().substring(0, 1)+". "+getItem(position).getPlayer().getNachname()+
+            " ("+getItem(position).getPlayer().getNummmer()+")");
 
         txtEreignisse.setText("");
         for(Map.Entry<String, Integer> e : getItem(position).getEreignisse().entrySet()){
@@ -73,7 +71,7 @@ public class SpielerInSpielAdapter extends ArrayAdapter<SpielerEreignisZuordnung
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SpielActivity.class);
+                Intent intent = new Intent(getContext(), GameActivity.class);
                 intent.putExtra("spielId", Integer.parseInt((String) v.getContentDescription()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
