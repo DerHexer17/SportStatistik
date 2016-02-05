@@ -108,9 +108,11 @@ public class StatsTeamAdaper extends BaseExpandableListAdapter {
         TextView statTitleItem = (TextView) convertView.findViewById(R.id.labelItem);
         TextView sumItem = (TextView) convertView.findViewById(R.id.sumItem);
         TextView avgItem = (TextView) convertView.findViewById(R.id.averageItem);
+        TextView number = (TextView) convertView.findViewById(R.id.numberKit);
         DecimalFormat f = new DecimalFormat("#0.00");
         //lblListHeader.setTypeface(null, Typeface.BOLD);
         Stats stat = getChild(groupPosition, childPosition);
+        //number.setText(stat.getPlayer().getNummmer());
         String readablePlayerName = stat.getPlayer().getVorname().substring(0,1)+". "+stat.getPlayer().getNachname();
         statTitleItem.setText(readablePlayerName);
         sumItem.setText(String.valueOf(stat.getSum()));

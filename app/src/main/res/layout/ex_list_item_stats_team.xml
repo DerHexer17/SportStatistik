@@ -4,6 +4,13 @@
     android:id="@+id/exlistStatsTeamGroupLayout"
     android:layout_height="match_parent"
     android:padding="2dp" >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/numberKit"
+        android:background="@drawable/kit_red"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/labelItem"
         android:layout_width="fill_parent"

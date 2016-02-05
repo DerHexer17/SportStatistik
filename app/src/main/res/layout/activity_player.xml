@@ -23,8 +23,8 @@
         android:id="@+id/playerEditNumber"
         android:layout_below="@id/playerEditLastname"/>
     <TextView
-        android:layout_width="250px"
-        android:layout_height="250px"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/playerEditPicture"
         android:text="@string/pictureDummy"
         android:textColor="@android:color/white"
