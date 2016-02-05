@@ -51,10 +51,11 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.label);
         TextView txtMannschaft = (TextView) convertView.findViewById(R.id.spielerListTeam);
+        TextView number = (TextView) convertView.findViewById(R.id.numberKit);
 
+        number.setText(String.valueOf(getItem(position).getNummmer()));
         txtTitle.setText(getItem(position).getVorname() + " " +
-                getItem(position).getNachname() + " (" +
-                getItem(position).getNummmer() + ")");
+                getItem(position).getNachname() );
         if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 0){
             txtMannschaft.setText("Ohne Mannschaft");
         }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){

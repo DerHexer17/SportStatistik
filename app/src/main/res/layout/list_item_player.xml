@@ -4,6 +4,15 @@
     android:id="@+id/spielerListLayout"
     android:layout_height="match_parent"
     android:padding="2dp" >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/numberKit"
+        android:background="@drawable/kit_red"
+        android:gravity="center"
+
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/label"
     android:layout_width="fill_parent"
@@ -11,6 +20,7 @@
     android:padding="10dip"
     android:textSize="16dip"
     android:textStyle="bold"
+        android:layout_toRightOf="@id/numberKit"
     android:textColor="@android:color/black" />
 
     <TextView

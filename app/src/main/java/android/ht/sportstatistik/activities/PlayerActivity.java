@@ -1,5 +1,6 @@
 package android.ht.sportstatistik.activities;
 
+import android.content.Intent;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Player;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.ht.sportstatistik.R;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,7 +19,7 @@ public class PlayerActivity extends ActionBarActivity {
     EditText firstname;
     EditText lastname;
     EditText number;
-
+    private static int RESULT_LOAD_IMG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,14 @@ public class PlayerActivity extends ActionBarActivity {
             b = false;
         }
         return b;
+    }
+
+    public void selectPicture(View view){
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
 }
