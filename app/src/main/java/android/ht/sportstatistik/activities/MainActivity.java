@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Game;
@@ -13,7 +14,9 @@ import android.ht.sportstatistik.helper.GameAdapter;
 import android.ht.sportstatistik.helper.PlayerAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
+import android.inputmethodservice.Keyboard;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,10 +40,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.ht.sportstatistik.R;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+
 
 
 import static android.ht.sportstatistik.activities.TeamFragment.*;
@@ -197,6 +206,8 @@ public class MainActivity extends ActionBarActivity
         TextView delete = new TextView(getApplicationContext());
         delete.setText(getResources().getString(R.string.deleteTeam));
         delete.setTextColor(Color.BLACK);
+        delete.setGravity(Gravity.CENTER);
+        delete.setPadding(10,10,10,10);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -228,6 +239,8 @@ public class MainActivity extends ActionBarActivity
         TextView delete = new TextView(getApplicationContext());
         delete.setText(getResources().getString(R.string.deletePlayer));
         delete.setTextColor(Color.BLACK);
+        delete.setGravity(Gravity.CENTER);
+        delete.setPadding(10, 10, 10, 10);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -259,6 +272,8 @@ public class MainActivity extends ActionBarActivity
         TextView delete = new TextView(getApplicationContext());
         delete.setText(getResources().getString(R.string.deleteGame));
         delete.setTextColor(Color.BLACK);
+        delete.setGravity(Gravity.CENTER);
+        delete.setPadding(10, 10, 10, 10);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -290,6 +305,8 @@ public class MainActivity extends ActionBarActivity
         TextView delete = new TextView(getApplicationContext());
         delete.setText(getResources().getString(R.string.setGameActive));
         delete.setTextColor(Color.BLACK);
+        delete.setGravity(Gravity.CENTER);
+        delete.setPadding(10, 10, 10, 10);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -544,5 +561,46 @@ public class MainActivity extends ActionBarActivity
     public void teamStats(View view){
         Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
         startActivity(intent);
+    }
+
+    public void csvExport(View view) {
+        //File dbFile=getDatabasePath("yourDBname.sqlite");
+        //Databasehelper dbhelper = new Databasehelper(getApplicationContext());
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists())
+        {
+            exportDir.mkdirs();
+        }
+
+        File file = new File(exportDir, "csvname.csv");
+        /*try
+        {
+            file.createNewFile();
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+            SQLiteDatabase db = dbhelper.getReadableDatabase();
+            Cursor curCSV = db.rawQuery("SELECT * FROM TableName",null);
+            csvWrite.writeNext(curCSV.getColumnNames());
+            while(curCSV.moveToNext())
+            {
+                //Which column you want to exprort
+                String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2)};
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+        }
+        catch(Exception sqlEx)
+        {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }*/
+
+        Toast t = Toast.makeText(getApplicationContext(), "Cursor Größe: " + dbh.csvExport().getCount(), Toast.LENGTH_LONG);
+        t.show();
+        Cursor c = dbh.csvExport();
+        if(c.moveToFirst()){
+            do{
+
+            }while(c.moveToNext());
+        }
     }
 }

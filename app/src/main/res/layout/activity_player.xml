@@ -22,15 +22,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/playerEditNumber"
         android:layout_below="@id/playerEditLastname"/>
-    <TextView
+    <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/playerEditPicture"
-        android:text="@string/pictureDummy"
-        android:textColor="@android:color/white"
-        android:gravity="center"
         android:layout_alignParentRight="true"
-        android:background="@android:drawable/alert_dark_frame"
-        android:onClick="selectPicture"/>
+        android:onClick="selectPicture"
+        android:background="@android:drawable/menuitem_background"/>
+
 
 </RelativeLayout>

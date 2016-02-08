@@ -74,8 +74,8 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
     public void addSpieler(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Player hinzufügen");
-        alert.setMessage("Welche Player gehören zu diesem Team?");
+        alert.setTitle(getResources().getString(R.string.addPlayerTitle));
+        alert.setMessage(getResources().getString(R.string.addPlayerMessage));
 
         // Set an EditText view to get user input
         final ListView lvSpielerHinzu = new ListView(this);
@@ -85,7 +85,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
 
         alert.setView(lvSpielerHinzu);
 
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 List<Player> selectedPlayers = new ArrayList<Player>();
                 int c = 0;
@@ -102,7 +102,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
             }
         });
 
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.cancelButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }

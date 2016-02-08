@@ -11,6 +11,7 @@
     android:padding="10dip"
     android:textSize="16dip"
     android:textStyle="bold"
+        android:layout_centerVertical="true"
     android:textColor="@android:color/black" />
 
     <Button
@@ -19,8 +20,8 @@
         android:id="@+id/buttonSpielerInTeamEntfernen"
         android:layout_alignParentRight="true"
         android:text="X"
-        android:onClick="spielerEntfernen"
-        />
+        android:background="@android:drawable/btn_default"
+        android:onClick="spielerEntfernen" />
 
 
 

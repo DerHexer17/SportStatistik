@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SportStatistik.iml" filepath="$PROJECT_DIR$/SportStatistik.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opencv-2.3.1/opencv-2.3.1.iml" filepath="$PROJECT_DIR$/opencv-2.3.1/opencv-2.3.1.iml" />
     </modules>
   </component>
 </project>

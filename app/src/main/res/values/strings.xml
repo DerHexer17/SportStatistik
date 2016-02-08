@@ -15,6 +15,10 @@
     <string name="action_example">Zur Test Activity</string>
     <string name="testdatenEinspielen">Testdaten einspielen</string>
 
+    <!-- General Buttons and Texts -->
+    <string name="saveButton">Speichern</string>
+    <string name="cancelButton">Abbrechen</string>
+
     <!-- Pop-Ups in Main Activity -->
     <string name="addPlayerFirstname">Vorname</string>
     <string name="addPlayerLastname">Nachname</string>
@@ -34,6 +38,10 @@
     <!-- Game Activity -->
     <string name="updatePlayerInGame">Spieler bearbeiten</string>
 
+    <!-- Team Activity -->
+    <string name="addPlayerTitle">Spieler hinzufügen</string>
+    <string name="addPlayerMessage">Welche Spieler gehören noch zu diesem Team?</string>
+
     <string name="statsTitle">Statisik</string>
 
     <!-- Nav Drawer Menu Items -->
@@ -52,6 +60,8 @@
     <string name="title_activity_stats">StatsActivity</string>
     <string name="menuGameIsFinished">Spiel beenden</string>
     <string name="title_activity_player">PlayerActivity</string>
+    <string name="addPlayer">Spieler hinzufügen</string>
+    <string name="buttonExportCSV">CSV Export</string>
 
 
 </resources>

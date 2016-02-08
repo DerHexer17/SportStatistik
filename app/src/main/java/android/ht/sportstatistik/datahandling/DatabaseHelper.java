@@ -931,6 +931,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return allPlayerStatsForAction;
     }
 
+    public Cursor csvExport(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sqlSelect = "SELECT " + EREIGNIS_NAME + ", " + SPIELER_VORNAME + ", " + SPIELER_NACHNAME + ", " +
+                SPIELER_NUMMER + ", " + TEAM_LANG + ", " + SPIEL_GASTTEAM + ", " + SPIEL_DATUM +
+                " FROM " + TABLE_SPIELER + ", " + TABLE_EREIGNIS + ", " + TABLE_STATISTIK + ", " +
+                TABLE_TEAM + ", " + TABLE_SPIEL + ", " + TABLE_SPIEL_SPIELER +
+                " WHERE " + STATISTIK_EREIGNIS + " = " + TABLE_EREIGNIS + "." + KEY_ID + " AND " +
+                STATISTIK_SPIELER + " = " + TABLE_SPIELER + "." + KEY_ID + " AND " +
+                STATISTIK_SPIEL + " = " + TABLE_SPIEL + "." + KEY_ID + " AND "+
+                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID;
+
+        Cursor c = db.rawQuery(sqlSelect, null);
+        return c;
+    }
+
     //Alle DELETER
 
     public int removePlayerFromTeam(Player s, Team t){
