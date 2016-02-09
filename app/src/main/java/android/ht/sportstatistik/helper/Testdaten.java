@@ -30,12 +30,15 @@ public class Testdaten {
 
 
         Team t1 = new Team("esv_vlm", "ESV 1. Herren", "");
+        t1.setColor("red");
+        t1.setGoalieColor("black");
         t1.setId((int) dbh.addTeam(t1));
         teams.add(t1);
         Team t2 = new Team("esv_blm", "ESV 2. Herren", "");
         t2.setId((int) dbh.addTeam(t2));
         teams.add(t2);
         Team t3 = new Team("esv_blf", "ESV 1. Damen", "");
+        t3.setColor("light_blue");
         t3.setId((int) dbh.addTeam(t3));
         teams.add(t3);
 

@@ -8,6 +8,8 @@ public class Team {
     private String kurz_name;
     private String lang_name;
     private String beschreibung;
+    private String color;
+    private String goalieColor;
     private int id;
 
     public Team(String kname, String lname, String beschreibung){
@@ -48,6 +50,22 @@ public class Team {
 
     public void setBeschreibung(String beschreibung) {
         this.beschreibung = beschreibung;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getGoalieColor() {
+        return goalieColor;
+    }
+
+    public void setGoalieColor(String goalieColor) {
+        this.goalieColor = goalieColor;
     }
 
     public String toString(){

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import android.ht.sportstatistik.R;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
     private OnFragmentInteractionListener mListener;
     DatabaseHelper dbh;
     PlayerAdapter players;
+    ProgressBar spinner;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -72,6 +75,12 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        spinner.setVisibility(View.GONE);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -84,6 +93,9 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
         players.setNotifyOnChange(true);
         players.setCallback(this);
         lv.setAdapter(players);
+
+        spinner = (ProgressBar) rootView.findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
 
         return rootView;
     }
@@ -116,6 +128,12 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
     @Override
     public void deletePlayer(int playerId, int position) {
         mListener.deletePlayer(playerId, position);
+    }
+
+    @Override
+    public void showSpinner(){
+
+        spinner.setVisibility(View.VISIBLE);
     }
 
     /**

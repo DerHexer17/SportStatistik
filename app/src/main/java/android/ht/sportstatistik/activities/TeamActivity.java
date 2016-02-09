@@ -1,12 +1,15 @@
 package android.ht.sportstatistik.activities;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
+import android.ht.sportstatistik.helper.KitDrawableFetcher;
 import android.ht.sportstatistik.helper.PlayerForTeamAdapter;
 import android.ht.sportstatistik.helper.PlayerInTeamAdapter;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,16 +32,26 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
     PlayerInTeamAdapter spielerAdapter;
     PlayerForTeamAdapter spielerAuswahlAdapter;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
         dbh = DatabaseHelper.getInstance(this);
         team = dbh.getTeam(getIntent().getIntExtra("teamId", 0));
+
         chosenPlayer = new ArrayList<Player>();
         setTitle(team.getKurz_name());
         TextView titel = (TextView) findViewById(R.id.teamTitel);
         titel.setText(team.getLang_name());
+
+        TextView txtKit = (TextView) findViewById(R.id.teamKit);
+        try{
+            txtKit.setBackground(getDrawable(new KitDrawableFetcher(team).fetchDrawableId(team.getColor())));
+        }catch(Exception e){
+            Log.d("Kit", "Entweder wurde keine Farbe festgelegt oder das Trikot gibt es noch nicht!");
+        }
+
         ListView lv = (ListView) findViewById(R.id.teamSpieler);
         spielerAdapter = new PlayerInTeamAdapter(this, R.id.label ,dbh.getAllPlayersFromTeam(team.getId()));
         spielerAdapter.setNotifyOnChange(true);

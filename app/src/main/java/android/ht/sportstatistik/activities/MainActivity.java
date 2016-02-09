@@ -265,6 +265,11 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    public void showSpinner() {
+
+    }
+
+    @Override
     public void deleteGame(final int spielId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("Game löschen");

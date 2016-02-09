@@ -31,7 +31,6 @@
         android:id="@+id/teamKit"
         android:layout_alignParentRight="true"
         android:layout_below="@id/teamTitel"
-        android:background="@drawable/kit_red"
         android:layout_marginRight="50px"/>
 
     <ListView

@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 14;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -53,6 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TEAM_KURZ = "team_kurz";
     private static final String TEAM_LANG = "team_lang";
     private static final String TEAM_BESCHREIBUNG = "team_beschreibung";
+    private static final String TEAM_COLOR = "team_color";
+    private static final String TEAM_GOALIE_COLOR = "team_goalie_color";
 
     // LOG Table - column names
     private static final String LOG_ACTIVITY = "log_activity";
@@ -103,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE " + TABLE_TEAM + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_KURZ + " TEXT, " +
             TEAM_LANG + " TEXT, " + TEAM_BESCHREIBUNG + " TEXT, " +
+            TEAM_COLOR + " TEXT, " + TEAM_GOALIE_COLOR + " TEXT, " +
             KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_LOG = "CREATE TABLE " + TABLE_LOG + "(" +
@@ -229,6 +232,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(TEAM_KURZ, team.getKurz_name());
         values.put(TEAM_LANG, team.getLang_name());
         values.put(TEAM_BESCHREIBUNG, team.getBeschreibung());
+        values.put(TEAM_COLOR, team.getColor());
+        values.put(TEAM_GOALIE_COLOR, team.getGoalieColor());
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
         values.put(KEY_CREATED_AT, formatter.format(new Date()));
 
@@ -529,6 +534,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
             t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
             t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));
+            t.setColor(c.getString(c.getColumnIndex(TEAM_COLOR)));
+            t.setGoalieColor(c.getString(c.getColumnIndex(TEAM_GOALIE_COLOR)));
         }
         return t;
     }
@@ -555,6 +562,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
                 t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
                 t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));
+                t.setColor(c.getString(c.getColumnIndex(TEAM_COLOR)));
+                t.setGoalieColor(c.getString(c.getColumnIndex(TEAM_GOALIE_COLOR)));
 
                 alleTeams.add(t);
             } while (c.moveToNext());
@@ -588,6 +597,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 t.setKurz_name(c.getString(c.getColumnIndex(TEAM_KURZ)));
                 t.setLang_name(c.getString(c.getColumnIndex(TEAM_LANG)));
                 t.setBeschreibung(c.getString(c.getColumnIndex(TEAM_BESCHREIBUNG)));
+                t.setColor(c.getString(c.getColumnIndex(TEAM_COLOR)));
+                t.setGoalieColor(c.getString(c.getColumnIndex(TEAM_GOALIE_COLOR)));
                 alleTeamsFromPlayer.add(t);
             } while (c.moveToNext());
         }
@@ -1117,7 +1128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public int updatePlayerPicture(String path, Player player){
+    public int updatePlayerPicture(String path, Player player) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();

@@ -66,8 +66,10 @@ public class PlayerActivity extends ActionBarActivity {
             playerPicture.setImageBitmap(bmp);
         }catch(Exception e){
             Log.d("BMP", e.getMessage());
-            playerPicture.setImageDrawable(getDrawable(R.drawable.abc_item_background_holo_light));
+            playerPicture.setImageDrawable(getDrawable(R.drawable.default_icon));
         }
+
+
     }
 
     @Override

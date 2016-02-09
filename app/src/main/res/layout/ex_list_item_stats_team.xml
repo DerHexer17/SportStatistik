@@ -8,7 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/numberKit"
-        android:background="@drawable/kit_red"
         android:gravity="center"
 
         android:textColor="@android:color/black"
