@@ -3,6 +3,7 @@ package android.ht.sportstatistik.activities;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
@@ -10,9 +11,11 @@ import android.ht.sportstatistik.datahandling.Player;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.ht.sportstatistik.R;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class PlayerActivity extends ActionBarActivity {
 
@@ -30,6 +39,7 @@ public class PlayerActivity extends ActionBarActivity {
     EditText number;
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
+    ImageView playerPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,7 @@ public class PlayerActivity extends ActionBarActivity {
 
         dbh = DatabaseHelper.getInstance(getApplicationContext());
         player = dbh.getPlayer(getIntent().getIntExtra("player", 0));
+        playerPicture = (ImageView) findViewById(R.id.playerEditPicture);
 
         setTitle(player.getVorname()+" "+player.getNachname());
 
@@ -48,6 +59,15 @@ public class PlayerActivity extends ActionBarActivity {
         firstname.setText(player.getVorname());
         lastname.setText(player.getNachname());
         number.setText(String.valueOf(player.getNummmer()));
+
+        try{
+            Bitmap bmp = BitmapFactory.decodeFile(player.getPicture());
+            storeImage(bmp);
+            playerPicture.setImageBitmap(bmp);
+        }catch(Exception e){
+            Log.d("BMP", e.getMessage());
+            playerPicture.setImageDrawable(getDrawable(R.drawable.abc_item_background_holo_light));
+        }
     }
 
     @Override
@@ -110,7 +130,7 @@ public class PlayerActivity extends ActionBarActivity {
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,12 +152,13 @@ public class PlayerActivity extends ActionBarActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
-                ImageView playerPicture = (ImageView) findViewById(R.id.playerEditPicture);
 
-                playerPicture.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-                //ImageView imgView = (ImageView) findViewById(R.id.imgView);
-                // Set the Image in ImageView after decoding the String
-                //imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+
+                Bitmap bmp = BitmapFactory.decodeFile(imgDecodableString);
+                storeImage(bmp);
+                playerPicture.setImageBitmap(bmp);
+
+                //We need to store the image and link it to the player
 
             } else {
                 Toast.makeText(this, "You haven't picked Image",
@@ -148,6 +169,52 @@ public class PlayerActivity extends ActionBarActivity {
                     .show();
         }
 
+    }
+
+    /** Create a File for saving an image or video */
+    private File getOutputMediaFile(){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getApplicationContext().getPackageName()
+                + "/Files");
+
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+        // Create a media file name
+
+        File mediaFile;
+        String mImageName="Player_"+player.getId()+"_Picture";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
+    }
+
+    private void storeImage(Bitmap image) {
+        File pictureFile = getOutputMediaFile();
+        if (pictureFile == null) {
+            Log.d("BMP",
+                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            return;
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.close();
+            Log.d("BMP", "Pfad: " + pictureFile.getAbsolutePath());
+            dbh.updatePlayerPicture(pictureFile.getAbsolutePath(), player);
+        } catch (FileNotFoundException e) {
+            Log.d("BMP", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("BMP", "Error accessing file: " + e.getMessage());
+        }
     }
 
 }

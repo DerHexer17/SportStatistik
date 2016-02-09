@@ -191,8 +191,8 @@ public class GameActivity extends ActionBarActivity implements PlayerInGameAdapt
 
 
     public void setupAlert(){
-        alertAddAction.setTitle("Action hinzufügen");
-        alertDeleteAction.setTitle("Action entfernen");
+        alertAddAction.setTitle(getResources().getString(R.string.addActionTitle));
+        alertDeleteAction.setTitle(getResources().getString(R.string.deleteActionTitle));
         //alert.setMessage("Leg ein neues Game an");
 
         //final LinearLayout ll = new LinearLayout(this);
@@ -223,8 +223,8 @@ public class GameActivity extends ActionBarActivity implements PlayerInGameAdapt
     public void updatePlayerInGame(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
-        alert.setTitle("Player bearbeiten");
-        alert.setMessage("Bearbeite die teilnehmenden Player");
+        alert.setTitle(getResources().getString(R.string.updatePlayerInGameTitle));
+        alert.setMessage(getResources().getString(R.string.updatePlayerInGameMessage));
 
         LayoutInflater inflater = getLayoutInflater();
         final View alertLayout = inflater.inflate(R.layout.update_player_in_game, null);
@@ -234,7 +234,8 @@ public class GameActivity extends ActionBarActivity implements PlayerInGameAdapt
 
         alert.setView(alertLayout);
 
-        alert.setPositiveButton("Schließen", new DialogInterface.OnClickListener() {
+
+        alert.setPositiveButton(getResources().getString(R.string.closeButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 int c = 0;
                 while (c < updateSpieler.getCount()) {

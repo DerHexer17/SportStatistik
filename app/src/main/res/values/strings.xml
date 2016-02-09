@@ -18,6 +18,7 @@
     <!-- General Buttons and Texts -->
     <string name="saveButton">Speichern</string>
     <string name="cancelButton">Abbrechen</string>
+    <string name="closeButton">Schließen</string>
 
     <!-- Pop-Ups in Main Activity -->
     <string name="addPlayerFirstname">Vorname</string>
@@ -30,6 +31,16 @@
     <string name="setGameActive">Spiel wieder aktivieren?</string>
     <string name="deletePositiveButton">Jawohl</string>
     <string name="deleteNegativeButton">Ne</string>
+    <string name="newGameTitle">Spiel anlegen</string>
+    <string name="newGameMessage">Leg ein neues Spiel an</string>
+    <string name="newTeamTitle">Mannschaft anlegen</string>
+    <string name="newTeamMessage">Leg eine neue Mannschaft an</string>
+    <string name="newTeamHintLong">Längerer Titel (z.B. ESV Dresden 1. Herren)</string>
+    <string name="newTeamHintShort">Kurztitel (z.B. esv_vlm)</string>
+    <string name="newTeamHintDescription">Beschreibung (Optional)</string>
+    <string name="newPlayerTitle">Spieler anlegen</string>
+    <string name="newPlayerMessage">Leg einen neuen Spieler an</string>
+
 
     <!-- Player Activity-->
     <string name="saveEditedPlayer">Speichern</string>
@@ -37,6 +48,10 @@
 
     <!-- Game Activity -->
     <string name="updatePlayerInGame">Spieler bearbeiten</string>
+    <string name="updatePlayerInGameTitle">Spieler bearbeiten</string>
+    <string name="updatePlayerInGameMessage">Bearbeite die teilnehmenden Spieler</string>
+    <string name="addActionTitle">Neues Ereignis</string>
+    <string name="deleteActionTitle">Ereignis entfernen</string>
 
     <!-- Team Activity -->
     <string name="addPlayerTitle">Spieler hinzufügen</string>
@@ -51,6 +66,7 @@
         <item>Spieler</item>
         <item>Ereignisse</item>
         <item>Auswertung</item>
+        <item>Hilfe und Kontakt</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

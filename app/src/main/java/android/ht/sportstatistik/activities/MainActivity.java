@@ -372,11 +372,11 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public void neuesSpiel(View view){
+    public void newGame(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Game anlegen");
-        alert.setMessage("Leg ein neues Game an");
+        alert.setTitle(getResources().getString(R.string.newGameTitle));
+        alert.setMessage(getResources().getString(R.string.newGameMessage));
 
         final Spinner heimteam = new Spinner(this);
         /*List<String> heimteams = new ArrayList<String>();
@@ -402,11 +402,11 @@ public class MainActivity extends ActionBarActivity
         ll.addView(date);
         alert.setView(ll);
 
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Game s = new Game();
                 s.setBeendet(false);
-                s.setGastteam(String.valueOf(gegner.getText()));
+                s.setGastteam(String.valueOf(gegner.getText()).trim());
                 Team t = (Team) heimteam.getSelectedItem();
                 s.setHeimteam(t);
 
@@ -433,7 +433,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.cancelButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -445,21 +445,21 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void neuesTeam(View view){
+    public void newTeam(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Team anlegen");
-        alert.setMessage("Leg ein neues Team an");
+        alert.setTitle(getResources().getString(R.string.newTeamTitle));
+        alert.setMessage(getResources().getString(R.string.newTeamMessage));
 
         // Set an EditText view to get user input
         final LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         final EditText titel_kurz = new EditText(this);
-        titel_kurz.setHint("Kurztitel (z.B. esv_vlm)");
+        titel_kurz.setHint(getResources().getString(R.string.newTeamHintShort));
         final EditText titel_lang = new EditText(this);
-        titel_lang.setHint("Längerer Titel (z.B. ESV Dresden 1. Herren)");
+        titel_lang.setHint(getResources().getString(R.string.newTeamHintLong));
         final EditText beschreibung = new EditText(this);
-        beschreibung.setHint("Beschreibung (Optional)");
+        beschreibung.setHint(getResources().getString(R.string.newTeamHintDescription));
         //final Spinner datum = new Spinner(this);
         //datum.setAdapter(new DatePicker(this));
         ll.addView(titel_kurz);
@@ -467,7 +467,7 @@ public class MainActivity extends ActionBarActivity
         ll.addView(beschreibung);
         alert.setView(ll);
 
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Team t = new Team();
                 t.setKurz_name(String.valueOf(titel_kurz.getText()).trim());
@@ -488,7 +488,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.cancelButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -501,11 +501,11 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void neuerSpieler(View view){
+    public void newPlayer(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
-        alert.setTitle("Player anlegen");
-        alert.setMessage("Leg einen neuen Player an");
+        alert.setTitle(getResources().getString(R.string.newPlayerTitle));
+        alert.setMessage(getResources().getString(R.string.newPlayerMessage));
 
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.add_player, null);
@@ -515,7 +515,7 @@ public class MainActivity extends ActionBarActivity
         final CheckBox goalie = (CheckBox) alertLayout.findViewById(R.id.addPlayerCheckboxGoalie);
         alert.setView(alertLayout);
 
-        alert.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Player sp = new Player();
 
@@ -541,7 +541,7 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        alert.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getString(R.string.cancelButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
             }
@@ -599,7 +599,11 @@ public class MainActivity extends ActionBarActivity
         Cursor c = dbh.csvExport();
         if(c.moveToFirst()){
             do{
-
+                String csv = "";
+                for(int i = 0; i < c.getColumnCount(); i++){
+                    csv = csv + ";" + String.valueOf(c.getString(i));
+                }
+                Log.d("csv", csv);
             }while(c.moveToNext());
         }
     }

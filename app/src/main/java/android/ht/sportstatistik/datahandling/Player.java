@@ -10,6 +10,7 @@ public class Player {
     private String nachname;
     private int nummmer;
     private boolean torwart;
+    private String picture;
 
     public Player(String vorname, String nachname, int nummer, boolean torwart){
         this.vorname=vorname;
@@ -57,5 +58,13 @@ public class Player {
 
     public void setNummmer(int nummmer) {
         this.nummmer = nummmer;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

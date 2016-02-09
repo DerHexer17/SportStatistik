@@ -94,6 +94,10 @@ public class Testdaten {
         e.setBild(R.drawable.goal_icon);
         dbh.addEreignis(e);
 
+        e.setName("Fehlwurf");
+        e.setBeschreibung("Wurfversucht ohne Torerfolg");
+        dbh.addEreignis(e);
+
         e.setName("Assist");
         e.setBeschreibung("Torerfolg vorbereitet");
         dbh.addEreignis(e);
@@ -102,8 +106,8 @@ public class Testdaten {
         e.setBeschreibung("Ballverlust wegen technischem Fehler");
         dbh.addEreignis(e);
 
-        e.setName("Fehlwurf");
-        e.setBeschreibung("Wurfversucht ohne Torerfolg");
+        e.setName("Block");
+        e.setBeschreibung("Gegnerischen Wurf geblockt");
         dbh.addEreignis(e);
 
         e.setName("Gelbe Karte");
@@ -123,8 +127,8 @@ public class Testdaten {
         e.setBeschreibung("Gegnerischen Wurf pariert");
         dbh.addEreignis(e);
 
-        e.setName("Block");
-        e.setBeschreibung("Gegnerischen Wurf geblockt");
+        e.setName("Gegentor");
+        e.setBeschreibung("Einen Torwurf kassiert");
         dbh.addEreignis(e);
     }
 }

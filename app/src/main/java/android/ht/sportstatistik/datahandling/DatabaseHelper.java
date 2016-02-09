@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -78,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SPIELER_NACHNAME = "spieler_nachname";
     private static final String SPIELER_NUMMER = "spieler_nummer";
     private static final String SPIELER_TORWART = "spieler_torwart";
+    private static final String SPIELER_PICTURE = "spieler_picture";
 
     // TEAM_SPIELER Table - column names
     private static final String TEAM_SPIELER_TEAM = "team_spieler_team";
@@ -121,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SPIELER = "CREATE TABLE " + TABLE_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + SPIELER_VORNAME + " TEXT, " +
             SPIELER_NACHNAME + " TEXT, " + SPIELER_NUMMER + " INTEGER, " +
-            SPIELER_TORWART + " INTEGER, " + KEY_CREATED_AT + " DATE" + ")";
+            SPIELER_TORWART + " INTEGER, " + SPIELER_PICTURE + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
 
     private static final String CREATE_TABLE_TEAM_SPIELER = "CREATE TABLE " + TABLE_TEAM_SPIELER + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_SPIELER_TEAM + " INTEGER, " +
@@ -337,6 +338,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }else{
                 s.setTorwart(false);
             }
+            s.setPicture(c.getString(c.getColumnIndex(SPIELER_PICTURE)));
 
         }
         c.close();
@@ -501,10 +503,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         if (c.getCount() == 0) {
+            c.close();
             return -1;
         }else{
             c.moveToFirst();
-            return c.getInt(c.getColumnIndex(SPIEL_SPIELER_NUMMER));
+            int r = c.getInt(c.getColumnIndex(SPIEL_SPIELER_NUMMER));
+            c.close();
+            return r;
+
         }
 
     }
@@ -869,15 +875,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery;
         String selectQuery_avg;
         if(t == null){
-            selectQuery = "SELECT " + STATISTIK_SPIELER + ", COUNT(" + STATISTIK_SPIEL + ")" +
+            selectQuery = "SELECT " + STATISTIK_SPIELER + ", COUNT(" + STATISTIK_SPIEL + ")"+
                     " FROM " + TABLE_STATISTIK +
                     " WHERE " + STATISTIK_EREIGNIS + " = " + id +
-                    " GROUP BY " + STATISTIK_SPIELER;
+                    " GROUP BY " + STATISTIK_SPIELER + " ORDER BY COUNT(" + STATISTIK_SPIEL + ") DESC";
         }else {
             selectQuery = "SELECT " + STATISTIK_SPIELER + ", COUNT(" + STATISTIK_SPIEL + ")" +
                     " FROM " + TABLE_STATISTIK +
                     " WHERE " + STATISTIK_EREIGNIS + " = " + id +
-                    " GROUP BY " + STATISTIK_SPIELER;
+                    " GROUP BY " + STATISTIK_SPIELER + " ORDER BY COUNT(" + STATISTIK_SPIEL + ") DESC";
         }
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -933,14 +939,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor csvExport(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String sqlSelect = "SELECT " + EREIGNIS_NAME + ", " + SPIELER_VORNAME + ", " + SPIELER_NACHNAME + ", " +
+        String sqlSelect = "SELECT " + TABLE_STATISTIK + "." + KEY_ID + ", " + EREIGNIS_NAME + ", " +
+                SPIELER_VORNAME + ", " + SPIELER_NACHNAME + ", " +
                 SPIELER_NUMMER + ", " + TEAM_LANG + ", " + SPIEL_GASTTEAM + ", " + SPIEL_DATUM +
                 " FROM " + TABLE_SPIELER + ", " + TABLE_EREIGNIS + ", " + TABLE_STATISTIK + ", " +
                 TABLE_TEAM + ", " + TABLE_SPIEL + ", " + TABLE_SPIEL_SPIELER +
                 " WHERE " + STATISTIK_EREIGNIS + " = " + TABLE_EREIGNIS + "." + KEY_ID + " AND " +
                 STATISTIK_SPIELER + " = " + TABLE_SPIELER + "." + KEY_ID + " AND " +
                 STATISTIK_SPIEL + " = " + TABLE_SPIEL + "." + KEY_ID + " AND "+
-                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID;
+                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID +
+                " GROUP BY " + TABLE_STATISTIK + "." + KEY_ID;
 
         Cursor c = db.rawQuery(sqlSelect, null);
         return c;
@@ -1106,6 +1114,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
 
+        return i;
+    }
+
+    public int updatePlayerPicture(String path, Player player){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SPIELER_PICTURE, path);
+        int i = db.update(TABLE_SPIELER, values, KEY_ID + " = " + player.getId(), null);
+        db.close();
         return i;
     }
 
