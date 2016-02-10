@@ -11,7 +11,9 @@ import android.ht.sportstatistik.datahandling.Game;
 import android.ht.sportstatistik.datahandling.Player;
 import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.GameAdapter;
+import android.ht.sportstatistik.helper.KitDrawableFetcher;
 import android.ht.sportstatistik.helper.PlayerAdapter;
+import android.ht.sportstatistik.helper.TeamColorSpinnerAdapter;
 import android.ht.sportstatistik.helper.TeamsArrayAdapter;
 import android.ht.sportstatistik.helper.Testdaten;
 import android.inputmethodservice.Keyboard;
@@ -45,10 +47,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-
+import java.util.Map;
 
 
 import static android.ht.sportstatistik.activities.TeamFragment.*;
@@ -452,10 +454,11 @@ public class MainActivity extends ActionBarActivity
 
     public void newTeam(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
+        final Context context = this;
         alert.setTitle(getResources().getString(R.string.newTeamTitle));
         alert.setMessage(getResources().getString(R.string.newTeamMessage));
 
+        /*
         // Set an EditText view to get user input
         final LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -470,18 +473,38 @@ public class MainActivity extends ActionBarActivity
         ll.addView(titel_kurz);
         ll.addView(titel_lang);
         ll.addView(beschreibung);
-        alert.setView(ll);
+        alert.setView(ll);*/
+
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.add_team, null);
+        final EditText teamLong = (EditText) alertLayout.findViewById(R.id.addTeamLong);
+        final EditText teamShort = (EditText) alertLayout.findViewById(R.id.addTeamShort);
+        final EditText teamDescription = (EditText) alertLayout.findViewById(R.id.addTeamDescription);
+        final Spinner teamColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamColor);
+
+        ArrayList<String> colorlist = new ArrayList<String>();
+        KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
+        for(Map.Entry entry : fetcher.getKitColors().entrySet()){
+            colorlist.add((String) entry.getKey());
+        }
+        TeamColorSpinnerAdapter colorAdapter = new TeamColorSpinnerAdapter(context, colorlist, fetcher.getKitColors());
+        teamColor.setAdapter(colorAdapter);
+
+
+        alert.setView(alertLayout);
 
         alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Team t = new Team();
-                t.setKurz_name(String.valueOf(titel_kurz.getText()).trim());
-                t.setLang_name(String.valueOf(titel_lang.getText()).trim());
+                t.setKurz_name(String.valueOf(teamShort.getText()).trim());
+                t.setLang_name(String.valueOf(teamLong.getText()).trim());
                 try{
-                    t.setBeschreibung(String.valueOf(beschreibung.getText()));
+                    t.setBeschreibung(String.valueOf(teamDescription.getText()));
                 }catch (Exception e){
                     t.setBeschreibung("");
                 }
+                t.setColor((String) teamColor.getSelectedItem());
+
 
                 t.setId((int) dbh.addTeam(t));
                 ListView lv = (ListView) findViewById(R.id.listViewTeams);

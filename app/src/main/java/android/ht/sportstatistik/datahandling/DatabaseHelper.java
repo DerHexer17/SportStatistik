@@ -426,7 +426,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_SPIELER + " LEFT JOIN " + TABLE_TEAM_SPIELER +
                 " ON " + TABLE_SPIELER + "." + KEY_ID + " = " + TEAM_SPIELER_SPIELER +
                 " WHERE " + TEAM_SPIELER_TEAM + " IS NULL OR " +
-                TEAM_SPIELER_TEAM + " != " + id;
+                TEAM_SPIELER_TEAM + " != " + id + " ORDER BY " + SPIELER_NUMMER;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
