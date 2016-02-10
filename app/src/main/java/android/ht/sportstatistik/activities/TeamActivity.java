@@ -2,6 +2,7 @@ package android.ht.sportstatistik.activities;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.ht.sportstatistik.datahandling.DatabaseHelper;
 import android.ht.sportstatistik.datahandling.Player;
@@ -9,20 +10,26 @@ import android.ht.sportstatistik.datahandling.Team;
 import android.ht.sportstatistik.helper.KitDrawableFetcher;
 import android.ht.sportstatistik.helper.PlayerForTeamAdapter;
 import android.ht.sportstatistik.helper.PlayerInTeamAdapter;
+import android.ht.sportstatistik.helper.TeamColorSpinnerAdapter;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.ht.sportstatistik.R;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapter.SpielerInTeamAdapterCallback{
 
@@ -77,7 +84,8 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menuTeamEdit) {
+            updateTeam();
             return true;
         }
 
@@ -131,6 +139,64 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
         int i = dbh.removePlayerFromTeam(spielerAdapter.getItem(position), team);
         spielerAdapter.remove(spielerAdapter.getItem(position));
 
+
+    }
+
+    public void updateTeam(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final Context context = this;
+        alert.setTitle(getResources().getString(R.string.newTeamTitle));
+        alert.setMessage(getResources().getString(R.string.newTeamMessage));
+
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.add_team, null);
+        final EditText teamLong = (EditText) alertLayout.findViewById(R.id.addTeamLong);
+        final EditText teamShort = (EditText) alertLayout.findViewById(R.id.addTeamShort);
+        final EditText teamDescription = (EditText) alertLayout.findViewById(R.id.addTeamDescription);
+        final Spinner teamColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamColor);
+        final Spinner teamGoalieColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamGoalieColor);
+
+        ArrayList<String> colorlist = new ArrayList<String>();
+        KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
+        for(Map.Entry entry : fetcher.getKitColors().entrySet()){
+            colorlist.add((String) entry.getKey());
+        }
+        TeamColorSpinnerAdapter colorAdapter = new TeamColorSpinnerAdapter(context, colorlist, fetcher.getKitColors());
+        teamColor.setAdapter(colorAdapter);
+        teamGoalieColor.setAdapter(colorAdapter);
+
+
+        alert.setView(alertLayout);
+
+        alert.setPositiveButton(getResources().getString(R.string.saveButton), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Team t = new Team();
+                t.setKurz_name(String.valueOf(teamShort.getText()).trim());
+                t.setLang_name(String.valueOf(teamLong.getText()).trim());
+                try{
+                    t.setBeschreibung(String.valueOf(teamDescription.getText()));
+                }catch (Exception e){
+                    t.setBeschreibung("");
+                }
+                t.setColor((String) teamColor.getSelectedItem());
+                t.setGoalieColor((String) teamGoalieColor.getSelectedItem());
+
+                dbh.updateTeam(t);
+
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton(getResources().getString(R.string.cancelButton), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        alert.show();
+
+        //this.recreate();
 
     }
 }

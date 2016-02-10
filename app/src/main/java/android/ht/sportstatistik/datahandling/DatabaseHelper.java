@@ -1092,6 +1092,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
+    public int updateTeam(Team t){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TEAM_KURZ, t.getKurz_name());
+        values.put(TEAM_LANG, t.getLang_name());
+        values.put(TEAM_BESCHREIBUNG, t.getBeschreibung());
+        values.put(TEAM_COLOR, t.getColor());
+        values.put(TEAM_GOALIE_COLOR, t.getGoalieColor());
+
+        int i = db.update(TABLE_TEAM, values, KEY_ID + " = " + t.getId(), null);
+
+        db.close();
+
+        return i;
+    }
+
     public int updatePlayer(Player p){
         SQLiteDatabase db = this.getWritableDatabase();
 

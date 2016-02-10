@@ -58,6 +58,7 @@
     <!-- Team Activity -->
     <string name="addPlayerTitle">Spieler hinzufügen</string>
     <string name="addPlayerMessage">Welche Spieler gehören noch zu diesem Team?</string>
+    <string name="menuTeamEdit">Team bearbeiten</string>
 
     <string name="statsTitle">Statisik</string>
 
