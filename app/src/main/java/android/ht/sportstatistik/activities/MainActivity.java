@@ -481,6 +481,7 @@ public class MainActivity extends ActionBarActivity
         final EditText teamShort = (EditText) alertLayout.findViewById(R.id.addTeamShort);
         final EditText teamDescription = (EditText) alertLayout.findViewById(R.id.addTeamDescription);
         final Spinner teamColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamColor);
+        final Spinner teamGoalieColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamGoalieColor);
 
         ArrayList<String> colorlist = new ArrayList<String>();
         KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
@@ -489,6 +490,7 @@ public class MainActivity extends ActionBarActivity
         }
         TeamColorSpinnerAdapter colorAdapter = new TeamColorSpinnerAdapter(context, colorlist, fetcher.getKitColors());
         teamColor.setAdapter(colorAdapter);
+        teamGoalieColor.setAdapter(colorAdapter);
 
 
         alert.setView(alertLayout);
@@ -504,7 +506,7 @@ public class MainActivity extends ActionBarActivity
                     t.setBeschreibung("");
                 }
                 t.setColor((String) teamColor.getSelectedItem());
-
+                t.setGoalieColor((String) teamGoalieColor.getSelectedItem());
 
                 t.setId((int) dbh.addTeam(t));
                 ListView lv = (ListView) findViewById(R.id.listViewTeams);
