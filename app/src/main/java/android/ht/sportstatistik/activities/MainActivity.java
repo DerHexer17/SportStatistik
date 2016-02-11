@@ -44,8 +44,10 @@ import android.widget.TextView;
 import android.ht.sportstatistik.R;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -594,47 +596,63 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void csvExport(View view) {
-        //File dbFile=getDatabasePath("yourDBname.sqlite");
-        //Databasehelper dbhelper = new Databasehelper(getApplicationContext());
-        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-        if (!exportDir.exists())
-        {
-            exportDir.mkdirs();
-        }
 
-        File file = new File(exportDir, "csvname.csv");
-        /*try
-        {
-            file.createNewFile();
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-            SQLiteDatabase db = dbhelper.getReadableDatabase();
-            Cursor curCSV = db.rawQuery("SELECT * FROM TableName",null);
-            csvWrite.writeNext(curCSV.getColumnNames());
-            while(curCSV.moveToNext())
-            {
-                //Which column you want to exprort
-                String arrStr[] ={curCSV.getString(0),curCSV.getString(1), curCSV.getString(2)};
-                csvWrite.writeNext(arrStr);
-            }
-            csvWrite.close();
-            curCSV.close();
-        }
-        catch(Exception sqlEx)
-        {
-            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
-        }*/
-
-        Toast t = Toast.makeText(getApplicationContext(), "Cursor Größe: " + dbh.csvExport().getCount(), Toast.LENGTH_LONG);
-        t.show();
+        String csv = "id;Ereignis;Vorname;Nachname;Nummer;Verein;Gegner;Datum";
         Cursor c = dbh.csvExport();
         if(c.moveToFirst()){
             do{
-                String csv = "";
+                String row = "";
                 for(int i = 0; i < c.getColumnCount(); i++){
-                    csv = csv + ";" + String.valueOf(c.getString(i));
+                    row = row + ";" + String.valueOf(c.getString(i));
                 }
-                Log.d("csv", csv);
+                row = row.substring(1);
+                Log.d("csv", row);
+                csv = csv + "\n" + row;
             }while(c.moveToNext());
+
+
         }
+
+        BufferedWriter bufferedWriter = null;
+        File exportDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getApplicationContext().getPackageName()+"/Export");
+        if (!exportDir.exists()){
+            exportDir.mkdirs();
+        }
+
+
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(exportDir.getPath() + File.separator + "csvExport.txt")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            bufferedWriter.write(csv);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Toast t = Toast.makeText(getApplicationContext(), "CSV Export wurde erfolgreich gespeichert", Toast.LENGTH_LONG);
+        t.show();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "CSV Export von SportStatistik");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new
+                File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getApplicationContext().getPackageName()
+                + "/Export/" + "csvExport.txt")));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
     }
 }

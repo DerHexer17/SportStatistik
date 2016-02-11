@@ -2,23 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context="android.ht.sportstatistik.activities.StatsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonStatsTeam"
-        android:layout_margin="10dp"
-        android:text="Auswertung pro Team"
-        android:onClick="teamStats"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonStatsCsvExport"
-        android:layout_marginTop="200px"
-        android:text="@string/buttonExportCSV"
-        android:onClick="csvExport"/>
-
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/buttonStatsTeam"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/buttonStatsTitle"
+            android:background="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
+            android:onClick="teamStats"/>
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/buttonStatsCsvExport"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/buttonStatsTeam"
+            android:text="@string/buttonExportCSV"
+            android:background="@drawable/abc_popup_background_mtrl_mult"
+            android:onClick="csvExport"/>
+    </RelativeLayout>
 
 </FrameLayout>

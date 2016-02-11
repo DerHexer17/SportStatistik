@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -647,7 +647,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Game> getAllGames() {
         List<Game> alleSpiele = new ArrayList<Game>();
         String selectQuery = "SELECT  * FROM " + TABLE_SPIEL + ", " + TABLE_TEAM + " WHERE " +
-                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID;
+                SPIEL_HEIMTEAM + " = " + TABLE_TEAM + "." + KEY_ID + " ORDER BY " + SPIEL_DATUM;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

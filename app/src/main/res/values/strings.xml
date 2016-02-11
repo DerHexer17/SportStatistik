@@ -43,6 +43,9 @@
     <string name="newPlayerTitle">Spieler anlegen</string>
     <string name="newPlayerMessage">Leg einen neuen Spieler an</string>
 
+    <!-- Stats Fragment -->
+    <string name="buttonStatsTitle">Stats</string>
+
 
     <!-- Player Activity-->
     <string name="saveEditedPlayer">Speichern</string>

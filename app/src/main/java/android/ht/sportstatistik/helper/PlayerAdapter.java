@@ -62,6 +62,7 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
 
         if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 0){
             txtMannschaft.setText("Ohne Mannschaft");
+            number.setBackground(null);
         }else if(dbh.getAllTeamsFromPlayer(getItem(position).getId()).size() == 1){
             txtMannschaft.setText(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0).getLang_name());
             KitDrawableFetcher kitFetcher = new KitDrawableFetcher(dbh.getAllTeamsFromPlayer(getItem(position).getId()).get(0));

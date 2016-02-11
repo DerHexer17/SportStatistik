@@ -44,6 +44,9 @@ public class IconDrawableFetcher {
             case "Block":
                 result = R.drawable.block_icon;
                 break;
+            case "Gegentor":
+                result = R.drawable.goalie_not_defended_icon;
+                break;
             default:
                 result = R.drawable.default_icon;
         }

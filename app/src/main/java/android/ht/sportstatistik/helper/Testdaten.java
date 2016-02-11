@@ -95,43 +95,52 @@ public class Testdaten {
 
         Action e = new Action("Tor", "Tor geworfen");
         e.setBild(R.drawable.goal_icon);
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Fehlwurf");
         e.setBeschreibung("Wurfversucht ohne Torerfolg");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Assist");
         e.setBeschreibung("Torerfolg vorbereitet");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Technischer Fehler");
         e.setBeschreibung("Ballverlust wegen technischem Fehler");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Block");
         e.setBeschreibung("Gegnerischen Wurf geblockt");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Gelbe Karte");
         e.setBeschreibung("Gelbe Karte erhalten");
-        e.setBild(R.drawable.yellow_card_icon);
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("2 Minuten");
         e.setBeschreibung("2 Minuten Zeitstrafe erhalten");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Rote Karte");
         e.setBeschreibung("Rote Karte erhalten");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Gehalten");
         e.setBeschreibung("Gegnerischen Wurf pariert");
+        e.setActive(true);
         dbh.addEreignis(e);
 
         e.setName("Gegentor");
         e.setBeschreibung("Einen Torwurf kassiert");
+        e.setActive(true);
         dbh.addEreignis(e);
     }
 }

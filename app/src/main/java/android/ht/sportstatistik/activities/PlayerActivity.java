@@ -66,7 +66,7 @@ public class PlayerActivity extends ActionBarActivity {
             playerPicture.setImageBitmap(bmp);
         }catch(Exception e){
             Log.d("BMP", e.getMessage());
-            playerPicture.setImageDrawable(getDrawable(R.drawable.default_icon));
+            playerPicture.setImageDrawable(getDrawable(R.drawable.player_no_picture));
         }
 
 

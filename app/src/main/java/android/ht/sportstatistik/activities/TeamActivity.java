@@ -156,6 +156,10 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
         final Spinner teamColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamColor);
         final Spinner teamGoalieColor = (Spinner) alertLayout.findViewById(R.id.spinnerTeamGoalieColor);
 
+        teamLong.setText(team.getLang_name());
+        teamShort.setText(team.getKurz_name());
+        teamDescription.setText(team.getBeschreibung());
+
         ArrayList<String> colorlist = new ArrayList<String>();
         KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
         for(Map.Entry entry : fetcher.getKitColors().entrySet()){
@@ -180,7 +184,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
                 }
                 t.setColor((String) teamColor.getSelectedItem());
                 t.setGoalieColor((String) teamGoalieColor.getSelectedItem());
-
+                t.setId(team.getId());
                 dbh.updateTeam(t);
 
                 // Do something with value!
