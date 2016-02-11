@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:context="android.ht.sportstatistik.activities.StatsFragment">
+    tools:context="hight.ht.sportstatistik.activities.StatsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout

@@ -5,7 +5,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:id="@+id/layout"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".TestDataActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context="hight.ht.sportstatistik.TestDataActivity">
 
 
     <EditText

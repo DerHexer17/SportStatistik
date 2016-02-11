@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="android.ht.sportstatistik.activities.MainActivity">
+    tools:context="hight.ht.sportstatistik.activities.MainActivity">
 
     <item android:id="@+id/testdatenEinspielen" android:title="@string/testdatenEinspielen"
         app:showAsAction="never" />

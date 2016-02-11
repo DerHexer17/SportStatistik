@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.ht.sportstatistik">
+    package="hight.ht.sportstatistik">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -11,10 +11,10 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".TestDataActivity"
+            android:name="hight.ht.sportstatistik.TestDataActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="hight.ht.sportstatistik.activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,36 +23,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.TeamActivity"
+            android:name="hight.ht.sportstatistik.activities.TeamActivity"
             android:label="@string/title_activity_team"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="android.ht.sportstatistik.activities.MainActivity" />
+                android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.GameActivity"
+            android:name="hight.ht.sportstatistik.activities.GameActivity"
             android:label="@string/title_activity_spiel"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="android.ht.sportstatistik.activities.MainActivity" />
+                android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.StatsActivity"
+            android:name="hight.ht.sportstatistik.activities.StatsActivity"
             android:label="@string/title_activity_stats"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="android.ht.sportstatistik.activities.MainActivity" />
+                android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.PlayerActivity"
+            android:name="hight.ht.sportstatistik.activities.PlayerActivity"
             android:label="@string/title_activity_player"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="android.ht.sportstatistik.activities.MainActivity" />
+                android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
     </application>
 
