@@ -58,7 +58,7 @@ import java.util.Map;
 import static android.ht.sportstatistik.activities.TeamFragment.*;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         //setTitle("Sport Statistik App");
-        mTitle = "Handball Statistik";
+        mTitle = "SportStatistik";
         dbh = DatabaseHelper.getInstance(this);
         spieler = new GameAdapter(getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
 
@@ -123,6 +123,9 @@ public class MainActivity extends ActionBarActivity
             case 4:
                 fragment = new StatsFragment();
                 break;
+            case 5:
+                fragment = new AboutFragment();
+                break;
             default:
                 fragment = PlaceholderFragment.newInstance(position+1);
                 break;
@@ -138,13 +141,24 @@ public class MainActivity extends ActionBarActivity
 
         }
 
-        //mTitle = navMenuTitles[position];
+        try{
+            mTitle = navMenuTitles[position];
+        }catch(Exception e) {
+            e.printStackTrace();
+            Log.d("mTitle", e.getMessage());
+        }
 
-    }
+
+        }
 
     public void onSectionAttached(int number) {
 
-        //mTitle = navMenuTitles[number-1];
+        try{
+            mTitle = navMenuTitles[number-1];
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.d("mTitle", e.getMessage());
+        }
 
     }
 
@@ -645,6 +659,7 @@ public class MainActivity extends ActionBarActivity
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_SUBJECT, "CSV Export von SportStatistik");
+        intent.putExtra(Intent.EXTRA_TEXT, "Anhängend der CSV Export der SportStatistik App");
         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new
                 File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"

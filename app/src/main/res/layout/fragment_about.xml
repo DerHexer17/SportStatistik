@@ -1,0 +1,57 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.ht.sportstatistik.activities.AboutFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/aboutInfoBeta"
+            android:id="@+id/aboutInfoVersion"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:layout_marginTop="15dp"
+            android:padding="5dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutImpressumTitle"
+            android:text="@string/aboutImpressumTitle"
+            android:gravity="center"
+            android:layout_below="@id/aboutInfoVersion"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutImpressumText"
+            android:text="@string/aboutImpressumText"
+            android:layout_below="@id/aboutImpressumTitle"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="5dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutContactDeveloper"
+            android:layout_below="@id/aboutImpressumText"
+            android:text="@string/aboutContactDeveloper"
+            android:background="@android:drawable/btn_default"
+            android:layout_margin="15dp"/>
+        <ExpandableListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutExList"
+            android:layout_below="@id/aboutContactDeveloper"
+            android:layout_marginTop="10dp"></ExpandableListView>
+
+    </RelativeLayout>
+
+
+</FrameLayout>

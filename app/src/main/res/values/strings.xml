@@ -46,6 +46,11 @@
     <!-- Stats Fragment -->
     <string name="buttonStatsTitle">Stats</string>
 
+    <!-- About Fragment -->
+    <string name="aboutInfoBeta">Diese App befindet sich noch im Beta Status! Bitte kontaktieren Sie mich wegen auftretender Fehler oder Vorschlägen</string>
+    <string name="aboutImpressumTitle">Impressum</string>
+    <string name="aboutImpressumText">Hendrik Thüs\nPoststraße</string>
+    <string name="aboutContactDeveloper">Entwickler kontaktieren</string>
 
     <!-- Player Activity-->
     <string name="saveEditedPlayer">Speichern</string>
@@ -62,6 +67,8 @@
     <string name="addPlayerTitle">Spieler hinzufügen</string>
     <string name="addPlayerMessage">Welche Spieler gehören noch zu diesem Team?</string>
     <string name="menuTeamEdit">Team bearbeiten</string>
+
+
 
     <string name="statsTitle">Statisik</string>
 
