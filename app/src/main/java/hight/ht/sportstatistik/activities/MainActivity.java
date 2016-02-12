@@ -55,7 +55,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         //setTitle("Sport Statistik App");
-        mTitle = "SportStatistik";
+        mTitle = "Handball Statistik";
         dbh = DatabaseHelper.getInstance(this);
         spieler = new GameAdapter(getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
 
@@ -142,6 +142,7 @@ public class MainActivity extends ActionBarActivity
             mTitle = navMenuTitles[position];
         }catch(Exception e) {
             e.printStackTrace();
+            mTitle = "Handball Statistik";
             Log.d("mTitle", e.getMessage());
         }
 

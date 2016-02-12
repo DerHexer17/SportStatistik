@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "android.ht.sportstatistik"
+        applicationId "hight.ht.sportstatistik"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
