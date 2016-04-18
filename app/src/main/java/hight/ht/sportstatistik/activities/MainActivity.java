@@ -44,6 +44,10 @@ import android.widget.TextView;
 import hight.ht.sportstatistik.R;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -70,6 +74,11 @@ public class MainActivity extends ActionBarActivity
     GameAdapter spieler;
 
     public String[] navMenuTitles;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +94,7 @@ public class MainActivity extends ActionBarActivity
         spieler = new GameAdapter(getApplicationContext(), R.id.label, (List<Game>) dbh.getAllGames());
 
 
-        if(dbh.getAlleEreignisse().size() == 0){
+        if (dbh.getAlleEreignisse().size() == 0) {
             new Testdaten(getApplicationContext()).ereignisseEinspielen();
         }
 
@@ -93,6 +102,9 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -100,7 +112,7 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment = null;
 
 
-        switch(position){
+        switch (position) {
             case 0:
                 fragment = new GameFragment();
                 break;
@@ -124,11 +136,11 @@ public class MainActivity extends ActionBarActivity
                 fragment = new AboutFragment();
                 break;
             default:
-                fragment = PlaceholderFragment.newInstance(position+1);
+                fragment = PlaceholderFragment.newInstance(position + 1);
                 break;
         }
 
-        if(fragment != null){
+        if (fragment != null) {
             // update the main content by replacing fragments
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
@@ -138,22 +150,22 @@ public class MainActivity extends ActionBarActivity
 
         }
 
-        try{
+        try {
             mTitle = navMenuTitles[position];
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             mTitle = "Handball Statistik";
-            Log.d("mTitle", e.getMessage());
+            //Log.d("mTitle", e.getMessage());
         }
 
 
-        }
+    }
 
     public void onSectionAttached(int number) {
 
-        try{
-            mTitle = navMenuTitles[number-1];
-        }catch(Exception e){
+        try {
+            mTitle = navMenuTitles[number - 1];
+        } catch (Exception e) {
             e.printStackTrace();
             Log.d("mTitle", e.getMessage());
         }
@@ -190,7 +202,7 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch(id){
+        switch (id) {
 
 
             case R.id.testdatenEinspielen:
@@ -213,7 +225,6 @@ public class MainActivity extends ActionBarActivity
     }
 
 
-
     @Override
     public void deleteTeam(final int teamId, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -223,7 +234,7 @@ public class MainActivity extends ActionBarActivity
         delete.setText(getResources().getString(R.string.deleteTeam));
         delete.setTextColor(Color.BLACK);
         delete.setGravity(Gravity.CENTER);
-        delete.setPadding(10,10,10,10);
+        delete.setPadding(10, 10, 10, 10);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -353,6 +364,47 @@ public class MainActivity extends ActionBarActivity
         builder.show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        /*
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://hight.ht.sportstatistik.activities/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);*/
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        /*
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://hight.ht.sportstatistik.activities/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();*/
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -393,7 +445,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public void newGame(View view){
+    public void newGame(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle(getResources().getString(R.string.newGameTitle));
@@ -406,7 +458,7 @@ public class MainActivity extends ActionBarActivity
         }*/
 
         TeamsArrayAdapter teamsAdapter = new TeamsArrayAdapter(this, android.R.layout.simple_spinner_item, dbh.getAllTeams());
-       // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heimteams);
+        // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heimteams);
         teamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         heimteam.setAdapter(teamsAdapter);
 
@@ -438,13 +490,13 @@ public class MainActivity extends ActionBarActivity
                 s.setDatum(calendar);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                Log.d("DatePicker", "Gewähltes Datum: "+sdf.format(s.getDatum().getTime()));
+                Log.d("DatePicker", "Gewähltes Datum: " + sdf.format(s.getDatum().getTime()));
                 s.setId((int) dbh.addSpiel(s));
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
 
                 //Einmal initial werden einfach alle Player des Teams dem Game zugeordnet
-                for(Player player : dbh.getAllPlayersFromTeam(s.getHeimteam().getId())){
+                for (Player player : dbh.getAllPlayersFromTeam(s.getHeimteam().getId())) {
                     dbh.addSpielerToSpiel(player, s, player.getNummmer());
                 }
 
@@ -466,7 +518,7 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void newTeam(View view){
+    public void newTeam(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
         alert.setTitle(getResources().getString(R.string.newTeamTitle));
@@ -499,7 +551,7 @@ public class MainActivity extends ActionBarActivity
 
         ArrayList<String> colorlist = new ArrayList<String>();
         KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
-        for(Map.Entry entry : fetcher.getKitColors().entrySet()){
+        for (Map.Entry entry : fetcher.getKitColors().entrySet()) {
             colorlist.add((String) entry.getKey());
         }
         TeamColorSpinnerAdapter colorAdapter = new TeamColorSpinnerAdapter(context, colorlist, fetcher.getKitColors());
@@ -514,9 +566,9 @@ public class MainActivity extends ActionBarActivity
                 Team t = new Team();
                 t.setKurz_name(String.valueOf(teamShort.getText()).trim());
                 t.setLang_name(String.valueOf(teamLong.getText()).trim());
-                try{
+                try {
                     t.setBeschreibung(String.valueOf(teamDescription.getText()));
-                }catch (Exception e){
+                } catch (Exception e) {
                     t.setBeschreibung("");
                 }
                 t.setColor((String) teamColor.getSelectedItem());
@@ -545,7 +597,7 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void newPlayer(View view){
+    public void newPlayer(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
         alert.setTitle(getResources().getString(R.string.newPlayerTitle));
@@ -563,16 +615,16 @@ public class MainActivity extends ActionBarActivity
             public void onClick(DialogInterface dialog, int whichButton) {
                 Player sp = new Player();
 
-                try{
+                try {
                     sp.setVorname(String.valueOf(vorname.getText()).trim());
                     sp.setNachname(String.valueOf(nachname.getText()).trim());
                     sp.setNummmer(Integer.parseInt(String.valueOf(nummer.getText())));
-                    if(goalie.isChecked()){
+                    if (goalie.isChecked()) {
                         sp.setTorwart(true);
-                    }else{
+                    } else {
                         sp.setTorwart(false);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.d("Neuer Player", e.getMessage());
                 }
 
@@ -598,11 +650,11 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void cancel(View view){
-        Log.d("Cancel", "Button gedrückt"+view.getParent().toString());
+    public void cancel(View view) {
+        Log.d("Cancel", "Button gedrückt" + view.getParent().toString());
     }
 
-    public void teamStats(View view){
+    public void teamStats(View view) {
         Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
         startActivity(intent);
     }
@@ -611,16 +663,16 @@ public class MainActivity extends ActionBarActivity
 
         String csv = "id;Ereignis;Vorname;Nachname;Nummer;Verein;Gegner;Datum";
         Cursor c = dbh.csvExport();
-        if(c.moveToFirst()){
-            do{
+        if (c.moveToFirst()) {
+            do {
                 String row = "";
-                for(int i = 0; i < c.getColumnCount(); i++){
+                for (int i = 0; i < c.getColumnCount(); i++) {
                     row = row + ";" + String.valueOf(c.getString(i));
                 }
                 row = row.substring(1);
                 Log.d("csv", row);
                 csv = csv + "\n" + row;
-            }while(c.moveToNext());
+            } while (c.moveToNext());
 
 
         }
@@ -628,8 +680,8 @@ public class MainActivity extends ActionBarActivity
         BufferedWriter bufferedWriter = null;
         File exportDir = new File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"
-                + getApplicationContext().getPackageName()+"/Export");
-        if (!exportDir.exists()){
+                + getApplicationContext().getPackageName() + "/Export");
+        if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
 

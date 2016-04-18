@@ -1,22 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        ht {
-            keyAlias 'ht'
-            keyPassword '171188'
-            storeFile file('C:/Users/heth/Dropbox/SportStatistik/keystore.jks')
-            storePassword '171188'
-        }
-    }
+
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "hight.ht.sportstatistik"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "0.0.2"
     }
     buildTypes {
         release {
@@ -30,4 +23,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }
