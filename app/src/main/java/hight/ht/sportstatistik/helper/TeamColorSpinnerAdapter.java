@@ -28,6 +28,10 @@ public class TeamColorSpinnerAdapter implements SpinnerAdapter {
         this.map = m;
     }
 
+    public int getIdForColor(String color){
+        return colors.indexOf(color);
+    }
+
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

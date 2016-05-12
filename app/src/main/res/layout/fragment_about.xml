@@ -43,6 +43,7 @@
             android:layout_below="@id/aboutImpressumText"
             android:text="@string/aboutContactDeveloper"
             android:background="@android:drawable/btn_default"
+            android:onClick="contactDeveloper"
             android:layout_margin="15dp"/>
         <ExpandableListView
             android:layout_width="match_parent"

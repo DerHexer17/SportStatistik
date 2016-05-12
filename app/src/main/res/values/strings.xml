@@ -91,7 +91,7 @@
     <string name="title_activity_player">PlayerActivity</string>
     <string name="addPlayer">Spieler hinzufügen</string>
     <string name="buttonExportCSV">CSV Export</string>
-
+    <string name="dbFormat">Datenbank formatieren</string>
 
 
 </resources>

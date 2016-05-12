@@ -208,6 +208,9 @@ public class MainActivity extends ActionBarActivity
             case R.id.testdatenEinspielen:
                 new Testdaten(getApplicationContext()).testdatenEinspielen();
                 break;
+            case R.id.dbFormat:
+                dbh.deleteAll();
+                break;
         }
 
 
@@ -719,5 +722,16 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
         }
 
+    }
+
+    public void contactDeveloper(View v){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("*/*");
+        String[] adresses = {"hendrik.thues@gmail.com"};
+        intent.putExtra(Intent.EXTRA_EMAIL, adresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SportStatistik - Kontakt wegen:");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }

@@ -52,7 +52,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
 
         TextView txtKit = (TextView) findViewById(hight.ht.sportstatistik.R.id.teamKit);
         try{
-            txtKit.setBackground(getDrawable(new KitDrawableFetcher(team).fetchDrawableId(team.getColor())));
+            txtKit.setBackground(getResources().getDrawable(new KitDrawableFetcher(team).fetchDrawableId(team.getColor())));
         }catch(Exception e){
             Log.d("Kit", "Entweder wurde keine Farbe festgelegt oder das Trikot gibt es noch nicht!");
         }
@@ -158,14 +158,18 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
         teamShort.setText(team.getKurz_name());
         teamDescription.setText(team.getBeschreibung());
 
+
         ArrayList<String> colorlist = new ArrayList<String>();
         KitDrawableFetcher fetcher = new KitDrawableFetcher(null);
         for(Map.Entry entry : fetcher.getKitColors().entrySet()){
             colorlist.add((String) entry.getKey());
         }
         TeamColorSpinnerAdapter colorAdapter = new TeamColorSpinnerAdapter(context, colorlist, fetcher.getKitColors());
+
         teamColor.setAdapter(colorAdapter);
+        teamColor.setSelection(colorAdapter.getIdForColor(team.getColor()));
         teamGoalieColor.setAdapter(colorAdapter);
+        teamGoalieColor.setSelection(colorAdapter.getIdForColor(team.getGoalieColor()));
 
 
         alert.setView(alertLayout);
