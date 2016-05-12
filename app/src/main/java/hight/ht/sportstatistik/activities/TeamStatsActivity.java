@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class StatsActivity extends ActionBarActivity {
+public class TeamStatsActivity extends ActionBarActivity {
 
     DatabaseHelper dbh;
     private StatsTeamAdaper adapter;
@@ -22,7 +22,7 @@ public class StatsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats);
+        setContentView(R.layout.activity_team_stats);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Auswertung");

@@ -11,12 +11,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="hight.ht.sportstatistik.TestDataActivity"
+            android:name=".TestDataActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="hight.ht.sportstatistik.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,41 +24,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="hight.ht.sportstatistik.activities.TeamActivity"
+            android:name=".activities.TeamActivity"
             android:label="@string/title_activity_team"
-            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name="hight.ht.sportstatistik.activities.GameActivity"
+            android:name=".activities.GameActivity"
             android:label="@string/title_activity_spiel"
-            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name="hight.ht.sportstatistik.activities.StatsActivity"
+            android:name=".activities.TeamStatsActivity"
             android:label="@string/title_activity_stats"
-            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hight.ht.sportstatistik.activities.MainActivity" />
         </activity>
         <activity
-            android:name="hight.ht.sportstatistik.activities.PlayerActivity"
+            android:name=".activities.PlayerActivity"
             android:label="@string/title_activity_player"
-            android:parentActivityName="hight.ht.sportstatistik.activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hight.ht.sportstatistik.activities.MainActivity" />
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        </activity>
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".activities.PlayerStatsActivity"
+            android:label="@string/title_activity_player_stats"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hight.ht.sportstatistik.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

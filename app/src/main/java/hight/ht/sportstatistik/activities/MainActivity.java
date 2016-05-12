@@ -44,7 +44,6 @@ import android.widget.TextView;
 import hight.ht.sportstatistik.R;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -658,7 +657,12 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void teamStats(View view) {
-        Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), TeamStatsActivity.class);
+        startActivity(intent);
+    }
+
+    public void playerStats(View view){
+        Intent intent = new Intent(getApplicationContext(), PlayerStatsActivity.class);
         startActivity(intent);
     }
 

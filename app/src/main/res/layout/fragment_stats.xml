@@ -10,21 +10,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="100dp"
             android:id="@+id/buttonStatsTeam"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
-            android:text="@string/buttonStatsTitle"
+            android:text="@string/buttonTeamStatsTitle"
             android:background="@android:drawable/btn_default"
             android:onClick="teamStats"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:id="@+id/buttonStatsPlayer"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/buttonStatsTeam"
+            android:text="@string/buttonPlayerStatsTitle"
+            android:background="@android:drawable/btn_default"
+            android:onClick="playerStats"/>
         <Button
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:id="@+id/buttonStatsCsvExport"
             android:layout_marginTop="20dp"
-            android:layout_below="@id/buttonStatsTeam"
+            android:layout_below="@id/buttonStatsPlayer"
             android:text="@string/buttonExportCSV"
             android:background="@drawable/abc_popup_background_mtrl_mult"
             android:onClick="csvExport"/>
