@@ -192,6 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SPIELER, null, null);
         db.delete(TABLE_SPIEL, null, null);
         db.delete(TABLE_SPIEL_SPIELER, null, null);
         db.delete(TABLE_STATISTIK, null, null);
@@ -946,6 +947,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         c.close();
         return allPlayerStatsForAction;
+    }
+
+    public List<Stats> getStatsFromPlayerForGames(int id){
+        /*
+
+        HINWEIS: Im Grunde einfach alle Stats pro Player. Die Filterung nach Ereignis und/oder Spiel kann man gut programmatisch machen
+
+         */
+
+        List<Stats> allPlayerStatsForGame = new ArrayList<Stats>();
+        String selectQuery;
+        String selectQuery_avg;
+
+        selectQuery = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + ")"+
+            " FROM " + TABLE_STATISTIK +
+            " WHERE " + STATISTIK_SPIELER + " = " + id +
+            " GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+
+            do {
+                Stats stat = new Stats();
+                stat.setPlayer(getPlayer(id));
+                stat.setGame(getSpiel(c.getInt(0)));
+                try{
+                    stat.setSum(c.getInt(1));
+
+                }catch(Exception e){
+                    stat.setSum(0);
+                }
+
+
+                selectQuery_avg = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + ")"+
+                        " FROM " + TABLE_STATISTIK +
+                        " WHERE " + STATISTIK_SPIELER + " = " + id +
+                        " GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
+
+                Cursor c_avg = db.rawQuery(selectQuery_avg, null);
+                try{
+                    stat.setAverage(new Double(stat.getSum())/new Double(c_avg.getCount()));
+                }catch(Exception e){
+                    stat.setAverage(0);
+                }
+
+
+                allPlayerStatsForGame.add(stat);
+            } while (c.moveToNext());
+        }
+
+        //stat.setAverage(c.getDouble(c.getColumnIndex("AVG")));
+
+
+
+
+
+        c.close();
+        return allPlayerStatsForGame;
     }
 
     public Cursor csvExport(){

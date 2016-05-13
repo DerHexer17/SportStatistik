@@ -3,12 +3,16 @@ package hight.ht.sportstatistik.helper;
 import android.content.Context;
 
 import hight.ht.sportstatistik.datahandling.Action;
+import hight.ht.sportstatistik.datahandling.ActionMapping;
 import hight.ht.sportstatistik.datahandling.DatabaseHelper;
+import hight.ht.sportstatistik.datahandling.Game;
 import hight.ht.sportstatistik.datahandling.Player;
 import hight.ht.sportstatistik.datahandling.Team;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -24,10 +28,26 @@ public class Testdaten {
         this.dbh = DatabaseHelper.getInstance(c);
     }
     public void testdatenEinspielen(){
-        List<Team> teams = new ArrayList<Team>();
+
         List<Player> player = new ArrayList<Player>();
         dbh.deleteAll();
 
+        Team t1 = createTestTeams().get(0);
+
+        Log.d("testdaten", "t1 ID: "+ t1.getId());
+        createTestPlayers(t1);
+
+        createTestGames(t1);
+
+        createTestStats();
+
+        Toast t = Toast.makeText(context, "Die Testdaten wurden erfolgreich eingespielt", Toast.LENGTH_LONG);
+        t.show();
+
+    }
+
+    public List<Team> createTestTeams(){
+        List<Team> teams = new ArrayList<Team>();
 
         Team t1 = new Team("esv_vlm", "ESV 1. Herren", "");
         t1.setColor("red");
@@ -42,6 +62,10 @@ public class Testdaten {
         t3.setId((int) dbh.addTeam(t3));
         teams.add(t3);
 
+        return teams;
+    }
+
+    public void createTestPlayers(Team t1){
         Player s1 = new Player("Hendrik", "Thüs", 18, false);
         s1.setId((int) dbh.addSpieler(s1));
         dbh.addSpielerToTeam(s1, t1);
@@ -84,9 +108,51 @@ public class Testdaten {
         Player s14 = new Player("Alexander", "Schmidt", 17, false);
         s14.setId((int) dbh.addSpieler(s14));
         dbh.addSpielerToTeam(s14, t1);
+    }
 
+    public void createTestGames(Team t1){
+        Game g1 = new Game();
+        Calendar d = Calendar.getInstance();
+        d.set(Calendar.DAY_OF_MONTH, 17);
+        d.set(Calendar.MONTH, 10);
+        d.set(Calendar.YEAR, 1988);
+        g1.setDatum(d);
+        g1.setHeimteam(t1);
+        g1.setGastteam("SG Kurort Hartha");
+        g1.setBeendet(false);
+        dbh.addSpiel(g1);
 
+        Game g2 = new Game();
+        d.set(Calendar.DAY_OF_MONTH, 20);
+        d.set(Calendar.MONTH, 11);
+        d.set(Calendar.YEAR, 1991);
+        g2.setDatum(d);
+        g2.setHeimteam(t1);
+        g2.setGastteam("TuS Westfalia Hombruch");
+        g2.setBeendet(false);
+        dbh.addSpiel(g2);
 
+        Game g3 = new Game();
+        d.set(Calendar.DAY_OF_MONTH, 14);
+        d.set(Calendar.MONTH, 4);
+        d.set(Calendar.YEAR, 2016);
+        g3.setDatum(d);
+        g3.setHeimteam(t1);
+        g3.setGastteam("bvb");
+        g3.setBeendet(false);
+        dbh.addSpiel(g3);
+    }
+
+    public void createTestStats(){
+        List<Game> games = dbh.getAllGames();
+        List<Player> players = dbh.getAllPlayers();
+        List<Action> actions = dbh.getAllActiveActions();
+        for(int i = 0; i<= 100; i++){
+            int zufallszahlGame = (int)(Math.random() * games.size());
+            int zufallszahlAction = (int)(Math.random() * actions.size());
+            int zufallszahlSpieler = (int)(Math.random() * players.size());
+            dbh.addStatistik(new ActionMapping(games.get(zufallszahlGame), players.get(zufallszahlSpieler), actions.get(zufallszahlAction)));
+        }
     }
 
     public void ereignisseEinspielen(){

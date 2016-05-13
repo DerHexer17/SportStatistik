@@ -10,6 +10,7 @@ public class Stats {
     private double average;
     private Player player;
     private Team team;
+    private Game game;
     private int id;
 
     public Team getTeam() {
@@ -58,5 +59,13 @@ public class Stats {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
