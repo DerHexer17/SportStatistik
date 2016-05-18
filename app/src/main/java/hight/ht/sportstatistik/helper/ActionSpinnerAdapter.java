@@ -1,0 +1,104 @@
+package hight.ht.sportstatistik.helper;
+
+import android.app.Activity;
+import android.content.Context;
+import android.database.DataSetObserver;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import hight.ht.sportstatistik.R;
+import hight.ht.sportstatistik.datahandling.Action;
+import hight.ht.sportstatistik.datahandling.DatabaseHelper;
+
+/**
+ * Created by heth on 18.05.2016.
+ */
+public class ActionSpinnerAdapter implements SpinnerAdapter {
+
+    Context context;
+    List<Action> actions;
+    DatabaseHelper dbh;
+
+    public ActionSpinnerAdapter(Context c, List<Action> a){
+        context = c;
+        actions = a;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater)
+                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            convertView = mInflater.inflate(R.layout.spinner_team_color_item, null);
+        }
+
+        TextView txt = (TextView) convertView.findViewById(R.id.label);
+        txt.setText(getItem(position).getName());
+
+        return convertView;
+    }
+
+    @Override
+    public void registerDataSetObserver(DataSetObserver observer) {
+
+    }
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver observer) {
+
+    }
+
+    @Override
+    public int getCount() {
+        return actions.size();
+    }
+
+    @Override
+    public Action getItem(int position) {
+        return actions.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater)
+                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            convertView = mInflater.inflate(R.layout.spinner_team_color_item, null);
+        }
+
+        TextView txt = (TextView) convertView.findViewById(R.id.label);
+        txt.setText(getItem(position).getName());
+        return convertView;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+}

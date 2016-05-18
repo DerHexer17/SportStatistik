@@ -8,11 +8,22 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hight.ht.sportstatistik.activities.PlayerStatsActivity">
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerStatsSpinnerPlayer"></Spinner>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerStatsSpinnerAction"
+        android:layout_below="@id/playerStatsSpinnerPlayer"></Spinner>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/playerStatsTitleLabel"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:layout_below="@id/playerStatsSpinnerAction"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"

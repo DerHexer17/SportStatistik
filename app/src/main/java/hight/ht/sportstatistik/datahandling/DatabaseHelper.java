@@ -949,20 +949,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return allPlayerStatsForAction;
     }
 
-    public List<Stats> getStatsFromPlayerForGames(int id){
+    public List<Stats> getStatsForPlayerAndAction(Player player, Action action){
         /*
 
         HINWEIS: Im Grunde einfach alle Stats pro Player. Die Filterung nach Ereignis und/oder Spiel kann man gut programmatisch machen
 
          */
 
-        List<Stats> allPlayerStatsForGame = new ArrayList<Stats>();
+        List<Stats> allPlayerStatsAndActions = new ArrayList<Stats>();
         String selectQuery;
         String selectQuery_avg;
 
         selectQuery = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + ")"+
             " FROM " + TABLE_STATISTIK +
-            " WHERE " + STATISTIK_SPIELER + " = " + id +
+            " WHERE " + STATISTIK_SPIELER + " = " + player.getId() +
+            " AND " + STATISTIK_EREIGNIS + " = " + action.getId() +
             " GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
 
 
@@ -974,7 +975,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             do {
                 Stats stat = new Stats();
-                stat.setPlayer(getPlayer(id));
+                stat.setPlayer(getPlayer(player.getId()));
                 stat.setGame(getSpiel(c.getInt(0)));
                 try{
                     stat.setSum(c.getInt(1));
@@ -986,7 +987,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 selectQuery_avg = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + ")"+
                         " FROM " + TABLE_STATISTIK +
-                        " WHERE " + STATISTIK_SPIELER + " = " + id +
+                        " WHERE " + STATISTIK_SPIELER + " = " + player.getId() +
+                        " AND " + STATISTIK_EREIGNIS + " = " + action.getId() +
                         " GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
 
                 Cursor c_avg = db.rawQuery(selectQuery_avg, null);
@@ -997,7 +999,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
 
 
-                allPlayerStatsForGame.add(stat);
+                allPlayerStatsAndActions.add(stat);
             } while (c.moveToNext());
         }
 
@@ -1008,7 +1010,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         c.close();
-        return allPlayerStatsForGame;
+        return allPlayerStatsAndActions;
     }
 
     public Cursor csvExport(){
