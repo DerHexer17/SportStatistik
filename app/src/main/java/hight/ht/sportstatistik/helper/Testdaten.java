@@ -147,11 +147,12 @@ public class Testdaten {
         List<Game> games = dbh.getAllGames();
         List<Player> players = dbh.getAllPlayers();
         List<Action> actions = dbh.getAllActiveActions();
-        for(int i = 0; i<= 100; i++){
+        for(int i = 0; i<= 200; i++){
             int zufallszahlGame = (int)(Math.random() * games.size());
             int zufallszahlAction = (int)(Math.random() * actions.size());
             int zufallszahlSpieler = (int)(Math.random() * players.size());
             dbh.addStatistik(new ActionMapping(games.get(zufallszahlGame), players.get(zufallszahlSpieler), actions.get(zufallszahlAction)));
+            dbh.updatePlayerInGame(players.get(zufallszahlSpieler), games.get(zufallszahlGame), players.get(zufallszahlSpieler).getNummmer());
         }
     }
 

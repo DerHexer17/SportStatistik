@@ -8,22 +8,35 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hight.ht.sportstatistik.activities.PlayerStatsActivity">
-    <Spinner
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/playerStatsSpinnerPlayer"></Spinner>
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/playerStatsSpinnerAction"
-        android:layout_below="@id/playerStatsSpinnerPlayer"></Spinner>
+        android:id="@+id/layoutSpinnerCluster"
+        android:padding="2dp"
+        android:background="@drawable/spinner_cluster">
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/playerStatsSpinnerPlayer"
+            android:padding="2dp"></Spinner>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/playerStatsSpinnerAction"
+            android:padding="2dp"
+            android:layout_below="@id/playerStatsSpinnerPlayer"></Spinner>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/playerStatsTitleLabel"
         android:textColor="@android:color/black"
-        android:layout_below="@id/playerStatsSpinnerAction"/>
+        android:layout_margin="3dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColorHighlight="@android:color/black"
+        android:layout_below="@id/layoutSpinnerCluster"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"

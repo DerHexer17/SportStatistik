@@ -44,8 +44,10 @@
     <string name="newPlayerMessage">Leg einen neuen Spieler an</string>
 
     <!-- Stats Fragment -->
-    <string name="buttonTeamStatsTitle">Team Statistiken</string>
-    <string name="buttonPlayerStatsTitle">Spieler Statistiken</string>
+    <string name="buttonTeamStatsTitle">Teams</string>
+    <string name="buttonPlayerStatsTitle">Spieler</string>
+    <string name="statsForLabel">Statistiken</string>
+    <string name="exportLabel">Export</string>
 
     <!-- About Fragment -->
     <string name="aboutInfoBeta">Diese App befindet sich noch im Beta Status! Bitte kontaktieren Sie mich wegen auftretender Fehler oder Vorschlägen</string>
@@ -69,6 +71,9 @@
     <string name="addPlayerMessage">Welche Spieler gehören noch zu diesem Team?</string>
     <string name="menuTeamEdit">Team bearbeiten</string>
 
+    <!-- PlayerStats Activity -->
+    <string name="playerStatsTitle">Spieler Statistiken</string>
+
 
     <string name="statsTitle">Statisik</string>
 
@@ -90,9 +95,10 @@
     <string name="menuGameIsFinished">Spiel beenden</string>
     <string name="title_activity_player">PlayerActivity</string>
     <string name="addPlayer">Spieler hinzufügen</string>
-    <string name="buttonExportCSV">CSV Export</string>
+    <string name="buttonExportCSV">CSV</string>
     <string name="dbFormat">Datenbank formatieren</string>
     <string name="title_activity_player_stats">PlayerStatsActivity</string>
+
 
 
 </resources>
