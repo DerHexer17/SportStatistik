@@ -61,8 +61,8 @@ public class PlayerActivity extends ActionBarActivity {
             storeImage(bmp);
             playerPicture.setImageBitmap(bmp);
         }catch(Exception e){
-            Log.d("BMP", e.getMessage());
-            playerPicture.setImageDrawable(getDrawable(R.drawable.player_no_picture));
+            //Log.d("BMP", e.getMessage());
+            playerPicture.setImageDrawable(getResources().getDrawable(R.drawable.player_no_picture));
         }
 
 
@@ -102,6 +102,7 @@ public class PlayerActivity extends ActionBarActivity {
             dbh.updatePlayer(editedPlayer);
         }else{
             Toast toast = Toast.makeText(getApplicationContext(), "NUMMER!", Toast.LENGTH_LONG);
+            toast.show();
         }
 
     }
