@@ -59,6 +59,9 @@
     <string name="saveEditedPlayer">Speichern</string>
     <string name="pictureDummy">Bild Platzhalter</string>
 
+    <!-- Player Fragment-->
+    <string name="playerFragmentNoPlayer">Du hast noch keine Spieler angelegt!\nFang am besten damit an, danach würde ich Mannschaften anlegen ;)</string>
+
     <!-- Game Activity -->
     <string name="updatePlayerInGame">Spieler bearbeiten</string>
     <string name="updatePlayerInGameTitle">Spieler bearbeiten</string>
@@ -66,10 +69,17 @@
     <string name="addActionTitle">Neues Ereignis</string>
     <string name="deleteActionTitle">Ereignis entfernen</string>
 
+    <!-- Game Fragment -->
+    <string name="gameFagmentNoGame">Du hast noch keine Spiele angelegt!\nBevor du dies tust, solltest du folgende Dinge erledigen:\n
+        1. Spieler anlegen\n2. Mannschaften anlegen\n3. Den Mannschaften Spieler zuordnen</string>
+
     <!-- Team Activity -->
     <string name="addPlayerTitle">Spieler hinzufügen</string>
     <string name="addPlayerMessage">Welche Spieler gehören noch zu diesem Team?</string>
     <string name="menuTeamEdit">Team bearbeiten</string>
+
+    <!-- Team Fragment -->
+    <string name="teamFragmentNoTeams">Du hast noch keine Mannschaften angelegt!\nBevor du damit loslegst, solltest du am besten erst ein paar Spieler anlegen</string>
 
     <!-- PlayerStats Activity -->
     <string name="playerStatsTitle">Spieler Statistiken</string>

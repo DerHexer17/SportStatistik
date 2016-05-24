@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import hight.ht.sportstatistik.R;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,10 +78,19 @@ public class TeamFragment extends Fragment implements TeamAdapter.TeamAdapterCal
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(R.id.listViewTeams);
+        TextView noTeams = (TextView) rootView.findViewById(R.id.teamFragmentNoTeams);
         teams = new TeamAdapter(getActivity().getApplicationContext(), R.id.teamSpieler, dbh.getAllTeams());
         teams.setCallback(this);
         teams.setNotifyOnChange(true);
         lv.setAdapter(teams);
+
+        if(teams.getCount() == 0){
+            lv.setVisibility(View.INVISIBLE);
+            noTeams.setVisibility(View.VISIBLE);
+        }else{
+            lv.setVisibility(View.VISIBLE);
+            noTeams.setVisibility(View.INVISIBLE);
+        }
 
         return rootView;
     }

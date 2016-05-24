@@ -1,6 +1,8 @@
 package hight.ht.sportstatistik.activities;
 
 import android.app.Activity;
+
+import hight.ht.sportstatistik.R;
 import hight.ht.sportstatistik.datahandling.DatabaseHelper;
 import hight.ht.sportstatistik.datahandling.Player;
 import hight.ht.sportstatistik.helper.PlayerAdapter;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -88,10 +91,19 @@ public class PlayerFragment extends Fragment implements PlayerAdapter.SpielerAda
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(hight.ht.sportstatistik.R.id.listViewSpieler);
+        TextView noPlayers = (TextView) rootView.findViewById(R.id.playerFragmentNoPlayer);
         players = new PlayerAdapter(getActivity().getApplicationContext(), hight.ht.sportstatistik.R.id.label, (List<Player>) dbh.getAllPlayers());
         players.setNotifyOnChange(true);
         players.setCallback(this);
         lv.setAdapter(players);
+
+        if(players.getCount() == 0){
+            lv.setVisibility(View.INVISIBLE);
+            noPlayers.setVisibility(View.VISIBLE);
+        }else{
+            lv.setVisibility(View.VISIBLE);
+            noPlayers.setVisibility(View.INVISIBLE);
+        }
 
         spinner = (ProgressBar) rootView.findViewById(hight.ht.sportstatistik.R.id.progressBar1);
         spinner.setVisibility(View.GONE);

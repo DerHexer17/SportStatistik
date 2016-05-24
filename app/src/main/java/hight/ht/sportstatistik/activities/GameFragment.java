@@ -1,6 +1,8 @@
 package hight.ht.sportstatistik.activities;
 
 import android.app.Activity;
+
+import hight.ht.sportstatistik.R;
 import hight.ht.sportstatistik.datahandling.DatabaseHelper;
 import hight.ht.sportstatistik.datahandling.Game;
 import hight.ht.sportstatistik.helper.GameAdapter;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -88,10 +91,17 @@ public class GameFragment extends Fragment implements GameAdapter.SpielAdapterCa
 
         dbh = DatabaseHelper.getInstance(getActivity().getApplicationContext());
         ListView lv = (ListView) rootView.findViewById(hight.ht.sportstatistik.R.id.listViewSpiele);
+        TextView noGames = (TextView) rootView.findViewById(R.id.gameFragmentNoGames);
         this.spiele = new GameAdapter(getActivity().getApplicationContext(), hight.ht.sportstatistik.R.id.label, (List<Game>) dbh.getAllGames());
         spiele.setCallback(this);
         lv.setAdapter(spiele);
-
+        if(spiele.getCount() == 0){
+            lv.setVisibility(View.INVISIBLE);
+            noGames.setVisibility(View.VISIBLE);
+        }else{
+            lv.setVisibility(View.VISIBLE);
+            noGames.setVisibility(View.INVISIBLE);
+        }
 
         return rootView;
     }
