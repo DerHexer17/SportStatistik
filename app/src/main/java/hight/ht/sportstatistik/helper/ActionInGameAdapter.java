@@ -34,7 +34,7 @@ public class ActionInGameAdapter extends ArrayAdapter<Action> {
             LayoutInflater mInflater = (LayoutInflater)
                     getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.grid_item_ereignis, null);
-            convertView.setLayoutParams(new GridView.LayoutParams(300, 200));
+            convertView.setLayoutParams(new GridView.LayoutParams(200, 200));
         }
 
         ImageButton button = (ImageButton) convertView.findViewById(R.id.gridButton);

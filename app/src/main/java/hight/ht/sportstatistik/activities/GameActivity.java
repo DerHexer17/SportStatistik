@@ -216,6 +216,8 @@ public class GameActivity extends ActionBarActivity implements PlayerInGameAdapt
         gridDeleteAction.setHorizontalSpacing(5);
         gridDeleteAction.setVerticalSpacing(5);
         gridDeleteAction.setPadding(5,5,5,5);
+        gridDeleteAction.setBackgroundColor(Color.WHITE);
+        gridDeleteAction.setGravity(Gravity.CENTER);
         gridDeleteAction.setAdapter(deleteActionAdapter);
         alertDeleteAction.setView(gridDeleteAction);
     }
