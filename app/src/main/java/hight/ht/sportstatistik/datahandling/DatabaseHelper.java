@@ -960,11 +960,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery;
         String selectQuery_avg;
 
-        selectQuery = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + ")"+
-            " FROM " + TABLE_STATISTIK +
-            " WHERE " + STATISTIK_SPIELER + " = " + player.getId() +
+        selectQuery = "SELECT " + STATISTIK_SPIEL + ", COUNT(" + STATISTIK_EREIGNIS + "), " + SPIEL_DATUM +
+            " FROM " + TABLE_STATISTIK + ", " + TABLE_SPIEL +
+            " WHERE " + TABLE_SPIEL + "." + KEY_ID + " = " + TABLE_STATISTIK + "." + STATISTIK_SPIEL +
+            " AND " + STATISTIK_SPIELER + " = " + player.getId() +
             " AND " + STATISTIK_EREIGNIS + " = " + action.getId() +
-            " GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
+            " GROUP BY " + STATISTIK_SPIEL + " ORDER BY " + SPIEL_DATUM + " ASC";
+            //" GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
 
 
         SQLiteDatabase db = this.getReadableDatabase();
