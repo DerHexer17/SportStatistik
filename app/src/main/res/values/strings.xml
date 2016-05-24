@@ -79,7 +79,7 @@
     <string name="menuTeamEdit">Team bearbeiten</string>
 
     <!-- Team Fragment -->
-    <string name="teamFragmentNoTeams">Du hast noch keine Mannschaften angelegt!\nBevor du damit loslegst, solltest du am besten erst ein paar Spieler anlegen</string>
+    <string name="teamFragmentNoTeams">Du hast noch keine Mannschaften angelegt!\nBevor du damit loslegst, solltest du am besten ein paar Spieler anlegen</string>
 
     <!-- PlayerStats Activity -->
     <string name="playerStatsTitle">Spieler Statistiken</string>
