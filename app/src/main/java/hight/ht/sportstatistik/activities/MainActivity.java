@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     private CharSequence mTitle;
     DatabaseHelper dbh;
     GameAdapter spieler;
+    private int pressedBack;
 
     public String[] navMenuTitles;
     /**
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity
         if (dbh.getAlleEreignisse().size() == 0) {
             new Testdaten(getApplicationContext()).ereignisseEinspielen();
         }
+
+        pressedBack = 0;
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -215,6 +218,17 @@ public class MainActivity extends AppCompatActivity
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        pressedBack++;
+        if(pressedBack == 2) {
+            super.onBackPressed();
+        }else {
+            Toast t = Toast.makeText(getApplicationContext(), "Nochmal auf Zurück drücken um die App zu beenden", Toast.LENGTH_LONG);
+            t.show();
+        }
     }
 
     @Override
