@@ -14,13 +14,20 @@
         android:textStyle="bold"
         android:layout_centerVertical="true"
         android:textColor="@android:color/black" />
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchUpdatePlayer"
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:layout_centerVertical="true"/>
     <Button
         android:layout_width="100px"
-        android:layout_height="wrap_content"
-        android:text="-"
+        android:layout_height="100px"
+        android:text="+"
         android:textColor="@android:color/black"
-        android:id="@+id/minus"
-        android:layout_toRightOf="@id/name"
+        android:id="@+id/plus"
+        android:layout_toLeftOf="@id/switchUpdatePlayer"
         android:textSize="15sp"
         android:background="@android:drawable/btn_default_small"
         android:layout_centerVertical="true"/>
@@ -32,24 +39,20 @@
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:id="@+id/number"
-        android:layout_toRightOf="@id/minus"
+        android:layout_toLeftOf="@id/plus"
         android:layout_centerVertical="true"/>
     <Button
         android:layout_width="100px"
-        android:layout_height="wrap_content"
-        android:text="+"
+        android:layout_height="100px"
+        android:text="-"
         android:textColor="@android:color/black"
-        android:id="@+id/plus"
-        android:layout_toRightOf="@id/number"
+        android:id="@+id/minus"
+        android:layout_toLeftOf="@id/number"
         android:textSize="15sp"
         android:background="@android:drawable/btn_default_small"
         android:layout_centerVertical="true"/>
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/switchUpdatePlayer"
-        android:layout_alignParentRight="true"
-        android:padding="10dp"
-        android:layout_centerVertical="true"/>
+
+
+
 
 </RelativeLayout>

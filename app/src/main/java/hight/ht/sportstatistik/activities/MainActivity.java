@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity
         delete.setTextColor(Color.BLACK);
         delete.setGravity(Gravity.CENTER);
         delete.setPadding(10, 10, 10, 10);
+        delete.setTextSize(16);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -271,6 +272,7 @@ public class MainActivity extends AppCompatActivity
         delete.setTextColor(Color.BLACK);
         delete.setGravity(Gravity.CENTER);
         delete.setPadding(10, 10, 10, 10);
+        delete.setTextSize(16);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -309,6 +311,7 @@ public class MainActivity extends AppCompatActivity
         delete.setTextColor(Color.BLACK);
         delete.setGravity(Gravity.CENTER);
         delete.setPadding(10, 10, 10, 10);
+        delete.setTextSize(16);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -342,6 +345,7 @@ public class MainActivity extends AppCompatActivity
         delete.setTextColor(Color.BLACK);
         delete.setGravity(Gravity.CENTER);
         delete.setPadding(10, 10, 10, 10);
+        delete.setTextSize(16);
         builder.setView(delete);
         builder.setPositiveButton(getResources().getString(R.string.deletePositiveButton), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {

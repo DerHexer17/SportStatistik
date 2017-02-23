@@ -1,8 +1,11 @@
 package hight.ht.sportstatistik.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import hight.ht.sportstatistik.datahandling.DatabaseHelper;
 import hight.ht.sportstatistik.datahandling.Action;
@@ -288,6 +291,8 @@ public class GameActivity extends ActionBarActivity implements PlayerInGameAdapt
         game.setBeendet(true);
         dbh.updateGame(game);
 
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
         this.finish();
     }
 }

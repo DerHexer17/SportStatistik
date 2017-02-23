@@ -1,6 +1,7 @@
 package hight.ht.sportstatistik.activities;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,8 @@ import hight.ht.sportstatistik.helper.KitDrawableFetcher;
 import hight.ht.sportstatistik.helper.PlayerForTeamAdapter;
 import hight.ht.sportstatistik.helper.PlayerInTeamAdapter;
 import hight.ht.sportstatistik.helper.TeamColorSpinnerAdapter;
+
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -83,7 +86,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
 
         //noinspection SimplifiableIfStatement
         if (id == hight.ht.sportstatistik.R.id.menuTeamEdit) {
-            updateTeam();
+            updateTeam(this);
             return true;
         }
 
@@ -140,7 +143,7 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
 
     }
 
-    public void updateTeam(){
+    public void updateTeam(final Activity activity){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final Context context = this;
         alert.setTitle(getResources().getString(hight.ht.sportstatistik.R.string.newTeamTitle));
@@ -188,6 +191,11 @@ public class TeamActivity extends ActionBarActivity implements PlayerInTeamAdapt
                 t.setGoalieColor((String) teamGoalieColor.getSelectedItem());
                 t.setId(team.getId());
                 dbh.updateTeam(t);
+
+                Intent refresh = new Intent(activity, TeamActivity.class);
+                refresh.putExtra("teamId", team.getId());
+                startActivity(refresh);
+                activity.finish();
 
                 // Do something with value!
             }
