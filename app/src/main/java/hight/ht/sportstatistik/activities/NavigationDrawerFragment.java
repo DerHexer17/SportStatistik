@@ -1,5 +1,6 @@
 package hight.ht.sportstatistik.activities;
 
+import hight.ht.sportstatistik.R;
 import hight.ht.sportstatistik.helper.NavigationDrawerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -140,7 +141,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                hight.ht.sportstatistik.R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
                 hight.ht.sportstatistik.R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 hight.ht.sportstatistik.R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {

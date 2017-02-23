@@ -99,7 +99,8 @@ public class PlayerStatsActivity extends ActionBarActivity {
         txtTitle.setText(a.getName()+"-Statistik für "+p.getVorname()+ " " + p.getNachname());
         graph.removeAllSeries();
 
-        final List<Stats> playerStats = dbh.getStatsForPlayerAndAction(p, a);
+        //final List<Stats> playerStats = dbh.getStatsForPlayerAndAction(p, a);
+        final List<Stats> playerStats = addGamesWithZeroStat(p, a);
         //Toast t = Toast.makeText(getApplicationContext(), "Größe der Stats Liste: "+playerStats.size(), Toast.LENGTH_LONG);
         //t.show();
         if(playerStats.size()==0){
@@ -109,7 +110,7 @@ public class PlayerStatsActivity extends ActionBarActivity {
             graph.setVisibility(View.VISIBLE);
         }
         for(Stats stats : playerStats){
-            Log.d("STAT", "Der Stat Eintrag: Spiel = "+stats.getGame().getHeimteam().getLang_name()+" vs. "+stats.getGame().getGastteam()+", Summe = "+stats.getSum()+", Spieler = "+stats.getPlayer().getNachname());
+            //Log.d("STAT", "Der Stat Eintrag: Spiel = "+stats.getGame().getHeimteam().getLang_name()+" vs. "+stats.getGame().getGastteam()+", Summe = "+stats.getSum()+", Spieler = "+stats.getPlayer().getNachname());
         }
 
 
@@ -186,6 +187,30 @@ public class PlayerStatsActivity extends ActionBarActivity {
         }
 
         graph.getViewport().setMaxY(max);
+    }
+
+    public List<Stats> addGamesWithZeroStat(Player p, Action a){
+        List<Game> allPlayedGames = dbh.getAllPlayedGamesFromPlayer(p);
+        List <Stats> tempPlayerStats = dbh.getStatsForPlayerAndAction(p, a);
+        Log.d("Graph", "Alle gespielten Spiele Listgröße: "+allPlayedGames.size());
+        try {
+            if (allPlayedGames.size() != tempPlayerStats.size()) {
+                int index = 0;
+                for (Game g : allPlayedGames) {
+                    if (g.getId() != tempPlayerStats.get(index).getGame().getId()) {
+                        Stats tempStat = new Stats();
+                        tempStat.setGame(dbh.getSpiel(g.getId()));
+                        tempStat.setSum(0);
+                        tempPlayerStats.add(index-1, tempStat);
+                    }
+                    index++;
+                }
+            }
+        }catch(Exception e){
+
+        }
+
+        return tempPlayerStats;
     }
 
 }

@@ -950,11 +950,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<Stats> getStatsForPlayerAndAction(Player player, Action action){
-        /*
 
-        HINWEIS: Im Grunde einfach alle Stats pro Player. Die Filterung nach Ereignis und/oder Spiel kann man gut programmatisch machen
-
-         */
 
         List<Stats> allPlayerStatsAndActions = new ArrayList<Stats>();
         String selectQuery;
@@ -1013,6 +1009,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         c.close();
         return allPlayerStatsAndActions;
+    }
+
+    public List<Game> getAllPlayedGamesFromPlayer(Player player){
+
+
+        List<Game> allPlayedGamesFromPlayer = new ArrayList<Game>();
+        String selectQuery;
+
+
+        selectQuery = "SELECT " + TABLE_SPIEL + "." + KEY_ID + ", " + SPIEL_DATUM +
+                " FROM " + TABLE_SPIEL + ", " + TABLE_SPIEL_SPIELER +
+                " WHERE " + TABLE_SPIEL + "." + KEY_ID + " = " + TABLE_SPIEL_SPIELER + "." + SPIEL_SPIELER_SPIEL +
+                " AND " + SPIEL_SPIELER_SPIELER + " = " + player.getId();
+        //" GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+
+            do {
+                Game g = new Game();
+                g.setId(c.getInt(0));
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar datum = Calendar.getInstance();
+                datum.set(Calendar.YEAR, 1970);
+                try {
+                    Date tempDate = formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM)));
+
+                    datum.setTime(tempDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                g.setDatum(datum);
+
+
+
+                allPlayedGamesFromPlayer.add(g);
+            } while (c.moveToNext());
+        }
+
+        //stat.setAverage(c.getDouble(c.getColumnIndex("AVG")));
+
+
+
+
+        Log.d("Graph", "Der Cursor für gespielte Spiele: "+c.getCount());
+        c.close();
+        return allPlayedGamesFromPlayer;
     }
 
     public Cursor csvExport(){
