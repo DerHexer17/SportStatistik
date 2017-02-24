@@ -52,7 +52,7 @@
     <!-- About Fragment -->
     <string name="aboutInfoBeta">Diese App befindet sich noch im Beta Status! Bitte kontaktieren Sie mich wegen auftretender Fehler oder Vorschlägen</string>
     <string name="aboutImpressumTitle">Impressum</string>
-    <string name="aboutImpressumText">Hendrik Thüs\nPoststraße</string>
+    <string name="aboutImpressumText">Hendrik Thüs\nPoststraße\n01159 Dresden</string>
     <string name="aboutContactDeveloper">Entwickler kontaktieren</string>
 
     <!-- Player Activity-->

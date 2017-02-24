@@ -45,6 +45,7 @@ public class TeamStatsActivity extends ActionBarActivity {
         Spinner teamSpinner = (Spinner) findViewById(R.id.spinnerTeamStatsFilter);
         TeamStatsFilterSpinner teamsSpinnerAdapter = new TeamStatsFilterSpinner(this, dbh.getAllTeams());
         teamSpinner.setAdapter(teamsSpinnerAdapter);
+        /*
         teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -58,8 +59,8 @@ public class TeamStatsActivity extends ActionBarActivity {
                 StatsTeamAdaper teamFilterAdapter = new StatsTeamAdaper(getApplicationContext(), dbh.getAllActionsFromTeam(null), statItems());
                 elv.setAdapter(teamFilterAdapter);
             }
-        }); 
-
+        });
+            */
 
         //testGroups = statTestGroup();
 
