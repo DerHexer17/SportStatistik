@@ -192,25 +192,36 @@ public class PlayerStatsActivity extends ActionBarActivity {
     public List<Stats> addGamesWithZeroStat(Player p, Action a){
         List<Game> allPlayedGames = dbh.getAllPlayedGamesFromPlayer(p);
         List <Stats> tempPlayerStats = dbh.getStatsForPlayerAndAction(p, a);
+        List <Stats> playerStats = new ArrayList<Stats>();
         Log.d("Graph", "Alle gespielten Spiele Listgröße: "+allPlayedGames.size());
-        try {
-            if (allPlayedGames.size() != tempPlayerStats.size()) {
+
+        if(tempPlayerStats.size() == 0){
+            return tempPlayerStats;
+        }
                 int index = 0;
                 for (Game g : allPlayedGames) {
-                    if (g.getId() != tempPlayerStats.get(index).getGame().getId()) {
+                    Log.d("Graph", "Spiel von "+p.getVorname()+" "+p.getNachname()+": (ID "+g.getId()+") "+g.getHeimteam().getLang_name()+" - "+g.getGastteam());
+                    if(tempPlayerStats.get(index).getGame().getId() == g.getId()){
+                        playerStats.add(tempPlayerStats.get(index));
+                        index++;
+                    }else{
                         Stats tempStat = new Stats();
                         tempStat.setGame(dbh.getSpiel(g.getId()));
                         tempStat.setSum(0);
-                        tempPlayerStats.add(index-1, tempStat);
+                        playerStats.add(tempStat);
                     }
-                    index++;
+
                 }
-            }
-        }catch(Exception e){
 
+
+        //Hier muss ich was debuggen
+        for(Stats s : playerStats){
+            Game g = s.getGame();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            Log.d("Graph", "Einzelheiten zum Stat Punkt: Spiel = "+g.getHeimteam().getLang_name()+" - "+g.getGastteam()+
+                    "\n"+"("+sdf.format(g.getDatum().getTime())+")"+" | Summe von Ereignis "+a.getName()+" = "+s.getSum());
         }
-
-        return tempPlayerStats;
+        return playerStats;
     }
 
 }

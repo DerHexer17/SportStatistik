@@ -1021,7 +1021,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         selectQuery = "SELECT " + TABLE_SPIEL + "." + KEY_ID + ", " + SPIEL_DATUM +
                 " FROM " + TABLE_SPIEL + ", " + TABLE_SPIEL_SPIELER +
                 " WHERE " + TABLE_SPIEL + "." + KEY_ID + " = " + TABLE_SPIEL_SPIELER + "." + SPIEL_SPIELER_SPIEL +
-                " AND " + SPIEL_SPIELER_SPIELER + " = " + player.getId();
+                " AND " + SPIEL_SPIELER_SPIELER + " = " + player.getId() +
+                " ORDER BY " + SPIEL_DATUM + " ASC";
         //" GROUP BY " + STATISTIK_SPIEL + " ORDER BY COUNT(" + STATISTIK_EREIGNIS + ") DESC";
 
 
@@ -1032,25 +1033,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
 
             do {
-                Game g = new Game();
-                g.setId(c.getInt(0));
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar datum = Calendar.getInstance();
-                datum.set(Calendar.YEAR, 1970);
-                try {
-                    Date tempDate = formatter.parse(c.getString(c.getColumnIndex(SPIEL_DATUM)));
-
-                    datum.setTime(tempDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
-                g.setDatum(datum);
 
 
 
-                allPlayedGamesFromPlayer.add(g);
+
+                allPlayedGamesFromPlayer.add(getSpiel(c.getInt(0)));
             } while (c.moveToNext());
         }
 
