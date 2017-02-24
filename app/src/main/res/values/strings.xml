@@ -108,7 +108,8 @@
     <string name="buttonExportCSV">CSV</string>
     <string name="dbFormat">Datenbank formatieren</string>
     <string name="title_activity_player_stats">PlayerStatsActivity</string>
-
+    <string name="toggleFiltersTeamStats">+ Filter</string>
+    <string name="untoggleFiltersTeamStats">- Filter</string>
 
 
 </resources>

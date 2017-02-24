@@ -7,7 +7,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import hight.ht.sportstatistik.R;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +61,16 @@ public class TeamStatsActivity extends ActionBarActivity {
 
 
         return itemStats;
+    }
+
+    public void toggleTeamFilter(View v){
+        LinearLayout teamFilter = (LinearLayout) findViewById(R.id.layoutTeamFilters);
+        Toast.makeText(getApplicationContext(), "Toggle getoggled", Toast.LENGTH_SHORT).show();
+        if(teamFilter.getVisibility() == View.GONE) {
+            teamFilter.setVisibility(View.VISIBLE);
+        }else{
+            teamFilter.setVisibility(View.GONE);
+        }
     }
 
 }
