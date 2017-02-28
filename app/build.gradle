@@ -8,8 +8,8 @@ android {
         applicationId "hight.ht.sportstatistik"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 9
-        versionName "0.0.3.3"
+        versionCode 10
+        versionName "0.4.0"
     }
     buildTypes {
         release {
