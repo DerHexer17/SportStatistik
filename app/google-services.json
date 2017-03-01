@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "871771461167",
+    "firebase_url": "https://handball-statistik.firebaseio.com",
+    "project_id": "handball-statistik",
+    "storage_bucket": "handball-statistik.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871771461167:android:206a46401f8406ef",
+        "android_client_info": {
+          "package_name": "hight.ht.sportstatistik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871771461167-ee76d44tdco312lsjl9o9iaavsgus1dq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hight.ht.sportstatistik",
+            "certificate_hash": "58565f887b645fc99bf0cc69bfdb5f3a1c3551c3"
+          }
+        },
+        {
+          "client_id": "871771461167-t0k9ocb00jgv5f1dt8ip5mdlt8u5ltcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_63dzQ7HJr9d2LnhscOjnR-Iu4Me3nVI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871771461167-t0k9ocb00jgv5f1dt8ip5mdlt8u5ltcr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
