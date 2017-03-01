@@ -59,7 +59,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PlayerFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, ActionFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, PlayerAdapter.SpielerAdapterCallback, GameAdapter.SpielAdapterCallback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new StatsFragment();
                 break;
             case 5:
+                fragment = new UserFragment();
+                break;
+            case 6:
                 fragment = new AboutFragment();
                 break;
             default:

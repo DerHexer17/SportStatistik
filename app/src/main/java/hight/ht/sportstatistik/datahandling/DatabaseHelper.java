@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -44,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_SPIEL_SPIELER = "spiel_spieler";
     private static final String TABLE_STATISTIK = "statistik";
     private static final String TABLE_SPORTART = "sportart";
+    private static final String TABLE_USER = "user";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -101,6 +102,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SPORTART_TITEL = "sportart_titel";
     private static final String SPORTART_BESCHREIBUNG = "sportart_beschreibung";
 
+    //USER Table - column names
+    private static final String USER_USERNAME = "user_username";
+    private static final String USER_ACCOUNTNAME = "user_accountname";
+    private static final String USER_PASSWORD = "user_password";
+
     // Table Create Statements
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE " + TABLE_TEAM + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " + TEAM_KURZ + " TEXT, " +
@@ -146,6 +152,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY, " + SPORTART_TITEL + " TEXT, " +
             SPORTART_BESCHREIBUNG + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
 
+    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY, " + USER_USERNAME + " TEXT, " +
+            USER_ACCOUNTNAME + " TEXT, " + USER_PASSWORD + " TEXT, " + KEY_CREATED_AT + " DATE" + ")";
+
     public static DatabaseHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DatabaseHelper(context.getApplicationContext());
@@ -171,7 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TEAM);
         db.execSQL(CREATE_TABLE_TEAM_SPIELER);
         db.execSQL(CREATE_TABLE_SPORTART);
-
+        db.execSQL(CREATE_TABLE_USER);
     }
 
     @Override
@@ -186,6 +196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM_SPIELER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPORTART);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         // create new tables
         onCreate(db);
     }
@@ -199,7 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_TEAM, null, null);
         db.delete(TABLE_TEAM_SPIELER, null, null);
         db.delete(TABLE_SPIEL_SPIELER, null, null);
-
+        db.delete(TABLE_USER, null, null);
         return 17;
     }
 
@@ -284,6 +295,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return l;
     }
+
+    public long addUser(User u){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USER_USERNAME, u.getUsername());
+        values.put(USER_ACCOUNTNAME, u.getAccountname());
+        values.put(USER_PASSWORD, u.getPassword());
+
+        long l = db.insert(TABLE_USER, null, values);
+        db.close();
+        return l;
+    }
+
 
     public long addSpielerToTeam(Player s, Team t){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1059,6 +1084,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return allPlayedGamesFromPlayer;
     }
 
+    public User getUser(int id){
+        String selectQuery = "SELECT  * FROM " + TABLE_USER + " WHERE " + KEY_ID + " = " + id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        User u = new User();
+        if(c.moveToFirst()){
+
+            u.setId(c.getInt(0));
+            u.setUsername(c.getString(c.getColumnIndex(USER_USERNAME)));
+            u.setAccountname(c.getString(c.getColumnIndex(USER_ACCOUNTNAME)));
+            u.setPassword(c.getString(c.getColumnIndex(USER_PASSWORD)));
+
+
+        }
+        c.close();
+        return u;
+    }
+
     public Cursor csvExport(){
         SQLiteDatabase db = this.getReadableDatabase();
         String sqlSelect = "SELECT " + TABLE_STATISTIK + "." + KEY_ID + ", " + EREIGNIS_NAME + ", " +
@@ -1156,6 +1201,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         deleteAllPlayersFromTeam(teamId);
         return db.delete(TABLE_TEAM, KEY_ID + " = " + teamId, null);
+    }
+
+    public int deleteUser(int userId){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.delete(TABLE_USER, KEY_ID + " = " + userId, null);
     }
 
     //Alle UPDATER
@@ -1266,5 +1317,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
+    public int updateUser(User u){
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(USER_USERNAME, u.getUsername());
+        values.put(USER_ACCOUNTNAME, u.getAccountname());
+        values.put(USER_PASSWORD, u.getPassword());
+
+        int i = db.update(TABLE_USER, values, KEY_ID + " = " + u.getId(), null);
+
+        db.close();
+
+        return i;
+    }
 }

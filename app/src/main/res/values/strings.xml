@@ -94,6 +94,7 @@
         <item>Spieler</item>
         <item>Ereignisse</item>
         <item>Auswertung</item>
+        <item>Benutzer</item>
         <item>Hilfe und Kontakt</item>
     </string-array>
 
@@ -110,6 +111,9 @@
     <string name="title_activity_player_stats">PlayerStatsActivity</string>
     <string name="toggleFiltersTeamStats">+ Filter</string>
     <string name="untoggleFiltersTeamStats">- Filter</string>
+    <string name="editTextUsername">Name des Benutzerkontos</string>
+    <string name="editTextAccountname">Eigene Bezeichnung</string>
+    <string name="editTextPassword">Passwort</string>
 
 
 </resources>
