@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "sportStatistik";
@@ -1093,7 +1093,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User u = new User();
         if(c.moveToFirst()){
 
-            u.setId(c.getInt(0));
+            u.setId(c.getInt(c.getColumnIndex(KEY_ID)));
             u.setUsername(c.getString(c.getColumnIndex(USER_USERNAME)));
             u.setAccountname(c.getString(c.getColumnIndex(USER_ACCOUNTNAME)));
             u.setPassword(c.getString(c.getColumnIndex(USER_PASSWORD)));

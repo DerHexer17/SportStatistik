@@ -11,7 +11,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextUsername"
-            android:padding="20dp"
+            android:padding="10dp"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="50px"
             android:layout_marginTop="50px"
             android:gravity="center"
             android:hint="@string/editTextUsername"/>
@@ -19,7 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextAccountname"
-            android:padding="20dp"
+            android:padding="10dp"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="50px"
             android:layout_marginTop="50px"
             android:gravity="center"
             android:hint="@string/editTextAccountname"
@@ -28,7 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextPassword"
-            android:padding="20dp"
+            android:padding="10dp"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="50px"
             android:layout_marginTop="50px"
             android:gravity="center"
             android:hint="@string/editTextPassword"
@@ -36,8 +42,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50px"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="50px"
             android:text="@string/saveButton"
-            android:layout_below="@id/editTextPassword"/>
+            android:layout_below="@id/editTextPassword"
+            android:onClick="saveUser"/>
     </RelativeLayout>
 
 </FrameLayout>

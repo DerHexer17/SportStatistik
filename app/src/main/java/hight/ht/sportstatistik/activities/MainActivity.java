@@ -10,6 +10,7 @@ import hight.ht.sportstatistik.datahandling.DatabaseHelper;
 import hight.ht.sportstatistik.datahandling.Game;
 import hight.ht.sportstatistik.datahandling.Player;
 import hight.ht.sportstatistik.datahandling.Team;
+import hight.ht.sportstatistik.datahandling.User;
 import hight.ht.sportstatistik.helper.GameAdapter;
 import hight.ht.sportstatistik.helper.KitDrawableFetcher;
 import hight.ht.sportstatistik.helper.PlayerAdapter;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     DatabaseHelper dbh;
     GameAdapter spieler;
     private int pressedBack;
+    private User user;
 
     public String[] navMenuTitles;
     /**
@@ -83,9 +85,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -105,6 +108,13 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        try{
+            user = dbh.getUser(1);
+        }catch(Exception e){
+            Log.d("user", "User Table empty or User not found");
+            user = null;
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -136,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new StatsFragment();
                 break;
             case 5:
-                fragment = new UserFragment();
+                fragment = new UserFragment().newInstance(user);
                 break;
             case 6:
                 fragment = new AboutFragment();
@@ -764,5 +774,23 @@ public class MainActivity extends AppCompatActivity
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    public void saveUser(View v){
+        User u = new User();
+        EditText username = (EditText) findViewById(R.id.editTextUsername);
+        EditText accountname = (EditText) findViewById(R.id.editTextAccountname);
+        EditText password = (EditText) findViewById(R.id.editTextPassword);
+        u.setUsername(String.valueOf(username.getText()).trim());
+        u.setAccountname(String.valueOf(accountname.getText()).trim());
+        u.setPassword(String.valueOf(password.getText()).trim());
+        if(user.getId() > 0){
+            //update
+            dbh.updateUser(u);
+        }else{
+            //add
+            dbh.addUser(u);
+        }
+        this.user = u;
     }
 }
