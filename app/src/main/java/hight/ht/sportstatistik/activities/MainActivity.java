@@ -83,9 +83,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -516,6 +517,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("DatePicker", "Gewähltes Datum: " + sdf.format(s.getDatum().getTime()));
                 s.setId((int) dbh.addSpiel(s));
                 ListView lv = (ListView) findViewById(R.id.listViewSpiele);
+                TextView noGames = (TextView) findViewById(R.id.gameFragmentNoGames);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
 
                 //Einmal initial werden einfach alle Player des Teams dem Game zugeordnet
@@ -525,6 +527,11 @@ public class MainActivity extends AppCompatActivity
 
                 adapter.add(s);
                 adapter.notifyDataSetChanged();
+                if(lv.getVisibility() == View.INVISIBLE){
+                    lv.setVisibility(View.VISIBLE);
+                    noGames.setVisibility(View.INVISIBLE);
+
+                }
                 // Do something with value!
             }
         });
@@ -547,22 +554,6 @@ public class MainActivity extends AppCompatActivity
         alert.setTitle(getResources().getString(R.string.newTeamTitle));
         alert.setMessage(getResources().getString(R.string.newTeamMessage));
 
-        /*
-        // Set an EditText view to get user input
-        final LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
-        final EditText titel_kurz = new EditText(this);
-        titel_kurz.setHint(getResources().getString(R.string.newTeamHintShort));
-        final EditText titel_lang = new EditText(this);
-        titel_lang.setHint(getResources().getString(R.string.newTeamHintLong));
-        final EditText beschreibung = new EditText(this);
-        beschreibung.setHint(getResources().getString(R.string.newTeamHintDescription));
-        //final Spinner datum = new Spinner(this);
-        //datum.setAdapter(new DatePicker(this));
-        ll.addView(titel_kurz);
-        ll.addView(titel_lang);
-        ll.addView(beschreibung);
-        alert.setView(ll);*/
 
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.add_team, null);
@@ -599,10 +590,16 @@ public class MainActivity extends AppCompatActivity
 
                 t.setId((int) dbh.addTeam(t));
                 ListView lv = (ListView) findViewById(R.id.listViewTeams);
+                TextView noTeams = (TextView) findViewById(R.id.teamFragmentNoTeams);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
                 adapter.add(t);
                 Log.d("Adapter", "Objekt t geadded. Kurztitel: " + t.getKurz_name());
                 adapter.notifyDataSetChanged();
+                if(lv.getVisibility() == View.INVISIBLE){
+                    lv.setVisibility(View.VISIBLE);
+                    noTeams.setVisibility(View.INVISIBLE);
+
+                }
                 // Do something with value!
             }
         });
@@ -654,9 +651,15 @@ public class MainActivity extends AppCompatActivity
 
                 dbh.addSpieler(sp);
                 ListView lv = (ListView) findViewById(R.id.listViewSpieler);
+                TextView noPlayer = (TextView) findViewById(R.id.playerFragmentNoPlayer);
                 ArrayAdapter adapter = (ArrayAdapter) lv.getAdapter();
                 adapter.add(sp);
                 adapter.notifyDataSetChanged();
+                if(lv.getVisibility() == View.INVISIBLE){
+                    lv.setVisibility(View.VISIBLE);
+                    noPlayer.setVisibility(View.INVISIBLE);
+
+                }
                 // Do something with value!
             }
         });
